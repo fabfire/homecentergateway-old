@@ -11,15 +11,15 @@
     "bower_components"
   ],
   "devDependencies": {
-    "sinon": "http://sinonjs.org/releases/sinon-1.12.1.js",
-    "bardjs": "~0.0.3"
   },
   "dependencies": {
-    "jquery": "~2.1.1",
-    "bootstrap": "~3.3.4",
-    "font-awesome": "~4.2.0",
-    "moment": "~2.8.4",
-    "toastr": "~2.1.0"
+    "jquery": "^2.2.0",
+    "bootstrap": "~3.3.6",
+    "font-awesome": "~4.5.0",
+    "moment": "~2.11.2",
+    "toastr": "~2.1.2",
+    "Ionicons": "ionicons#^2.0.1",
+    "socket.io": "^1.4.5"
   },
   "overrides": {
     "bootstrap": {
@@ -27,6 +27,12 @@
         "dist/js/bootstrap.js",
         "dist/css/bootstrap.css",
         "less/bootstrap.less"
+      ]
+    },
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.css",
+        "css/font-awesome.less"
       ]
     }
   }

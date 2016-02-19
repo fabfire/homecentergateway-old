@@ -3,6 +3,9 @@
 
 var express = require('express');
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var cors  = require('cors');
@@ -40,9 +43,23 @@ switch (environment) {
         break;
 }
 
-app.listen(port, function() {
+server.listen(port, function() {
     console.log('Express server listening on port ' + port);
     console.log('env = ' + app.get('env') +
                 '\n__dirname = ' + __dirname +
                 '\nprocess.cwd = ' + process.cwd());
 });
+
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('event from client', function (data) {
+    console.log(data);
+  });
+});
+
+setInterval(simulateIOPackets, 2000);
+
+function simulateIOPackets() {
+   console.log('envoi d\'un packet');
+   io.sockets.emit('message', {nodeid:2, temp:25.9, humidity:'45%',data :' le message'});
+}

@@ -27,12 +27,11 @@ gulp.task('vet', function() {
 });
 
 gulp.task('styles', ['clean-styles'], function() {
-    log('Compiling Less --> CSS');
+    log('Autoprefixing CSS');
 
     return gulp
-        .src(config.less)
+        .src(config.css)
         .pipe($.plumber())
-        .pipe($.less())
         .pipe($.autoprefixer({
             browsers: ['last 2 version', '> 5%']
         }))
@@ -55,7 +54,7 @@ gulp.task('images', ['clean-images'], function() {
         .pipe($.imagemin({
             optimizationLevel: 4
         }))
-        .pipe(gulp.dest(config.build + 'images'));
+        .pipe(gulp.dest(config.build + 'img'));
 });
 
 gulp.task('clean', function() {
@@ -85,9 +84,9 @@ gulp.task('clean-code', function() {
     clean(files);
 });
 
-gulp.task('less-watcher', function() {
-    gulp.watch([config.less], ['styles']);
-});
+// gulp.task('less-watcher', function() {
+//     gulp.watch([config.less], ['styles']);
+// });
 
 gulp.task('wiredep', function() {
     log('Wire up the bower css js and our app js into the html');
@@ -97,54 +96,35 @@ gulp.task('wiredep', function() {
     return gulp
         .src(config.index)
         .pipe(wiredep(options))
-        .pipe($.inject(gulp.src(config.js)))
         .pipe(gulp.dest(config.client));
 });
 
 gulp.task('inject', ['wiredep', 'styles'], function() {
     log('Wire up the app css into the html, and call wiredep ');
 
+    var injectVendorJS = gulp.src([ './node_modules/socket.io/node_modules/socket.io-client/socket.io.js', config.themejs], {
+        read: false
+    });
+    var vendorOptionsJS = {
+        starttag: '<!-- inject:vendorjs -->',
+        addRootSlash: false
+    };
+    var injectVendorCSS = gulp.src(config.themecss, {
+        read: false
+    });
+    var vendorOptionsCSS = {
+        starttag: '<!-- inject:vendorcss -->',
+        addRootSlash: false
+    };
+
     return gulp
         .src(config.index)
-        .pipe($.inject(gulp.src(config.css)))
+        .pipe($.inject(injectVendorJS, vendorOptionsJS))
+        .pipe($.inject(injectVendorCSS, vendorOptionsCSS))
+        .pipe($.inject(gulp.src(config.js)))
+        .pipe($.inject(gulp.src(config.tmpcss)))
         .pipe(gulp.dest(config.client));
 });
-
-// gulp.task('serve-dev', ['inject'], function() {
-//     var isDev = true;
-// 
-//     var nodeOptions = {
-//         script: config.nodeServer,
-//         delayTime: 1,
-//         env: {
-//             'PORT': port,
-//             'NODE_ENV': isDev ? 'dev' : 'build'
-//         },
-//         watch: [config.server]
-//     };
-// 
-//     return $.nodemon(nodeOptions)
-//         .on('restart', function(ev) {
-//             log('*** nodemon restarted');
-//             log('files changed on restart:\n' + ev);
-//             setTimeout(function() {
-//                 browserSync.notify('reloading now ...');
-//                 browserSync.reload({
-//                     stream: false
-//                 });
-//             }, config.browserReloadDelay);
-//         })
-//         .on('start', function() {
-//             log('*** nodemon started');
-//             startBrowserSync();
-//         })
-//         .on('crash', function() {
-//             log('*** nodemon crashed: script crashed for some reason');
-//         })
-//         .on('exit', function() {
-//             log('*** nodemon exited cleanly');
-//         });
-// });
 
 gulp.task('optimize', ['inject', 'fonts', 'images'], function() {
     log('Optimizing the javascript, css, html');
@@ -292,13 +272,14 @@ function startBrowserSync(isDev) {
 
     log('Starting browser-sync on port ' + port);
 
+    // TODO change less
     if (isDev) {
-        gulp.watch([config.less], ['styles'])
+        gulp.watch([config.css], ['styles'])
             .on('change', function(event) {
                 changeEvent(event);
             });
     } else {
-        gulp.watch([config.less, config.js, config.html], ['optimize', browserSync.reload])
+        gulp.watch([config.css, config.js, config.html], ['optimize', browserSync.reload])
             .on('change', function(event) {
                 changeEvent(event);
             });
@@ -309,7 +290,6 @@ function startBrowserSync(isDev) {
         port: 3000,
         files: isDev ? [
             config.client + '**/*.*',
-            '!' + config.less,
             config.temp + '**/*.css'
         ] : [],
         ghostMode: {
@@ -321,7 +301,7 @@ function startBrowserSync(isDev) {
         injectChanges: true,
         logFileChanges: true,
         logLevel: 'debug',
-        logPrefix: 'gulp-patterns',
+        logPrefix: 'BrowserSync',
         notify: true,
         reloadDelay: 0 //1000
     };
