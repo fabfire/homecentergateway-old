@@ -1,0 +1,33 @@
+{
+  "name": "nodejsprojecttemplate",
+  "version": "0.1.0",
+  "description": "Node.JS + Express template",
+  "authors": "",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/fabfire/nodejsprojecttemplate/overview",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "devDependencies": {
+    "sinon": "http://sinonjs.org/releases/sinon-1.12.1.js",
+    "bardjs": "~0.0.3"
+  },
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.3.4",
+    "font-awesome": "~4.2.0",
+    "moment": "~2.8.4",
+    "toastr": "~2.1.0"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/js/bootstrap.js",
+        "dist/css/bootstrap.css",
+        "less/bootstrap.less"
+      ]
+    }
+  }
+}
