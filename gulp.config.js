@@ -1,7 +1,7 @@
 module.exports = function() {
     var client = './src/client/';
     var theme = client + 'lib/adminlte/';
-    var clientApp = client + 'app/';
+    //var clientApp = client + 'app/';
     var temp = './.tmp/';
     var server = './src/server/';
     var root = './';
@@ -15,7 +15,8 @@ module.exports = function() {
             './src/**/*.js',
             './*.js'
         ],
-        build: './build/',
+        build: './build/client/',
+        buildServer: './build/',
         client: client,
         css: client + 'css/app.css',
         fonts: './bower_components/font-awesome/fonts/**/*.*',

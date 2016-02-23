@@ -58,7 +58,7 @@ gulp.task('images', ['clean-images'], function() {
 });
 
 gulp.task('clean', function() {
-    var delconfig = [].concat(config.build, config.temp);
+    var delconfig = [].concat(config.build, config.buildServer, config.temp);
     log('Cleaning: ' + $.util.colors.blue(delconfig));
     del(delconfig);
 });
@@ -102,7 +102,7 @@ gulp.task('wiredep', function() {
 gulp.task('inject', ['wiredep', 'styles'], function() {
     log('Wire up the app css into the html, and call wiredep ');
 
-    var injectVendorJS = gulp.src([ './node_modules/socket.io/node_modules/socket.io-client/socket.io.js', config.themejs], {
+    var injectVendorJS = gulp.src(['./node_modules/socket.io/node_modules/socket.io-client/socket.io.js', config.themejs], {
         read: false
     });
     var vendorOptionsJS = {
@@ -197,11 +197,18 @@ gulp.task('serve-dev', ['inject'], function() {
     serve(true /* isDev */ );
 });
 
-
+gulp.task('prepare-server-files', function() {
+    gulp.src(['package.json*', 'bower.json', '.bowerrc', 'gulpfile.js', 'gulp.config.js'])
+        .pipe(gulp.dest(config.buildServer));
+    gulp.src(['./src/server/**'], {
+            base: './src/'
+        })
+        .pipe(gulp.dest(config.buildServer));
+});
 //////////////////////////////
 gulp.task('deploy', function() {
     return gulp.src(['app.js', 'package.json*', 'index.html'])
-        .pipe($.scp({
+        .pipe($.scp2({
             host: '192.168.1.99',
             username: 'pi',
             password: 'raspberry',
@@ -212,13 +219,13 @@ gulp.task('deploy', function() {
         });
 });
 
-gulp.task('deployfull', function() {
-    return gulp.src(['**/*.js*', '**/www', 'views*/**', 'public*/**'])
-        .pipe($.scp({
+gulp.task('deployfull', ['optimize', 'prepare-server-files'], function() {
+    return gulp.src(['./build/**'])
+        .pipe($.scp2({
             host: '192.168.1.99',
             username: 'pi',
             password: 'raspberry',
-            dest: '/home/pi/homecenter'
+            dest: '/home/pi/homecenter/'
         }))
         .on('error', function(err) {
             console.log(err);
