@@ -74,12 +74,21 @@ io.on('connection', function(socket) {
 
 //setInterval(simulateIOPackets, 2000);
 
-
-//var serial = new serialport.SerialPort('COM4', {
-var serial = new serialport.SerialPort("/dev/ttyAMA0", {
-    baudrate: 57600,
-    parser: serialport.parsers.readline('\r\n')
-});
+// Load Serialport regarding environment
+switch (environment) {
+    case 'build':
+        var serial = new serialport.SerialPort('/dev/ttyAMA0', {
+            baudrate: 57600,
+            parser: serialport.parsers.readline('\r\n')
+        });
+        break;
+    default:
+        var serial = new serialport.SerialPort('COM4', {
+            baudrate: 57600,
+            parser: serialport.parsers.readline('\r\n')
+        });
+        break;
+}
 
 serial.on('open', function() {
     console.log('Serial port opened');
