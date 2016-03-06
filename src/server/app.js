@@ -44,8 +44,9 @@ console.log('NODE_ENV=' + environment);
 switch (environment) {
     case 'build':
         console.log('** BUILD **');
-        app.use(express.static('./build/'));
-        app.use('/*', express.static('./build/index.html'));
+        app.use(express.static('./build/client'));
+        app.use(express.static('./client'));
+        //app.use('/*', express.static('./src/client/index.html'));
         break;
     default:
         console.log('** DEV **');
@@ -64,15 +65,11 @@ server.listen(port, function() {
 });
 
 io.on('connection', function(socket) {
-    socket.emit('news', {
-        hello: 'world'
-    });
+    socket.emit('new client', 'client connecté');
     socket.on('event from client', function(data) {
         console.log(data);
     });
 });
-
-//setInterval(simulateIOPackets, 2000);
 
 // Load Serialport regarding environment
 switch (environment) {
@@ -93,6 +90,12 @@ switch (environment) {
 serial.on('open', function() {
     console.log('Serial port opened');
     logger.log('info', 'Serial port opened');
+
+});
+
+serial.on('close', function() {
+    console.log('Serial port closed');
+    logger.log('info', 'Serial port closed');
 
 });
 
@@ -118,6 +121,8 @@ serial.on('error', function(e) {
     console.error('Serial communication error : %s', e);
 });
 
+
+/************************************************************** */
 function simulateIOPackets() {
     console.log('envoi d\'un packet');
     io.sockets.emit('message', {

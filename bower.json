@@ -11,11 +11,12 @@
     "bower_components"
   ],
   "devDependencies": {
-  },
+ },
   "dependencies": {
     "jquery": "^2.2.0",
     "bootstrap": "~3.3.6",
     "font-awesome": "~4.5.0",
+    "kendo-ui": "kendo-ui-core#^2016.1.217",
     "moment": "~2.11.2",
     "toastr": "~2.1.2",
     "Ionicons": "ionicons#^2.0.1",

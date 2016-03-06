@@ -102,14 +102,17 @@ gulp.task('wiredep', function() {
 gulp.task('inject', ['wiredep', 'styles'], function() {
     log('Wire up the app css into the html, and call wiredep ');
 
-    var injectVendorJS = gulp.src(['./node_modules/socket.io/node_modules/socket.io-client/socket.io.js', config.themejs], {
+    var injectVendorJS = gulp.src(['./node_modules/socket.io/node_modules/socket.io-client/socket.io.js',
+        config.themejs,
+        './src/client/lib/kendo.console/js/kendo.console.js'
+    ], {
         read: false
     });
     var vendorOptionsJS = {
         starttag: '<!-- inject:vendorjs -->',
         addRootSlash: false
     };
-    var injectVendorCSS = gulp.src(config.themecss, {
+    var injectVendorCSS = gulp.src([].concat(config.themecss,'./src/client/lib/kendo.console/css/kendo.console.css'), {
         read: false
     });
     var vendorOptionsCSS = {
@@ -198,7 +201,7 @@ gulp.task('serve-dev', ['inject'], function() {
 });
 
 gulp.task('prepare-server-files', function() {
-    gulp.src(['package.json*', 'bower.json', '.bowerrc', 'gulpfile.js', 'gulp.config.js'])
+    gulp.src(['package.json*', /*'bower.json', '.bowerrc', */'gulpfile.js', 'gulp.config.js'])
         .pipe(gulp.dest(config.buildServer));
     gulp.src(['./src/server/**'], {
             base: './src/'
@@ -212,7 +215,7 @@ gulp.task('deploy', function() {
             host: '192.168.1.99',
             username: 'pi',
             password: 'raspberry',
-            dest: '/home/pi/homecenter'
+            dest: '/home/pi/homecenter/'
         }))
         .on('error', function(err) {
             console.log(err);

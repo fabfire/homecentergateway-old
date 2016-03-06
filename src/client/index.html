@@ -21,6 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- inject:vendorcss -->
     <link rel="stylesheet" href="src/client/lib/adminlte/css/AdminLTE.css">
     <link rel="stylesheet" href="src/client/lib/adminlte/css/skins/skin-blue.css">
+    <link rel="stylesheet" href="src/client/lib/kendo.console/css/kendo.console.css">
     <!-- endinject -->    
     <!-- endbuild -->
 
@@ -401,22 +402,21 @@ desired effect
     <!-- ./wrapper -->
 
     <!-- REQUIRED JS SCRIPTS -->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>-->
     <!-- build:js js/lib.js-->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/bower_components/kendo-ui/js/kendo.ui.core.min.js"></script>
     <script src="/bower_components/moment/moment.js"></script>
     <script src="/bower_components/toastr/toastr.js"></script>
     <!-- endbower -->
     <!-- inject:vendorjs -->
     <script src="node_modules/socket.io/node_modules/socket.io-client/socket.io.js"></script>
     <script src="src/client/lib/adminlte/js/app.js"></script>
+    <script src="src/client/lib/kendo.console/js/kendo.console.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
 
-<script src="http://kendo.cdn.telerik.com/2016.1.112/js/kendo.all.min.js"></script>
-<script src="http://demos.telerik.com/kendo-ui/content/shared/js/console.js"></script>
     <!-- build:js js/app.js-->
     <!-- inject:js -->
     <script src="/src/client/js/app.js"></script>
@@ -424,12 +424,6 @@ desired effect
     <!-- inject:templates:js -->
     <!-- endinject -->
     <!-- endbuild -->
-    <!-- jQuery 2.1.4 -->
-    <!--<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>-->
-    <!-- Bootstrap 3.3.5 -->
-    <!--<script src="bootstrap/js/bootstrap.min.js"></script>-->
-    <!-- AdminLTE App -->
-    <!--<script src="dist/js/app.min.js"></script>-->
 
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
