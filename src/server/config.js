@@ -3,10 +3,8 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var cors = require('cors');
 //var favicon = require('serve-favicon');
-var port = process.env.PORT || 7203;
 var environment = process.env.NODE_ENV;
 
-// Export method to be compliant with Express 3.0
 var applyConfiguration = function(app) {
 
     //app.use(favicon(__dirname + '/favicon.ico'));

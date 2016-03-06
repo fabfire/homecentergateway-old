@@ -1,4 +1,0 @@
-{"level":"info","message":"Serial port opened","timestamp":"2016-03-06T20:02:15.359Z"}
-{"level":"info","message":"2016-03-06 21:02:17;Gateway listening at 433 Mhz...","timestamp":"2016-03-06T20:02:17.005Z"}
-{"level":"info","message":"2016-03-06 21:02:17;SPI Flash Init OK. Unique MAC = [D7:63:3C:48:4F:28:9B:2C:]","timestamp":"2016-03-06T20:02:17.008Z"}
-{"level":"info","message":"2016-03-06 21:02:17;RFM69_ATC Enabled (Auto Transmission Control)","timestamp":"2016-03-06T20:02:17.308Z"}

@@ -3,7 +3,7 @@ var winston = require('winston');
 winston.remove(winston.transports.Console);
 
 winston.add(require('winston-daily-rotate-file'), {
-    filename: 'logs.',
+    filename: 'logs',
     maxFiles: 20
 });
 

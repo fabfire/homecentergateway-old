@@ -6,4 +6,4 @@ build
 startcmd.bat
 startcode.bat
 _theme
-logs.txt
+logs.*
