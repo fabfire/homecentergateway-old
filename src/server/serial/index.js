@@ -1,4 +1,5 @@
-module.exports = function(logger, io) {
+module.exports = function(logger, io, messageBus) {
+
     var serialport = require('serialport');
     var environment = process.env.NODE_ENV;
     // Load Serialport regarding environment
@@ -30,21 +31,15 @@ module.exports = function(logger, io) {
     });
 
     serial.on('data', function(data) {
-        console.log('Serial data : %s', data);
-        var temp = new Date();
-        var dateStr = padStr(temp.getFullYear()) + '-' +
-            padStr(1 + temp.getMonth()) + '-' +
-            padStr(temp.getDate()) + ' ' +
-            padStr(temp.getHours()) + ':' +
-            padStr(temp.getMinutes()) + ':' +
-            padStr(temp.getSeconds());
-        data = dateStr + ';' + data;
+        data = data + ',"date":' + JSON.stringify(new Date());
+        //console.log('Serial data : %s', data);
         logger.info(data);
-        io.sockets.emit('message', data);
+        //io.sockets.emit('message', data);
+        messageBus.emit('data', data); 
     });
 
     function padStr(i) {
-        return (i < 10) ? "0" + i : "" + i;
+        return (i < 10) ? '0' + i : i;
     }
 
     serial.on('error', function(e) {

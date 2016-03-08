@@ -112,7 +112,7 @@ gulp.task('inject', ['wiredep', 'styles'], function() {
         starttag: '<!-- inject:vendorjs -->',
         addRootSlash: false
     };
-    var injectVendorCSS = gulp.src([].concat(config.themecss,'./src/client/lib/kendo.console/css/kendo.console.css'), {
+    var injectVendorCSS = gulp.src([].concat(config.themecss, './src/client/lib/kendo.console/css/kendo.console.css'), {
         read: false
     });
     var vendorOptionsCSS = {
@@ -192,16 +192,28 @@ gulp.task('bump', function() {
         .pipe(gulp.dest(config.root));
 });
 
-gulp.task('serve-build', ['optimize'], function() {
+gulp.task('replace-socketio-url-build', function() {
+    gulp.src(config.client + 'js/app.js')
+        .pipe($.injectString.replace('var url = "http://localhost:3000";', 'var url;'))
+        .pipe(gulp.dest(config.client + 'js/'));
+});
+
+gulp.task('serve-build', ['replace-socketio-url-build', 'optimize'], function() {
     serve(false /* isDev */ );
 });
 
-gulp.task('serve-dev', ['inject'], function() {
+gulp.task('replace-socketio-url-dev', function() {
+    gulp.src(config.client + 'js/app.js')
+        .pipe($.injectString.replace('var url;', 'var url = "http://localhost:3000";'))
+        .pipe(gulp.dest(config.client + 'js/'));
+});
+
+gulp.task('serve-dev', ['replace-socketio-url-dev', 'inject'], function() {
     serve(true /* isDev */ );
 });
 
 gulp.task('prepare-server-files', function() {
-    gulp.src(['package.json*', /*'bower.json', '.bowerrc', */'gulpfile.js', 'gulp.config.js'])
+    gulp.src(['package.json*', /*'bower.json', '.bowerrc', */ 'gulpfile.js', 'gulp.config.js'])
         .pipe(gulp.dest(config.buildServer));
     gulp.src(['./src/server/**'], {
             base: './src/'
@@ -222,7 +234,7 @@ gulp.task('deploy', function() {
         });
 });
 
-gulp.task('deployfull', ['optimize', 'prepare-server-files'], function() {
+gulp.task('deployfull', ['replace-socketio-url-build', 'optimize', 'prepare-server-files'], function() {
     return gulp.src(['./build/**'])
         .pipe($.scp2({
             host: '192.168.1.99',

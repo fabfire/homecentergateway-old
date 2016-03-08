@@ -30,6 +30,6 @@ var applyConfiguration = function(app) {
             app.use('/*', express.static('./src/client/index.html'));
             break;
     }
-}
+};
 
 exports.applyConfiguration = applyConfiguration;
