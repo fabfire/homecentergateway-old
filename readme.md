@@ -1,4 +1,4 @@
-# Node.JS + Express project template 
+# HomeCenter project 
 
 ## Usage
 ```

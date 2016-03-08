@@ -1,18 +1,24 @@
 {
-  "name": "nodejsprojecttemplate",
+  "name": "HomeCenterProject",
   "version": "0.1.0",
-  "description": "Node.JS + Express template",
+  "description": "HomeCenter Project",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=build PORT=5000 node server/app.js"
+    "start": "NODE_ENV=build PORT=5000 node server/app.js",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "lite": "lite-server",
+    "typings": "typings",
+    "postinstall": "typings install"
   },
   "repository": {
     "type": "git",
-    "url": "https://fabfire@bitbucket.org/fabfire/nodejsprojecttemplate.git"
+    "url": "https://fabfire@bitbucket.org/fabfire/homecentergateway.git"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "angular2": "^2.0.0-beta.8",
     "bower": "^1.7.7",
     "browser-sync": "^2.11.1",
     "compression": "^1.6.1",
@@ -37,15 +43,21 @@
     "gulp-rev": "^7.0.0",
     "gulp-rev-replace": "^0.4.3",
     "gulp-scp2": "^0.2.0",
+    "gulp-shell": "^0.5.2",
     "gulp-task-listing": "^1.0.1",
+    "gulp-tsc": "^1.1.5",
     "gulp-uglify": "^1.5.2",
     "gulp-useref": "^3.0.5",
     "gulp-util": "^3.0.7",
     "jshint": "^2.9.1",
     "jshint-stylish": "^2.1.0",
     "socket.io": "^1.4.5",
+    "systemjs": "^0.19.23",
+    "typescript": "^1.8.7",
+    "typings": "^0.7.3",
     "wiredep": "^3.0.0",
-    "yargs": "^4.1.0"
+    "yargs": "^4.1.0",
+    "zone.js": "^0.5.15"
   },
   "dependencies": {
     "body-parser": "~1.13.2",

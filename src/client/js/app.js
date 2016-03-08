@@ -1,5 +1,5 @@
 // Socket connection : the line below will be replaced by gulp
-var url;
+var url = "http://localhost:5000";
 var socket = io.connect(url);
 
 socket.on('new client', function(data) {

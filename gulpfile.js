@@ -96,10 +96,12 @@ gulp.task('wiredep', function() {
     return gulp
         .src(config.index)
         .pipe(wiredep(options))
-        .pipe(gulp.dest(config.client));
+        .pipe(gulp.dest('config.client'));
 });
 
-gulp.task('inject', ['wiredep', 'styles'], function() {
+gulp.task('tsc', $.shell.task(['npm run tsc'], {verbose:true}));
+
+gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
     log('Wire up the app css into the html, and call wiredep ');
 
     var injectVendorJS = gulp.src(['./node_modules/socket.io/node_modules/socket.io-client/socket.io.js',
@@ -199,17 +201,17 @@ gulp.task('replace-socketio-url-build', function() {
 });
 
 gulp.task('serve-build', ['replace-socketio-url-build', 'optimize'], function() {
-    serve(false /* isDev */ );
+    serve(false);
 });
 
 gulp.task('replace-socketio-url-dev', function() {
     gulp.src(config.client + 'js/app.js')
-        .pipe($.injectString.replace('var url;', 'var url = "http://localhost:3000";'))
+        .pipe($.injectString.replace('var url;', 'var url = "http://localhost:5000";'))
         .pipe(gulp.dest(config.client + 'js/'));
 });
 
 gulp.task('serve-dev', ['replace-socketio-url-dev', 'inject'], function() {
-    serve(true /* isDev */ );
+    serve(true);
 });
 
 gulp.task('prepare-server-files', function() {
@@ -297,6 +299,10 @@ function startBrowserSync(isDev) {
     // TODO change less
     if (isDev) {
         gulp.watch([config.css], ['styles'])
+            .on('change', function(event) {
+                changeEvent(event);
+            });
+        gulp.watch([config.client + '**/*.ts'], ['tsc'])
             .on('change', function(event) {
                 changeEvent(event);
             });
