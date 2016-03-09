@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../probe/probe-list.component', '../console/console.component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,8 +10,8 @@ System.register(['angular2/core', 'angular2/router', '../probe/probe-list.compon
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, probe_list_component_1, console_component_1;
-    var MainSidebarComponent;
+    var core_1, router_1;
+    var MainContentComponent;
     return {
         setters:[
             function (core_1_1) {
@@ -19,29 +19,23 @@ System.register(['angular2/core', 'angular2/router', '../probe/probe-list.compon
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-            },
-            function (probe_list_component_1_1) {
-                probe_list_component_1 = probe_list_component_1_1;
-            },
-            function (console_component_1_1) {
-                console_component_1 = console_component_1_1;
             }],
         execute: function() {
-            MainSidebarComponent = (function () {
-                function MainSidebarComponent() {
+            MainContentComponent = (function () {
+                function MainContentComponent() {
                 }
-                MainSidebarComponent = __decorate([
+                MainContentComponent = __decorate([
                     core_1.Component({
-                        selector: 'main-sidebar',
-                        templateUrl: './app/layout/main-sidebar.component.html',
-                        directives: [router_1.ROUTER_DIRECTIVES, probe_list_component_1.ProbeListComponent, console_component_1.ConsoleComponent]
+                        selector: 'main-content',
+                        templateUrl: './app/layout/main-content.component.html',
+                        directives: [router_1.ROUTER_DIRECTIVES]
                     }), 
                     __metadata('design:paramtypes', [])
-                ], MainSidebarComponent);
-                return MainSidebarComponent;
+                ], MainContentComponent);
+                return MainContentComponent;
             }());
-            exports_1("MainSidebarComponent", MainSidebarComponent);
+            exports_1("MainContentComponent", MainContentComponent);
         }
     }
 });
-//# sourceMappingURL=main-sidebar.component.js.map
+//# sourceMappingURL=main-content.component.js.map

@@ -8,3 +8,4 @@ startcode.bat
 _theme
 logs.*
 typings
+*.js.map
