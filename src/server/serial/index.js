@@ -9,13 +9,13 @@ module.exports = function(logger, io, messageBus) {
     switch (environment) {
         case 'build':
             serial = new serialport.SerialPort(config.serialport.prod, {
-                baudrate: config.serialPort.baudrate,
+                baudrate: config.serialport.baudrate,
                 parser: serialport.parsers.readline('\r\n')
             });
             break;
         default:
             serial = new serialport.SerialPort(config.serialport.dev, {
-                baudrate: config.serialPort.baudrate,
+                baudrate: config.serialport.baudrate,
                 parser: serialport.parsers.readline('\r\n')
             });
             break;
