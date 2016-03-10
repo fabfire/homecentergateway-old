@@ -1,19 +1,21 @@
+var config = require('../config');
 
 module.exports = function(logger, io, messageBus) {
 
     var serialport = require('serialport');
-    var environment = process.env.NODE_ENV;
+    var environment = config.environment;
+    var serial;
     // Load Serialport regarding environment
     switch (environment) {
         case 'build':
-            var serial = new serialport.SerialPort('/dev/ttyAMA0', {
-                baudrate: 57600,
+            serial = new serialport.SerialPort(config.serialport.prod, {
+                baudrate: config.serialPort.baudrate,
                 parser: serialport.parsers.readline('\r\n')
             });
             break;
         default:
-            var serial = new serialport.SerialPort('COM4', {
-                baudrate: 57600,
+            serial = new serialport.SerialPort(config.serialport.dev, {
+                baudrate: config.serialPort.baudrate,
                 parser: serialport.parsers.readline('\r\n')
             });
             break;

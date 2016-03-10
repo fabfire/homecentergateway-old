@@ -1,16 +1,16 @@
 var logger = require('./logger/index');
-var server = require('./server');
+var server = require('./server/server');
 var io = require('./socket.io/index')(server);
 
 var events = require('events');
 var util = require('util');
 var messageBus = new events.EventEmitter();
 var serialport = require('./serial/index')(logger, io, messageBus);
-
+var config = require('./config');
 var analyzer = require('./dataanalyzer/index');
 
-var port = process.env.PORT || 7203;
-var environment = process.env.NODE_ENV;
+var port = config.port;
+var environment = config.environment;
 
 messageBus.on('data', function(data) {
     //console.log('Data received from Serial : ' + data);
