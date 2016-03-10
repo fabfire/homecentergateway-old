@@ -18,9 +18,10 @@ var applyConfiguration = function(app) {
     switch (environment) {
         case 'build':
             console.log('** BUILD **');
-            app.use(express.static('./build/client'));
+            app.use('/*', express.static('./client/index.html'));
+            app.use(express.static('./build/client')); // only for testing
+            app.use(express.static('./'));
             app.use(express.static('./client'));
-            //app.use('/*', express.static('./src/client/index.html'));
             break;
         default:
             console.log('** DEV **');

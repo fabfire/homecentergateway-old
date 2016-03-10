@@ -57,8 +57,8 @@ System.register(['angular2/core', './layout/main-header.component', './layout/ma
                         providers: [router_1.ROUTER_PROVIDERS]
                     }),
                     router_1.RouteConfig([
-                        { path: '/', name: 'Sensors', component: probe_list_component_1.ProbeListComponent },
-                        { path: '/console', name: 'Console', component: console_component_1.ConsoleComponent, useAsDefault: true }
+                        { path: '/', name: 'Sensors', component: probe_list_component_1.ProbeListComponent, useAsDefault: true },
+                        { path: '/console', name: 'Console', component: console_component_1.ConsoleComponent }
                     ]), 
                     __metadata('design:paramtypes', [])
                 ], AppComponent);

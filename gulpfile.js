@@ -57,6 +57,14 @@ gulp.task('images', ['clean-images'], function() {
         .pipe(gulp.dest(config.build + 'img'));
 });
 
+gulp.task('angular-app', ['clean-angular-app'], function() {
+    log('Copying Angular2 app');
+
+    return gulp
+        .src(config.app)
+        .pipe(gulp.dest(config.build + 'app'));
+});
+
 gulp.task('clean', function() {
     var delconfig = [].concat(config.build, config.buildServer, config.temp);
     log('Cleaning: ' + $.util.colors.blue(delconfig));
@@ -71,7 +79,12 @@ gulp.task('clean-images', function() {
     clean(config.build + 'images/**/*.*');
 });
 
+gulp.task('clean-angular-app', function() {
+    clean(config.build + 'app/**/*.*');
+});
+
 gulp.task('clean-styles', function() {
+    clean(config.build + 'css/**/*.*');
     clean(config.temp + '**/*.css');
 });
 
@@ -88,6 +101,15 @@ gulp.task('clean-code', function() {
 //     gulp.watch([config.less], ['styles']);
 // });
 
+gulp.task('angular-js', function() {
+    log('Copying Angular2 JS files');
+
+    return gulp
+        .src([config.client + 'lib/angular2/**/*.js'
+    ])
+        .pipe(gulp.dest(config.build + 'lib/angular2'));
+});
+
 gulp.task('wiredep', function() {
     log('Wire up the bower css js and our app js into the html');
     var options = config.getWiredepDefaultOptions();
@@ -96,7 +118,7 @@ gulp.task('wiredep', function() {
     return gulp
         .src(config.index)
         .pipe(wiredep(options))
-        .pipe(gulp.dest('config.client'));
+        .pipe(gulp.dest(config.client));
 });
 
 gulp.task('tsc', $.shell.task(['npm run tsc'], {verbose:true}));
@@ -104,7 +126,8 @@ gulp.task('tsc', $.shell.task(['npm run tsc'], {verbose:true}));
 gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
     log('Wire up the app css into the html, and call wiredep ');
 
-    var injectVendorJS = gulp.src(['./node_modules/socket.io/node_modules/socket.io-client/socket.io.js',
+    var injectVendorJS = gulp.src([
+        './node_modules/socket.io/node_modules/socket.io-client/socket.io.js',
         config.themejs,
         './src/client/lib/kendo.console/js/kendo.console.js'
     ], {
@@ -114,7 +137,28 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
         starttag: '<!-- inject:vendorjs -->',
         addRootSlash: false
     };
-    var injectVendorCSS = gulp.src([].concat(config.themecss, './src/client/lib/kendo.console/css/kendo.console.css'), {
+
+    var injectAngularJS = gulp.src([
+        './lib/angular2/es6-shim.min.js',
+        './lib/angular2/system-polyfills.js',
+        './lib/angular2/shims_for_IE.js',
+        './lib/angular2/angular2-polyfills.js',
+        './lib/angular2/system.src.js',
+        './lib/angular2/Rx.js',
+        './lib/angular2/angular2.dev.js',
+        './lib/angular2/router.dev.js'
+    ], {
+        read: false,
+        cwd: './src/client/'
+    });
+    var angularOptionsJS = {
+        starttag: '<!-- inject:angularjs -->',
+        addRootSlash: false
+    };
+
+    var injectVendorCSS = gulp.src([].concat(config.themecss,
+     './src/client/lib/kendo.console/css/kendo.console.css',
+     '/bower_components/PACE/themes/black/pace-theme-minimal.css'), {
         read: false
     });
     var vendorOptionsCSS = {
@@ -125,13 +169,14 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
     return gulp
         .src(config.index)
         .pipe($.inject(injectVendorJS, vendorOptionsJS))
+        .pipe($.inject(injectAngularJS, angularOptionsJS))
         .pipe($.inject(injectVendorCSS, vendorOptionsCSS))
         .pipe($.inject(gulp.src(config.js)))
         .pipe($.inject(gulp.src(config.tmpcss)))
         .pipe(gulp.dest(config.client));
 });
 
-gulp.task('optimize', ['inject', 'fonts', 'images'], function() {
+gulp.task('optimize', ['inject', 'fonts', 'images', 'angular-app', 'angular-js'], function() {
     log('Optimizing the javascript, css, html');
 
     var cssFilter = $.filter('**/*.css', {

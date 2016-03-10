@@ -15,6 +15,7 @@ module.exports = function() {
             './src/**/*.js',
             './*.js'
         ],
+        app: [client + 'app/**/*.js', client + 'app/**/*.html'],
         build: './build/client/',
         buildServer: './build/',
         client: client,
@@ -23,14 +24,14 @@ module.exports = function() {
         html: client + '**/*.html',
         images: client + 'img/**/*.*',
         index: client + 'index.html',
-        js: client + 'js/**.js',
+        js: client + 'app2.js',
         root: root,
         server: server,
         temp: temp,
         tmpcss: temp + 'app.css',
         themecss: [
             theme + 'css/AdminLTE.css',
-            theme + 'css/skins/skin-blue.css'
+            theme + 'css/skins/skin-yellow-light.css'
         ],
         themejs: theme + 'js/app.js',
         

@@ -1,40 +1,45 @@
 {
-  "name": "nodejsprojecttemplate",
-  "version": "0.1.0",
-  "description": "Node.JS + Express template",
-  "authors": "",
-  "license": "MIT",
-  "homepage": "https://bitbucket.org/fabfire/nodejsprojecttemplate/overview",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components"
-  ],
-  "devDependencies": {
- },
-  "dependencies": {
-    "jquery": "^2.2.0",
-    "bootstrap": "~3.3.6",
-    "font-awesome": "~4.5.0",
-    "kendo-ui": "kendo-ui-core#^2016.1.217",
-    "moment": "~2.11.2",
-    "toastr": "~2.1.2",
-    "Ionicons": "ionicons#^2.0.1",
-    "socket.io": "^1.4.5"
-  },
-  "overrides": {
-    "bootstrap": {
-      "main": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.css",
-        "less/bootstrap.less"
-      ]
+    "name": "nodejsprojecttemplate",
+    "version": "0.1.0",
+    "description": "Node.JS + Express template",
+    "authors": "",
+    "license": "MIT",
+    "homepage": "https://bitbucket.org/fabfire/nodejsprojecttemplate/overview",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "jquery": "^2.2.0",
+        "bootstrap": "~3.3.6",
+        "font-awesome": "~4.5.0",
+        "kendo-ui": "kendo-ui-core#^2016.1.217",
+        "moment": "~2.11.2",
+        "PACE": "pace#^1.0.2",
+        "toastr": "~2.1.2",
+        "Ionicons": "ionicons#^2.0.1",
+        "socket.io": "^1.4.5"
     },
-    "font-awesome": {
-      "main": [
-        "css/font-awesome.css",
-        "css/font-awesome.less"
-      ]
+    "overrides": {
+        "bootstrap": {
+            "main": [
+                "dist/js/bootstrap.js",
+                "dist/css/bootstrap.css",
+                "less/bootstrap.less"
+            ]
+        },
+        "font-awesome": {
+            "main": [
+                "css/font-awesome.css",
+                "css/font-awesome.less"
+            ]
+        },
+        "PACE": {
+            "main": [
+                "pace.js",
+                "themes/black/pace-theme-minimal.css"
+            ]
+        }
     }
-  }
 }
