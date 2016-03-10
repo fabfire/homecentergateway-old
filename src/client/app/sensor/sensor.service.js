@@ -11,27 +11,32 @@ System.register(['angular2/core'], function(exports_1, context_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1;
-    var ProbeListComponent;
+    var SensorService;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             }],
         execute: function() {
-            ProbeListComponent = (function () {
-                function ProbeListComponent() {
+            SensorService = (function () {
+                function SensorService() {
+                    var _this = this;
+                    this.messages = [];
+                    this.addMessage = function (msg) {
+                        _this.messages.push(msg);
+                    };
+                    this.getMessage = function () {
+                        return _this.messages;
+                    };
                 }
-                ProbeListComponent = __decorate([
-                    core_1.Component({
-                        selector: 'probe-list',
-                        templateUrl: './app/probe/probe-list.component.html'
-                    }), 
+                SensorService = __decorate([
+                    core_1.Injectable(), 
                     __metadata('design:paramtypes', [])
-                ], ProbeListComponent);
-                return ProbeListComponent;
+                ], SensorService);
+                return SensorService;
             }());
-            exports_1("ProbeListComponent", ProbeListComponent);
+            exports_1("SensorService", SensorService);
         }
     }
 });
-//# sourceMappingURL=probe-list.component.js.map
+//# sourceMappingURL=sensor.service.js.map

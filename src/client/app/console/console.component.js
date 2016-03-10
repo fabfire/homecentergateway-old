@@ -1,4 +1,4 @@
-System.register(['angular2/core'], function(exports_1, context_1) {
+System.register(['angular2/core', '../sensor/sensor.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,23 +10,35 @@ System.register(['angular2/core'], function(exports_1, context_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1;
+    var core_1, sensor_service_1;
     var ConsoleComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
+            },
+            function (sensor_service_1_1) {
+                sensor_service_1 = sensor_service_1_1;
             }],
         execute: function() {
             ConsoleComponent = (function () {
-                function ConsoleComponent() {
+                function ConsoleComponent(_sensorService) {
+                    this._sensorService = _sensorService;
+                    this.sensorService = this._sensorService;
                 }
+                ConsoleComponent.prototype.routerCanReuse = function (next, prev) { return true; };
+                ConsoleComponent.prototype.ngAfterViewInit = function () {
+                    var messages = this.sensorService.getMessage();
+                    messages.forEach(function (msg) {
+                        kendoConsole.log(msg);
+                    });
+                };
                 ConsoleComponent = __decorate([
                     core_1.Component({
                         selector: 'console',
                         templateUrl: './app/console/console.component.html'
                     }), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [sensor_service_1.SensorService])
                 ], ConsoleComponent);
                 return ConsoleComponent;
             }());
