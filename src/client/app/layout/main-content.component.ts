@@ -20,10 +20,11 @@ export class MainContentComponent implements OnInit {
     }
     
     ngOnInit() {
-        this.socket = io.connect('http://localhost:5000');
+        //this.socket = io.connect('http://localhost:5000');
+        this.socket = io.connect();
         this.socket.on("message", (msg) => {
             //this.messages.push(msg);
-            this.sensorService.addMessage(JSON.stringify(msg));
+            this.sensorService.messageReceived(msg);
             console.log(msg);
             kendoConsole.log(JSON.stringify(msg));
         });

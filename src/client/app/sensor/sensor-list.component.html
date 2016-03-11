@@ -1,1 +1,39 @@
 <h2>Sensors list</h2>
+<div class="row">
+    <div *ngFor="#data of sensorsData | async">
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-yellow">
+                <span class="info-box-icon"><i class="wi wi-thermometer"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text"> {{ data.nodeid }} </span>
+                    <span class="info-box-number">{{ data.temp | number:'.1-1' }}<i class="wi wi-degrees"></i></span>
+
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div *ngFor="#data of sensorsData | async">
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <p>{{ data.nodeid }}</p>
+                    <h3>{{ data.temp | number:'.1-1' }}<i class="wi wi-degrees"></i></h3>
+                </div>
+                <div class="icon">
+                    <i class="wi wi-thermometer"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    <i class="wi wi-time-8"></i> {{ data.date | date:'dd MM yyyy HH:mm' }}
+                    </a>
+            </div>
+        </div>
+    </div>
+</div>

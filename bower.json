@@ -19,7 +19,8 @@
         "PACE": "pace#^1.0.2",
         "toastr": "~2.1.2",
         "Ionicons": "ionicons#^2.0.1",
-        "socket.io": "^1.4.5"
+        "socket.io": "^1.4.5",
+        "weather-icons": "^2.0.10"
     },
     "overrides": {
         "bootstrap": {
@@ -39,6 +40,12 @@
             "main": [
                 "pace.js",
                 "themes/black/pace-theme-minimal.css"
+            ]
+        },
+        "weather-icons": {
+            "main": [
+                "css/weather-icons.css",
+                "font/*"
             ]
         }
     }

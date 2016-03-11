@@ -31,10 +31,11 @@ System.register(['angular2/core', 'angular2/router', '../sensor/sensor.service']
                 }
                 MainContentComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    this.socket = io.connect('http://localhost:5000');
+                    //this.socket = io.connect('http://localhost:5000');
+                    this.socket = io.connect();
                     this.socket.on("message", function (msg) {
                         //this.messages.push(msg);
-                        _this.sensorService.addMessage(JSON.stringify(msg));
+                        _this.sensorService.messageReceived(msg);
                         console.log(msg);
                         kendoConsole.log(JSON.stringify(msg));
                     });

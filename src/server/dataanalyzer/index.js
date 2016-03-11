@@ -1,16 +1,27 @@
 var ProbeFactory = require('../models/probeFactory');
 var probeFactory = new ProbeFactory();
 
-var analyze = function(data, io)
-{
-   parse(data,
+var analyze = function(data, io) {
+    parse(data,
         function(data) {
-            io.sockets.emit('message', data);
             var probe = probeFactory.createProbe(data);
-            
+            io.sockets.emit('message', probe);
+
             console.log('probe created : ' + JSON.stringify(probe));
+            // fake data
+            probe.nodeid = 4;
+            io.sockets.emit('message', probe);
+            probe.nodeid = 5;
+            io.sockets.emit('message', probe);
+            probe.nodeid = 6;
+            io.sockets.emit('message', probe);
+            probe.nodeid = 7;
+            io.sockets.emit('message', probe);
+            probe.nodeid = 8;
+            io.sockets.emit('message', probe);
+
         },
-        function(){
+        function() {
             // error parsing data
         });
 };
@@ -35,7 +46,7 @@ function parse(data, callback, error) {
 
     if (validData && typeof callback === 'function') {
         callback(obj);
-    }    
+    }
     if (!validData && typeof error === 'function') {
         error();
     }
