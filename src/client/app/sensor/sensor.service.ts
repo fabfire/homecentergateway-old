@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/core';
-import {Observable, Observer} from 'rxjs/Rx';
+import {Observable, Observer, Subject} from 'rxjs/Rx';
 import {SensorData, HashTable} from './sensor.model';
 
 
@@ -7,8 +7,14 @@ import {SensorData, HashTable} from './sensor.model';
 @Injectable()
 export class SensorService {
     messages: Array<String> = [];
+    // observables for list of sensors
     sensorsData$: Observable<SensorData[]>;
     private _sensorDataObserver: Observer<SensorData[]>;
+    // Observable number ressource for showing update of one sensor
+    private _sensorUpdated = new Subject<number>();
+    // Observable streams
+    sensorUpdated$ = this._sensorUpdated.asObservable();
+
     private _dataStore: {
         sensorData: SensorData[]
     };
@@ -19,9 +25,13 @@ export class SensorService {
 
         this._dataStore = { sensorData: [] };
     }
+
     messageReceived = (msg) => {
         this.messages.push(JSON.stringify(msg));
-        this.addSensorInfo(msg);
+
+        if (!msg.hasOwnProperty('msg')) {
+            this.addSensorInfo(msg);
+        }
     };
 
     addSensorInfo = (data) => {
@@ -30,7 +40,7 @@ export class SensorService {
         var updated = false;
         // update sensor data if it exists
         this._dataStore.sensorData.forEach((sensor, i) => {
-            if (sensor.nodeid === data.nodeid) {
+            if (sensor.nodeid === data.nodeid && sensor.type === data.type) {
                 this._dataStore.sensorData[i] = data;
                 updated = true;
             }
@@ -40,7 +50,22 @@ export class SensorService {
             this._dataStore.sensorData.push(data);
         }
         this._sensorDataObserver.next(this._dataStore.sensorData);
+        this.updateSensorInfo(data.nodeid);
     }
+
+    updateSensorInfo = (nodeid: number) => {
+        this._sensorUpdated.next(nodeid);
+    }
+
+    getSensorInfo = () => {
+        console.log('datastore ' + this._dataStore.sensorData.length);
+        if (this._dataStore.sensorData.length > 0) {
+            this._dataStore.sensorData.forEach((sensor, i) => {
+                this.updateSensorInfo(sensor.nodeid)
+            });
+        }
+    }
+
 
     getMessage = () => {
         return this.messages;

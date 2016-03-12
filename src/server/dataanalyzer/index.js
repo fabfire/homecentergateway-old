@@ -1,25 +1,27 @@
-var ProbeFactory = require('../models/probeFactory');
-var probeFactory = new ProbeFactory();
+var SensorFactory = require('../models/sensorFactory');
+var sensorFactory = new SensorFactory();
+
+//TODO : just for test
+var first = true;
 
 var analyze = function(data, io) {
     parse(data,
         function(data) {
-            var probe = probeFactory.createProbe(data);
-            io.sockets.emit('message', probe);
+            var sensors = sensorFactory.createSensor(data);
+            sensors.forEach(function(sensor) {
+                io.sockets.emit('message', sensor);
+                console.log('sensor created : ' + JSON.stringify(sensor));
+            });
 
-            console.log('probe created : ' + JSON.stringify(probe));
+            //TODO : just for test
             // fake data
-            probe.nodeid = 4;
-            io.sockets.emit('message', probe);
-            probe.nodeid = 5;
-            io.sockets.emit('message', probe);
-            probe.nodeid = 6;
-            io.sockets.emit('message', probe);
-            probe.nodeid = 7;
-            io.sockets.emit('message', probe);
-            probe.nodeid = 8;
-            io.sockets.emit('message', probe);
-
+            if (first && 'temp' in sensors[0]) {
+                for (var i = 4; i < 10; i++) {
+                    sensors[0].nodeid = i;
+                    io.sockets.emit('message', sensors[0]);
+                }
+                first = false;
+            }
         },
         function() {
             // error parsing data
@@ -30,7 +32,7 @@ function parse(data, callback, error) {
     var validData = false;
     data = data.replace('/[^a-z0-9 ,-_.?!]/', '');
     data = '{' + data + '}';
-    console.log('analyzing data : ' + data);
+    //console.log('analyzing data : ' + data);
     var obj;
     try {
         obj = JSON.parse(JSON.stringify(eval('(' + data + ')')));

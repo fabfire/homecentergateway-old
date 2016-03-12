@@ -37,10 +37,8 @@ module.exports = function(logger, io, messageBus) {
 
     serial.on('data', function(data) {
         data = data + ',"date":' + JSON.stringify(new Date());
-        //console.log('Serial data : %s', data);
         logger.info(data);
-        //io.sockets.emit('message', data);
-        messageBus.emit('data', data); 
+        messageBus.emit('data', data);
     });
 
     function padStr(i) {

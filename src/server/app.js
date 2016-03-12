@@ -13,8 +13,15 @@ var port = config.port;
 var environment = config.environment;
 
 messageBus.on('data', function(data) {
-    //console.log('Data received from Serial : ' + data);
     analyzer.analyze(data, io);
+    //TODO : remove fake data
+    //console.log('Data received from Serial : ' + data.indexOf('msg') );
+    if (data.indexOf('msg') === -1) {
+        var probe1 = data + ',"hum":45.12';
+        var probe2 = data + ',"hum":74.23,"pres":999';
+        analyzer.analyze(probe1, io);
+        analyzer.analyze(probe2, io);
+    }
 });
 
 console.log('Launching node');

@@ -1,0 +1,20 @@
+http://plnkr.co/edit/uMWX1nmNNzILlwU2XJ2A?p=preview
+
+Hello,
+
+I'm facing an issue in some case with ngClass.
+I think it's the normal behavior with current version (Beta 8) but it can be difficult to use ngClass in some common cases.
+
+The use case : with some font-icon library, we should often provide two classes.
+For example with font-awesome to add an asterisk : "fa fa-asterisk"
+But when you use it with ngClass with multiple choices (depending on the object which is binded to the component), it only applies the two class of the last choice (because it parses all the expression and remove the classes if the expression is false) :
+
+`[ngClass]="{'fa fa-book': data.type === 'type1', 'fa fa-check': data.type ==='type2', 'fa fa-heart': data.type ==='type3'}"`
+
+If it's not clear :) you can see it in the plunker : http://plnkr.co/edit/uMWX1nmNNzILlwU2XJ2A?p=preview
+
+The doc says :
+
+> Object - each key corresponds to a CSS class name while values are interpreted as expressions evaluating to Boolean. If a given expression evaluates to true a corresponding CSS class is added - otherwise it is removed.
+
+I think we should be able to add multiple class. The classes
