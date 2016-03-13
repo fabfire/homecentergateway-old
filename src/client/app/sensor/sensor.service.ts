@@ -2,8 +2,6 @@ import {Injectable} from 'angular2/core';
 import {Observable, Observer, Subject} from 'rxjs/Rx';
 import {SensorData, HashTable} from './sensor.model';
 
-
-
 @Injectable()
 export class SensorService {
     messages: Array<String> = [];
@@ -30,11 +28,11 @@ export class SensorService {
         this.messages.push(JSON.stringify(msg));
 
         if (!msg.hasOwnProperty('msg')) {
-            this.addSensorInfo(msg);
+            this.updateSensor(msg);
         }
     };
 
-    addSensorInfo = (data) => {
+    updateSensor = (data) => {
         data.date = new Date(data.date);
         var updated = false;
         // update sensor data if it exists
@@ -51,20 +49,28 @@ export class SensorService {
         if (this._sensorDataObserver != undefined) {
             this._sensorDataObserver.next(this._dataStore.sensorData);
         }
-        this.updateSensorInfo(data.nodeid);
+        this.sensorUpdated(data.nodeid);
     }
 
-    updateSensorInfo = (nodeid: number) => {
+    sensorUpdated = (nodeid: number) => {
         this._sensorUpdated.next(nodeid);
     }
 
     loadSensorInfo = () => {
-        // if (this._dataStore.sensorData.length > 0) {
-        //     this._sensorDataObserver.next(this._dataStore.sensorData);
-        // }
         this._sensorDataObserver.next(this._dataStore.sensorData);
     }
 
+    getSensor(id, type): SensorData {
+        var foundSensor: SensorData;
+        this._dataStore.sensorData.some((sensor, i) => {
+            if (sensor.nodeid === id && sensor.type === type) {
+                foundSensor = sensor;
+                return true;
+            }
+        });
+
+        return foundSensor;
+    }
 
     getMessage = () => {
         return this.messages;

@@ -1,5 +1,6 @@
 var Sensor = function(data) {
     this.nodeid = parseInt(data.nodeid);
+    this.name = '';
     this.date = data.date;
 };
 

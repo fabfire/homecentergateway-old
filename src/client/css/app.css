@@ -12,7 +12,7 @@
   font-size: 65px;
 }
 .icon.zoom{
-  font-size: 65px;
+  font-size: 70px;
 }
 .info-box-number {
     font-size: 28px;
@@ -25,7 +25,7 @@
     }
 }
 
-.wi-thermometer, .wi-humidity, .wi-barometer {
+/*.wi-thermometer, .wi-humidity, .wi-barometer {
     display: inline-block;
     font-family: 'weathericons';
     font-style: normal;
@@ -33,4 +33,4 @@
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
+}*/

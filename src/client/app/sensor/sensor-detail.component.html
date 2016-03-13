@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-md-12">
+        <div *ngIf="editSensorData" [ngClass]="{'box-warning': editSensorData.type == 'temp', 'box-info': editSensorData.type =='hum', 'box-success': editSensorData.type =='pres', 'box':true}">
+            <div class="box-header with-border">
+                <h3 class="box-title">Détail du capteur :<span [ngSwitch]="editSensorData.type">
+                <template [ngSwitchWhen]="'temp'">Température </template>
+                <template [ngSwitchWhen]="'hum'">Humidité </template>
+                <template [ngSwitchWhen]="'pres'">Pression atmosphérique </template>
+                <template ngSwitchDefault>Type inconnu </template>
+                </span> -
+                <span *ngIf="editSensorData.name"> {{editSensorData.name}}</span><span *ngIf="! editSensorData.name">id : {{editSensorData.nodeid}}</span></h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form">
+                <div class="box-body">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="name">Nom</label>
+                            <input type="text" class="form-control" id="name" [(ngModel)]="editSensorData.name">
+                        </div>
+                        <div class="form-group">
+                            <label for="nodeid">Id</label>
+                            <input type="number" class="form-control" id="nodeid" value="{{editSensorData.nodeid}}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <input type="text" class="form-control" id="type" value="{{editSensorData.type}}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="date">Dernière mise à jour</label>
+                            <input type="datetime" class="form-control" id="date" value="{{editSensorData.date | date:'dd MM yyyy HH:mm:ss' }}" disabled>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="value">Dernière valeur</label>
+                            <input type="number" class="form-control" id="value" value="{{editSensorData.value | number:'.1-1' }}" disabled>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" (click)="save()">Sauvegarder</button>
+                    <button type="submit" class="btn btn-default" (click)="cancel()">Annuler</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </div>
+</div>

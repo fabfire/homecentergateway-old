@@ -32,10 +32,10 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                     this.messageReceived = function (msg) {
                         _this.messages.push(JSON.stringify(msg));
                         if (!msg.hasOwnProperty('msg')) {
-                            _this.addSensorInfo(msg);
+                            _this.updateSensor(msg);
                         }
                     };
-                    this.addSensorInfo = function (data) {
+                    this.updateSensor = function (data) {
                         data.date = new Date(data.date);
                         var updated = false;
                         // update sensor data if it exists
@@ -52,15 +52,12 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                         if (_this._sensorDataObserver != undefined) {
                             _this._sensorDataObserver.next(_this._dataStore.sensorData);
                         }
-                        _this.updateSensorInfo(data.nodeid);
+                        _this.sensorUpdated(data.nodeid);
                     };
-                    this.updateSensorInfo = function (nodeid) {
+                    this.sensorUpdated = function (nodeid) {
                         _this._sensorUpdated.next(nodeid);
                     };
                     this.loadSensorInfo = function () {
-                        // if (this._dataStore.sensorData.length > 0) {
-                        //     this._sensorDataObserver.next(this._dataStore.sensorData);
-                        // }
                         _this._sensorDataObserver.next(_this._dataStore.sensorData);
                     };
                     this.getMessage = function () {
@@ -70,6 +67,16 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                     this.sensorsData$ = new Rx_1.Observable(function (observer) { return _this._sensorDataObserver = observer; }).share();
                     this._dataStore = { sensorData: [] };
                 }
+                SensorService.prototype.getSensor = function (id, type) {
+                    var foundSensor;
+                    this._dataStore.sensorData.some(function (sensor, i) {
+                        if (sensor.nodeid === id && sensor.type === type) {
+                            foundSensor = sensor;
+                            return true;
+                        }
+                    });
+                    return foundSensor;
+                };
                 SensorService = __decorate([
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [])
