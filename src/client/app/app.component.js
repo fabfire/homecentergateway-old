@@ -46,7 +46,8 @@ System.register(['angular2/core', './layout/main-header.component', './layout/ma
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent() {
+                function AppComponent(_sensorService) {
+                    this._sensorService = _sensorService;
                 }
                 AppComponent.prototype.ngAfterViewInit = function () {
                     //Initialize theme AdminLTE.
@@ -63,7 +64,7 @@ System.register(['angular2/core', './layout/main-header.component', './layout/ma
                         { path: '/', name: 'Sensors', component: sensor_list_component_1.SensorListComponent, useAsDefault: true },
                         { path: '/console', name: 'Console', component: console_component_1.ConsoleComponent }
                     ]), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [sensor_service_1.SensorService])
                 ], AppComponent);
                 return AppComponent;
             }());

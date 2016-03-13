@@ -10,6 +10,7 @@ export class SensorService {
     // observables for list of sensors
     sensorsData$: Observable<SensorData[]>;
     private _sensorDataObserver: Observer<SensorData[]>;
+
     // Observable number ressource for showing update of one sensor
     private _sensorUpdated = new Subject<number>();
     // Observable streams
@@ -22,7 +23,6 @@ export class SensorService {
     constructor() {
         // Create Observable Stream to output our data
         this.sensorsData$ = new Observable(observer => this._sensorDataObserver = observer).share();
-
         this._dataStore = { sensorData: [] };
     }
 
@@ -35,7 +35,6 @@ export class SensorService {
     };
 
     addSensorInfo = (data) => {
-        //var dateStr = JSON.parse(data.date);
         data.date = new Date(data.date);
         var updated = false;
         // update sensor data if it exists
@@ -49,7 +48,9 @@ export class SensorService {
         if (!updated) {
             this._dataStore.sensorData.push(data);
         }
-        this._sensorDataObserver.next(this._dataStore.sensorData);
+        if (this._sensorDataObserver != undefined) {
+            this._sensorDataObserver.next(this._dataStore.sensorData);
+        }
         this.updateSensorInfo(data.nodeid);
     }
 
@@ -57,13 +58,11 @@ export class SensorService {
         this._sensorUpdated.next(nodeid);
     }
 
-    getSensorInfo = () => {
-        console.log('datastore ' + this._dataStore.sensorData.length);
-        if (this._dataStore.sensorData.length > 0) {
-            this._dataStore.sensorData.forEach((sensor, i) => {
-                this.updateSensorInfo(sensor.nodeid)
-            });
-        }
+    loadSensorInfo = () => {
+        // if (this._dataStore.sensorData.length > 0) {
+        //     this._sensorDataObserver.next(this._dataStore.sensorData);
+        // }
+        this._sensorDataObserver.next(this._dataStore.sensorData);
     }
 
 

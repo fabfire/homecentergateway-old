@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit} from 'angular2/core';
+import {Component, OnInit} from 'angular2/core';
 import {CanReuse, OnReuse, ComponentInstruction} from 'angular2/router';
 import {Observable} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
@@ -10,22 +10,22 @@ declare var $: any;
     selector: 'sensor-list',
     templateUrl: './app/sensor/sensor-list.component.html'
 })
-export class SensorListComponent implements OnInit, CanReuse, AfterViewInit {
-    sensorsData: Observable<SensorData[]>;
+export class SensorListComponent implements OnInit, CanReuse {
+//    sensorsData: Observable<SensorData[]>;
+    sensorsData: SensorData[];
 
-    constructor(private _sensorService: SensorService) { }
+    constructor(private _sensorService: SensorService) {}
 
     ngOnInit() {
 
         // Two of doing subscription to observables :
         // 1 : explicitly subscribe
-        // this._sensorService.sensorsData$.subscribe(
-        //     updatedData => {
-        //         this.sensorsData = updatedData;
-        //     });
-        // 2 : bind member and use async pipe into the view
+        this._sensorService.sensorsData$.subscribe(
+            updatedData => {this.sensorsData = updatedData;});
+        // 2 : bind member and use async pipe into the view, but it doesn't work as expected : the view is not refreshed when the view is reloaded
+        //this.sensorsData$ = this._sensorService.sensorsData$;
 
-        console.log('oninit');
+        // add a small animation when a particular sensor is update
         this._sensorService.sensorUpdated$.subscribe(nodeid => {
             setTimeout(function() {
                 $(".small-box[data-nodeid=" + nodeid + "]").find(".icon").addClass("zoom").delay(800).queue(function() {
@@ -33,14 +33,10 @@ export class SensorListComponent implements OnInit, CanReuse, AfterViewInit {
                 });
             }, 200);
         });
-        this.sensorsData = this._sensorService.sensorsData$;
-
-        this._sensorService.getSensorInfo();
+ 
+        this._sensorService.loadSensorInfo();
     }
 
     routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
-    ngAfterViewInit() {
-        console.log('ngAfterViewInit');
-        //this._sensorService.getSensorInfo();
-    }
+
 }

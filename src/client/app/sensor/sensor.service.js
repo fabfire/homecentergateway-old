@@ -36,7 +36,6 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                         }
                     };
                     this.addSensorInfo = function (data) {
-                        //var dateStr = JSON.parse(data.date);
                         data.date = new Date(data.date);
                         var updated = false;
                         // update sensor data if it exists
@@ -50,19 +49,19 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                         if (!updated) {
                             _this._dataStore.sensorData.push(data);
                         }
-                        _this._sensorDataObserver.next(_this._dataStore.sensorData);
+                        if (_this._sensorDataObserver != undefined) {
+                            _this._sensorDataObserver.next(_this._dataStore.sensorData);
+                        }
                         _this.updateSensorInfo(data.nodeid);
                     };
                     this.updateSensorInfo = function (nodeid) {
                         _this._sensorUpdated.next(nodeid);
                     };
-                    this.getSensorInfo = function () {
-                        console.log('datastore ' + _this._dataStore.sensorData.length);
-                        if (_this._dataStore.sensorData.length > 0) {
-                            _this._dataStore.sensorData.forEach(function (sensor, i) {
-                                _this.updateSensorInfo(sensor.nodeid);
-                            });
-                        }
+                    this.loadSensorInfo = function () {
+                        // if (this._dataStore.sensorData.length > 0) {
+                        //     this._sensorDataObserver.next(this._dataStore.sensorData);
+                        // }
+                        _this._sensorDataObserver.next(_this._dataStore.sensorData);
                     };
                     this.getMessage = function () {
                         return _this.messages;

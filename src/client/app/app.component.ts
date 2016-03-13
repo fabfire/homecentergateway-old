@@ -16,14 +16,15 @@ declare var loadAdminLTE: any;
     selector: 'homecenter',
     templateUrl: './app/app.component.html',
     directives: [MainHeaderComponent, MainSidebarComponent, MainContentComponent, MainFooterComponent, ControlSidebarComponent]
-   ,providers: [ROUTER_PROVIDERS, SensorService]
+    , providers: [ROUTER_PROVIDERS, SensorService]
 })
 
 @RouteConfig([
-  { path: '/', name: 'Sensors', component: SensorListComponent , useAsDefault: true },
-  { path: '/console', name: 'Console', component: ConsoleComponent }
-  ])
+    { path: '/', name: 'Sensors', component: SensorListComponent, useAsDefault: true },
+    { path: '/console', name: 'Console', component: ConsoleComponent }
+])
 export class AppComponent implements AfterViewInit {
+    constructor(private _sensorService: SensorService) { }
 
     ngAfterViewInit() {
         //Initialize theme AdminLTE.

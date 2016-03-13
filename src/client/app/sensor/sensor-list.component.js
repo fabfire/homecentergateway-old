@@ -26,14 +26,13 @@ System.register(['angular2/core', './sensor.service'], function(exports_1, conte
                     this._sensorService = _sensorService;
                 }
                 SensorListComponent.prototype.ngOnInit = function () {
+                    var _this = this;
                     // Two of doing subscription to observables :
                     // 1 : explicitly subscribe
-                    // this._sensorService.sensorsData$.subscribe(
-                    //     updatedData => {
-                    //         this.sensorsData = updatedData;
-                    //     });
-                    // 2 : bind member and use async pipe into the view
-                    console.log('oninit');
+                    this._sensorService.sensorsData$.subscribe(function (updatedData) { _this.sensorsData = updatedData; });
+                    // 2 : bind member and use async pipe into the view, but it doesn't work as expected : the view is not refreshed when the view is reloaded
+                    //this.sensorsData$ = this._sensorService.sensorsData$;
+                    // add a small animation when a particular sensor is update
                     this._sensorService.sensorUpdated$.subscribe(function (nodeid) {
                         setTimeout(function () {
                             $(".small-box[data-nodeid=" + nodeid + "]").find(".icon").addClass("zoom").delay(800).queue(function () {
@@ -41,14 +40,9 @@ System.register(['angular2/core', './sensor.service'], function(exports_1, conte
                             });
                         }, 200);
                     });
-                    this.sensorsData = this._sensorService.sensorsData$;
-                    this._sensorService.getSensorInfo();
+                    this._sensorService.loadSensorInfo();
                 };
                 SensorListComponent.prototype.routerCanReuse = function (next, prev) { return true; };
-                SensorListComponent.prototype.ngAfterViewInit = function () {
-                    console.log('ngAfterViewInit');
-                    //this._sensorService.getSensorInfo();
-                };
                 SensorListComponent = __decorate([
                     core_1.Component({
                         selector: 'sensor-list',

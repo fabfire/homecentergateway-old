@@ -34,13 +34,59 @@ server.listen(port, function() {
         '\nprocess.cwd = ' + process.cwd());
 });
 
+
+
 /************************************************************** */
-function simulateIOPackets() {
-    console.log('envoi d\'un packet');
-    io.sockets.emit('message', {
-        nodeid: 2,
-        temp: 25.9,
-        humidity: '45%',
-        data: ' le message'
+/*                               Tests                          */
+/************************************************************** */
+setTimeout(function() {
+    simulateSensorsPackets();
+}, 3000);
+setInterval(function() {
+    simulateSensorsPackets();
+}, 30000); function simulateSensorsPackets() {
+    var sensors = [
+        {
+            nodeid: 4,
+            value: 20.9,
+            type: 'temp',
+            date: new Date()
+        }, {
+            nodeid: 4,
+            value: 59.7,
+            type: 'hum',
+            date: new Date()
+        }, {
+            nodeid: 4,
+            value: 989,
+            type: 'pres',
+            date: new Date()
+        }, {
+            nodeid: 5,
+            value: 78,
+            type: 'hum',
+            date: new Date()
+        }, {
+            nodeid: 6,
+            value: 15.1,
+            type: 'temp',
+            date: new Date()
+        }, {
+            nodeid: 7,
+            value: -10.8,
+            type: 'temp',
+            date: new Date()
+        }, {
+            nodeid: 8,
+            value: 22.0,
+            type: 'temp',
+            date: new Date()
+        }
+    ];
+
+    sensors.forEach(function(sensor) {
+        io.sockets.emit('message', sensor);
+        console.log('Fake sensor created : ' + JSON.stringify(sensor));
     });
+
 }
