@@ -15,7 +15,7 @@ var analyze = function(data, io) {
 
             //TODO : just for test
             // fake data
-            if (first && 'temp' in sensors[0]) {
+            if (first && sensors.length > 0 && 'temp' in sensors[0]) {
                 for (var i = 4; i < 10; i++) {
                     sensors[0].nodeid = i;
                     io.sockets.emit('message', sensors[0]);

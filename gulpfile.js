@@ -105,8 +105,7 @@ gulp.task('angular-js', function() {
     log('Copying Angular2 JS files');
 
     return gulp
-        .src([config.client + 'lib/angular2/**/*.js'
-    ])
+        .src([config.client + 'lib/angular2/**/*.js'])
         .pipe(gulp.dest(config.build + 'lib/angular2'));
 });
 
@@ -143,7 +142,7 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
         './lib/angular2/system-polyfills.js',
         './lib/angular2/shims_for_IE.js',
         './lib/angular2/angular2-polyfills.js',
-        './lib/angular2/system.src.js',
+        './lib/angular2/system.js',
         './lib/angular2/Rx.js',
         './lib/angular2/angular2.dev.js',
         './lib/angular2/router.dev.js'

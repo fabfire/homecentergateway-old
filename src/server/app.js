@@ -39,47 +39,47 @@ server.listen(port, function() {
 /************************************************************** */
 /*                               Tests                          */
 /************************************************************** */
-setTimeout(function() {
-    simulateSensorsPackets();
-}, 3000);
-setInterval(function() {
-    simulateSensorsPackets();
-}, 30000); 
+// setTimeout(function() {
+//     simulateSensorsPackets();
+// }, 3000);
+// setInterval(function() {
+//     simulateSensorsPackets();
+// }, 30000); 
 
 function simulateSensorsPackets() {
     var sensors = [
         {
-            nodeid: 4,
+            nodeid: 40,
             value: 20.9,
             type: 'temp',
             date: new Date()
         }, {
-            nodeid: 4,
+            nodeid: 40,
             value: 59.7,
             type: 'hum',
             date: new Date()
         }, {
-            nodeid: 4,
+            nodeid: 40,
             value: 989,
             type: 'pres',
             date: new Date()
         }, {
-            nodeid: 5,
+            nodeid: 50,
             value: 78,
             type: 'hum',
             date: new Date()
         }, {
-            nodeid: 6,
+            nodeid: 60,
             value: 15.1,
             type: 'temp',
             date: new Date()
         }, {
-            nodeid: 7,
+            nodeid: 70,
             value: -10.8,
             type: 'temp',
             date: new Date()
         }, {
-            nodeid: 8,
+            nodeid: 80,
             value: 22.0,
             type: 'temp',
             date: new Date()

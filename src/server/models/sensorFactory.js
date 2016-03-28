@@ -14,7 +14,7 @@ TempSensor.prototype.constructor = TempSensor;
 
 function HumiditySensor(data) {
     Sensor.call(this, data);
-    this.value = data.hum;
+    this.value = data.hum / 100;
     this.type = 'hum';
 }
 HumiditySensor.prototype = Object.create(Sensor.prototype);
