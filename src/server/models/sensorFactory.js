@@ -36,7 +36,6 @@ var Message = function(data) {
 module.exports = function() {
     this.createSensor = function(data) {
         var sensors = [];
-
         if ('temp' in data) {
             sensors.push(new TempSensor(data));
         }

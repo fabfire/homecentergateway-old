@@ -1,27 +1,35 @@
 var SensorFactory = require('../models/sensorFactory');
 var sensorFactory = new SensorFactory();
+var ProbeRepository = require('../models/probeRepository');
+var probeRepository = new ProbeRepository();
 
 //TODO : just for test
-var first = true;
+//var first = true;
 
 var analyze = function(data, io) {
     parse(data,
         function(data) {
-            var sensors = sensorFactory.createSensor(data);
-            sensors.forEach(function(sensor) {
-                io.sockets.emit('message', sensor);
-                console.log('sensor created : ' + JSON.stringify(sensor));
-            });
+            // check if the message has been already sent and skip it.
+            if (probeRepository.checkUnicity(data)) {
+                console.log('true');
+                var sensors = sensorFactory.createSensor(data);
+                sensors.forEach(function(sensor) {
+                    io.sockets.emit('message', sensor);
+                    console.log('sensor created : ' + JSON.stringify(sensor));
+                });
+            }
+            else
+                console.log('false');
 
             //TODO : just for test
             // fake data
-            if (first && sensors.length > 0 && 'temp' in sensors[0]) {
-                for (var i = 4; i < 10; i++) {
-                    sensors[0].nodeid = i;
-                    io.sockets.emit('message', sensors[0]);
-                }
-                first = false;
-            }
+            // if (first && sensors.length > 0 && 'temp' in sensors[0]) {
+            //     for (var i = 4; i < 10; i++) {
+            //         sensors[0].nodeid = i;
+            //         io.sockets.emit('message', sensors[0]);
+            //     }
+            //     first = false;
+            // }
         },
         function() {
             // error parsing data
