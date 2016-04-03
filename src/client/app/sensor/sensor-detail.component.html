@@ -8,7 +8,7 @@
                 <template [ngSwitchWhen]="'pres'">Pression atmosphérique </template>
                 <template ngSwitchDefault>Type inconnu </template>
                 </span> -
-                <span *ngIf="editSensorData.name"> {{editSensorData.name}}</span><span *ngIf="! editSensorData.name">id : {{editSensorData.nodeid}}</span></h3>
+                <span *ngIf="editSensorData.name"> {{editSensorData.name}}</span><span *ngIf="! editSensorData.name">id : {{editSensorData.id}}</span></h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -20,8 +20,8 @@
                             <input type="text" class="form-control" id="name" [(ngModel)]="editSensorData.name">
                         </div>
                         <div class="form-group">
-                            <label for="nodeid">Id</label>
-                            <input type="number" class="form-control" id="nodeid" value="{{editSensorData.nodeid}}" disabled>
+                            <label for="id">Id</label>
+                            <input type="string" class="form-control" id="id" value="{{editSensorData.id}}" disabled>
                         </div>
                         <div class="form-group">
                             <label for="type">Type</label>

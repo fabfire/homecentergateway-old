@@ -36,9 +36,9 @@ System.register(['angular2/core', 'angular2/router', './sensor.service'], functi
                     // 2 : bind member and use async pipe into the view, but it doesn't work as expected : the view is not refreshed when the view is reloaded
                     //this.sensorsData$ = this._sensorService.sensorsData$;
                     // add a small animation when a particular sensor is update
-                    this.animationSubscription = this._sensorService.sensorUpdated$.subscribe(function (nodeid) {
+                    this.animationSubscription = this._sensorService.sensorUpdated$.subscribe(function (id) {
                         setTimeout(function () {
-                            $(".small-box[data-nodeid=" + nodeid + "]").find(".icon").addClass("zoom").delay(1000).queue(function () {
+                            $(".small-box[data-id='" + id + "']").find(".icon").addClass("zoom").delay(1000).queue(function () {
                                 $(this).removeClass("zoom").dequeue();
                             });
                         }, 200);

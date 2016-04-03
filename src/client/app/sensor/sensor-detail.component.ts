@@ -19,13 +19,13 @@ export class SensorDetailComponent implements OnInit, CanReuse {
     constructor(private _router: Router, private _routeParams: RouteParams, private _sensorService: SensorService) { }
 
     ngOnInit() {
-        let id = +this._routeParams.get('id');
+        let id = this._routeParams.get('id');
         let type = this._routeParams.get('type');
 
         // automatically update sensor view when new data comes
         this.subscription = this._sensorService.sensorUpdated$.subscribe(
-            nodeid => {
-                if (nodeid === id) {
+            _id => {
+                 if (id === _id) {
                     this.getSensor(id, type);
                 }
             });

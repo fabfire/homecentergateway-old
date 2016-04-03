@@ -1,5 +1,5 @@
 export class SensorData{
-    nodeid: number;
+    id: string;
     value: number;
     date:Date;
     type:string

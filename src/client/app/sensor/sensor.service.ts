@@ -9,8 +9,8 @@ export class SensorService {
     sensorsData$: Observable<SensorData[]>;
     private _sensorDataObserver: Observer<SensorData[]>;
 
-    // Observable number ressource for showing update of one sensor
-    private _sensorUpdated = new Subject<number>();
+    // Observable string ressource for showing update of one sensor
+    private _sensorUpdated = new Subject<string>();
     // Observable streams
     sensorUpdated$ = this._sensorUpdated.asObservable();
 
@@ -37,7 +37,7 @@ export class SensorService {
         var updated = false;
         // update sensor data if it exists
         this._dataStore.sensorData.forEach((sensor, i) => {
-            if (sensor.nodeid === data.nodeid && sensor.type === data.type) {
+            if (sensor.id === data.id && sensor.type === data.type) {
                 this._dataStore.sensorData[i] = data;
                 updated = true;
             }
@@ -49,11 +49,11 @@ export class SensorService {
         if (this._sensorDataObserver != undefined) {
             this._sensorDataObserver.next(this._dataStore.sensorData);
         }
-        this.sensorUpdated(data.nodeid);
+        this.sensorUpdated(data.id);
     }
 
-    sensorUpdated = (nodeid: number) => {
-        this._sensorUpdated.next(nodeid);
+    sensorUpdated = (id: string) => {
+        this._sensorUpdated.next(id);
     }
 
     loadSensorInfo = () => {
@@ -63,7 +63,7 @@ export class SensorService {
     getSensor(id, type): SensorData {
         var foundSensor: SensorData;
         this._dataStore.sensorData.some((sensor, i) => {
-            if (sensor.nodeid === id && sensor.type === type) {
+            if (sensor.id === id && sensor.type === type) {
                 foundSensor = sensor;
                 return true;
             }

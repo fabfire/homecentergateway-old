@@ -1,0 +1,106 @@
+GET homecenter
+
+GET homecenter/_mapping
+
+GET homecenter/sensors/_mapping
+
+DELETE homecenter/
+
+GET homecenter/sensors/_search
+
+GET homecenter/sensorsmeasures/_search
+{
+  "sort": { "date": { "order": "desc" }}
+}
+
+POST homecenter
+{
+  "mappings": {
+    "probelocation": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "startdate": {
+          "type": "date"
+        },
+        "enddate": {
+          "type": "date"
+        }
+      }
+    },
+    "sensors": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "description": {
+          "type": "string",
+          "index": "not_analyzed"
+        }
+      }
+    },
+    "sensorsmeasures": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "date": {
+          "type": "date"
+        },
+        "value": {
+          "type": "short"
+        }
+      }
+    }
+  }
+}
+
+PUT http://localhost:9200/homecenter/_mapping/probelocation
+{
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "startdate": {
+      "type": "date"
+    },
+    "enddate": {
+      "type": "date"
+    }
+  }
+}
+
+PUT http://localhost:9200/homecenter/_mapping/sensors
+{
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}
+
+PUT http://localhost:9200/homecenter/_mapping/sensorsmeasures
+{
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "date"
+    },
+    "value": {
+      "type": "short"
+    }
+  }
+}

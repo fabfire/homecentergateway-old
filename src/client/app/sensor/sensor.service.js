@@ -25,7 +25,7 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                 function SensorService() {
                     var _this = this;
                     this.messages = [];
-                    // Observable number ressource for showing update of one sensor
+                    // Observable string ressource for showing update of one sensor
                     this._sensorUpdated = new Rx_1.Subject();
                     // Observable streams
                     this.sensorUpdated$ = this._sensorUpdated.asObservable();
@@ -40,7 +40,7 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                         var updated = false;
                         // update sensor data if it exists
                         _this._dataStore.sensorData.forEach(function (sensor, i) {
-                            if (sensor.nodeid === data.nodeid && sensor.type === data.type) {
+                            if (sensor.id === data.id && sensor.type === data.type) {
                                 _this._dataStore.sensorData[i] = data;
                                 updated = true;
                             }
@@ -52,10 +52,10 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                         if (_this._sensorDataObserver != undefined) {
                             _this._sensorDataObserver.next(_this._dataStore.sensorData);
                         }
-                        _this.sensorUpdated(data.nodeid);
+                        _this.sensorUpdated(data.id);
                     };
-                    this.sensorUpdated = function (nodeid) {
-                        _this._sensorUpdated.next(nodeid);
+                    this.sensorUpdated = function (id) {
+                        _this._sensorUpdated.next(id);
                     };
                     this.loadSensorInfo = function () {
                         _this._sensorDataObserver.next(_this._dataStore.sensorData);
@@ -70,7 +70,7 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                 SensorService.prototype.getSensor = function (id, type) {
                     var foundSensor;
                     this._dataStore.sensorData.some(function (sensor, i) {
-                        if (sensor.nodeid === id && sensor.type === type) {
+                        if (sensor.id === id && sensor.type === type) {
                             foundSensor = sensor;
                             return true;
                         }

@@ -1,40 +1,34 @@
-var SensorFactory = require('../models/sensorFactory');
-var sensorFactory = new SensorFactory();
+var sensorFactory = require('../models/sensorFactory');
 var ProbeRepository = require('../models/probeRepository');
 var probeRepository = new ProbeRepository();
+var SensorRepository = require('../models/sensorRepository');
 
-//TODO : just for test
-//var first = true;
+var addSensors = function(sensors, io) {
+    SensorRepository.addSensors(sensors);
+    sensors.forEach(function(sensor) {
+        if (sensor.id) {
+            SensorRepository.addSensorMeasure(sensor);
+        }
+        io.sockets.emit('message', sensor);
+        console.log('sensor sent : ' + JSON.stringify(sensor));
+    });
+};
+exports.addSensors = addSensors;
 
 var analyze = function(data, io) {
     parse(data,
         function(data) {
             // check if the message has been already sent and skip it.
             if (probeRepository.checkUnicity(data)) {
-                console.log('true');
                 var sensors = sensorFactory.createSensor(data);
-                sensors.forEach(function(sensor) {
-                    io.sockets.emit('message', sensor);
-                    console.log('sensor created : ' + JSON.stringify(sensor));
-                });
+                addSensors(sensors, io);
             }
-            else
-                console.log('false');
-
-            //TODO : just for test
-            // fake data
-            // if (first && sensors.length > 0 && 'temp' in sensors[0]) {
-            //     for (var i = 4; i < 10; i++) {
-            //         sensors[0].nodeid = i;
-            //         io.sockets.emit('message', sensors[0]);
-            //     }
-            //     first = false;
-            // }
         },
         function() {
             // error parsing data
         });
 };
+exports.analyze = analyze;
 
 function parse(data, callback, error) {
     var validData = false;
@@ -52,7 +46,7 @@ function parse(data, callback, error) {
         console.log('error analyzing data.');
     }
 
-    console.log('analyzed data : ' + JSON.stringify(obj));
+    //console.log('analyzed data : ' + JSON.stringify(obj));
 
     if (validData && typeof callback === 'function') {
         callback(obj);
@@ -62,4 +56,3 @@ function parse(data, callback, error) {
     }
 }
 
-exports.analyze = analyze;

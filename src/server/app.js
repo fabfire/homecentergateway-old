@@ -1,6 +1,7 @@
 var logger = require('./logger/index');
 var server = require('./server/server');
 var io = require('./socket.io/index')(server);
+var elastic = require('./db/elasticsearch');
 
 var events = require('events');
 var util = require('util');
@@ -8,6 +9,7 @@ var messageBus = new events.EventEmitter();
 var serialport = require('./serial/index')(logger, io, messageBus);
 var config = require('./config');
 var analyzer = require('./dataanalyzer/index');
+var sensorRepository = require('./models/sensorRepository');
 
 var port = config.port;
 var environment = config.environment;
@@ -15,10 +17,10 @@ var environment = config.environment;
 messageBus.on('data', function(data) {
     analyzer.analyze(data, io);
     //TODO : remove fake data
-    //console.log('Data received from Serial : ' + data.indexOf('msg') );
     // if (data.indexOf('msg') === -1) {
-    //     var probe1 = data + ',"hum":45.12';
-    //     var probe2 = data + ',"hum":74.23,"pres":999';
+    //     console.log("adding fake data to " + data);
+    //     var probe1 = data + ',"hum":4512';
+    //     var probe2 = data + ',"hum":7423,"pres":999';
     //     analyzer.analyze(probe1, io);
     //     analyzer.analyze(probe2, io);
     // }
@@ -34,14 +36,22 @@ server.listen(port, function() {
         '\nprocess.cwd = ' + process.cwd());
 });
 
+// Elastic search
+// elastic.indexExists().then(function(exists) {
+//     if (! exists) {
+//         return elastic.initIndex();
+//     }
+// });
+// elastic.createTypes();
 
+sensorRepository.initSensorsFromDB();
 
 /************************************************************** */
 /*                               Tests                          */
 /************************************************************** */
 // setTimeout(function() {
 //     simulateSensorsPackets();
-// }, 3000);
+// }, 7000);
 // setInterval(function() {
 //     simulateSensorsPackets();
 // }, 30000); 
@@ -49,46 +59,47 @@ server.listen(port, function() {
 function simulateSensorsPackets() {
     var sensors = [
         {
-            nodeid: 40,
+            id: '40.1',
             value: 20.9,
             type: 'temp',
             date: new Date()
         }, {
-            nodeid: 40,
+            id: '40.2',
             value: 59.7,
             type: 'hum',
             date: new Date()
         }, {
-            nodeid: 40,
+            id: '40.3',
             value: 989,
             type: 'pres',
             date: new Date()
         }, {
-            nodeid: 50,
+            id:'50.1',
             value: 78,
             type: 'hum',
             date: new Date()
         }, {
-            nodeid: 60,
+            id: '60.1',
             value: 15.1,
             type: 'temp',
             date: new Date()
         }, {
-            nodeid: 70,
+            id: '70.1',
             value: -10.8,
             type: 'temp',
             date: new Date()
         }, {
-            nodeid: 80,
+            id: '80.1',
             value: 22.0,
             type: 'temp',
             date: new Date()
         }
     ];
 
-    sensors.forEach(function(sensor) {
-        io.sockets.emit('message', sensor);
-        console.log('Fake sensor created : ' + JSON.stringify(sensor));
-    });
+    analyzer.addSensors(sensors, io);
+    // sensors.forEach(function(sensor) {
+    //     io.sockets.emit('message', sensor);
+    //     console.log('Fake sensor created : ' + JSON.stringify(sensor));
+    // });
 
 }

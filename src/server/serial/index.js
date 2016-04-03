@@ -6,7 +6,7 @@ module.exports = function(logger, io, messageBus) {
     var environment = config.environment;
     var serial;
     //TODO : remove, just form test
-    environment = 'dev';
+    //environment = 'dev';
     // Load Serialport regarding environment
     switch (environment) {
         case 'build':

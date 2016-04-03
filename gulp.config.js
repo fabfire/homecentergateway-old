@@ -20,7 +20,7 @@ module.exports = function() {
         buildServer: './build/',
         client: client,
         css: client + 'css/app.css',
-        fonts: ['./bower_components/font-awesome/fonts/**/*.*','./bower_components/weather-icons/font/**/*.*'],
+        fonts: ['./bower_components/font-awesome/fonts/**/*.*','./bower_components/weather-icons/fonts/**/*.*'],
         html: client + '**/*.html',
         images: client + 'img/**/*.*',
         index: client + 'index.html',

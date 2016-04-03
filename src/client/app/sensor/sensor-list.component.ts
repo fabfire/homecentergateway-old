@@ -30,9 +30,9 @@ export class SensorListComponent implements OnInit, CanReuse {
         //this.sensorsData$ = this._sensorService.sensorsData$;
 
         // add a small animation when a particular sensor is update
-        this.animationSubscription = this._sensorService.sensorUpdated$.subscribe(nodeid => {
+        this.animationSubscription = this._sensorService.sensorUpdated$.subscribe(id => {
             setTimeout(function() {
-                $(".small-box[data-nodeid=" + nodeid + "]").find(".icon").addClass("zoom").delay(1000).queue(function() {
+                $(".small-box[data-id='" + id + "']").find(".icon").addClass("zoom").delay(1000).queue(function() {
                     $(this).removeClass("zoom").dequeue();
                 });
             }, 200);

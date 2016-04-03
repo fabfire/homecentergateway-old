@@ -32,11 +32,11 @@ System.register(['angular2/core', 'angular2/router', './sensor.service'], functi
                 }
                 SensorDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    var id = +this._routeParams.get('id');
+                    var id = this._routeParams.get('id');
                     var type = this._routeParams.get('type');
                     // automatically update sensor view when new data comes
-                    this.subscription = this._sensorService.sensorUpdated$.subscribe(function (nodeid) {
-                        if (nodeid === id) {
+                    this.subscription = this._sensorService.sensorUpdated$.subscribe(function (_id) {
+                        if (id === _id) {
                             _this.getSensor(id, type);
                         }
                     });

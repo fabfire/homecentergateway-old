@@ -1,5 +1,7 @@
+var countProp = 1;
+
 var Sensor = function(data) {
-    this.nodeid = parseInt(data.nodeid);
+    this.id = data.nodeid + '.' + countProp++;
     this.name = '';
     this.date = data.date;
 };
@@ -28,27 +30,46 @@ function PressureSensor(data) {
 PressureSensor.prototype = Object.create(Sensor.prototype);
 PressureSensor.prototype.constructor = PressureSensor;
 
+function VCCSensor(data) {
+    Sensor.call(this, data);
+    this.value = data.pres;
+    this.type = 'vcc';
+}
+VCCSensor.prototype = Object.create(Sensor.prototype);
+VCCSensor.prototype.constructor = VCCSensor;
+
 var Message = function(data) {
     this.msg = data.msg;
     this.date = data.date;
 };
 
-module.exports = function() {
-    this.createSensor = function(data) {
-        var sensors = [];
-        if ('temp' in data) {
-            sensors.push(new TempSensor(data));
+function createSensor(data){
+    var sensors = [];
+    countProp = 1;
+    for (var property in data) {
+        if (data.hasOwnProperty(property)) {
+            switch (property) {
+                case 'temp':
+                    sensors.push(new TempSensor(data));
+                    break;
+                case 'hum':
+                    sensors.push(new HumiditySensor(data));
+                    break;
+                case 'pres':
+                    sensors.push(new PressureSensor(data));
+                    break;
+                case 'vcc':
+                    sensors.push(new VCCSensor(data));
+                    break;
+                case 'msg':
+                case 'err':
+                    sensors.push(new Message(data));
+                    break;
+                default:
+                    break;
+            }
         }
-        if ('hum' in data) {
-            sensors.push(new HumiditySensor(data));
-        }
-        if ('pres' in data) {
-            sensors.push(new PressureSensor(data));
-        }
-        if ('msg' in data) {
-            sensors.push(new Message(data));
-        }
-
-        return sensors;
-    };
-};
+    }
+    return sensors;
+}
+exports.createSensor = createSensor;

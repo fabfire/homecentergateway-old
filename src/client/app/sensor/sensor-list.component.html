@@ -4,11 +4,11 @@
     <div *ngFor="#data of sensorsData ">
         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
             <!-- small box -->
-            <a href='#' [routerLink]="['SensorDetail', {type:data.type, id: data.nodeid}]">
-                <div class="small-box" [attr.data-nodeid]="data.nodeid" [ngClass]="{'bg-yellow': data.type == 'temp', 'bg-aqua': data.type =='hum', 'bg-green': data.type =='pres'}">
+            <a href='#' [routerLink]="['SensorDetail', {type:data.type, id: data.id}]">
+                <div class="small-box" [attr.data-id]="data.id" [ngClass]="{'bg-yellow': data.type == 'temp', 'bg-aqua': data.type =='hum', 'bg-green': data.type =='pres'}">
                     <div class="inner">
                         <p *ngIf="data.name"> {{data.name}}</p>
-                        <p *ngIf="! data.name">id : {{data.nodeid}}</p>
+                        <p *ngIf="! data.name">id : {{data.id}}</p>
                         <h3>{{ data.value | number:'.1-1' }}
                         <i [ngClass]="{'wi wi-degrees': data.type == 'temp', 'fa fa-percent': data.type =='hum'}"></i></h3>
                     </div>
