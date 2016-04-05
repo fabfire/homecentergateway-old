@@ -1,6 +1,8 @@
-import {Injectable} from 'angular2/core';
+import {Inject, Injectable} from 'angular2/core';
+import {Http} from 'angular2/http';
 import {Observable, Observer, Subject} from 'rxjs/Rx';
 import {SensorData, HashTable} from './sensor.model';
+import {ProbeService} from './probe.service';
 
 @Injectable()
 export class SensorService {
@@ -13,15 +15,18 @@ export class SensorService {
     private _sensorUpdated = new Subject<string>();
     // Observable streams
     sensorUpdated$ = this._sensorUpdated.asObservable();
+    // ProbeService instance
+    private probeService: ProbeService;
 
     private _dataStore: {
         sensorData: SensorData[]
     };
 
-    constructor() {
+    constructor(probeService: ProbeService, http: Http) {
         // Create Observable Stream to output our data
         this.sensorsData$ = new Observable(observer => this._sensorDataObserver = observer).share();
         this._dataStore = { sensorData: [] };
+        this.probeService = probeService;
     }
 
     messageReceived = (msg) => {
@@ -37,7 +42,15 @@ export class SensorService {
         var updated = false;
         // update sensor data if it exists
         this._dataStore.sensorData.forEach((sensor, i) => {
-            if (sensor.id === data.id && sensor.type === data.type) {
+            if (!updated && sensor.id === data.id && sensor.type === data.type) {
+                if (this._dataStore.sensorData[i].name !== data.name) {
+                    // call probe.service to update probe location
+                    var probe = {
+                        id: data.id,
+                        location: data.name
+                    };
+                    this.probeService.updateProbe(probe);
+                }
                 this._dataStore.sensorData[i] = data;
                 updated = true;
             }
@@ -50,6 +63,27 @@ export class SensorService {
             this._sensorDataObserver.next(this._dataStore.sensorData);
         }
         this.sensorUpdated(data.id);
+    }
+
+    updateSensorInfo = (data) => {
+        var updated = false;
+        console.log("update : " + JSON.stringify( this._dataStore.sensorData));
+        console.log("data : " + JSON.stringify(data));
+        this._dataStore.sensorData.forEach((sensor, i) => {
+            if (!updated && sensor.id === data.id && sensor.type === data.type) {
+                if (this._dataStore.sensorData[i].name !== data.name) {
+                    // call probe.service to update probe location
+
+                    var probe = {
+                        id: data.id.substring(0, data.id.indexOf('.')),
+                        location: data.name
+                    };
+                    this.probeService.updateProbe(probe);
+                }
+                this._dataStore.sensorData[i] = data;
+                updated = true;
+            }
+        });
     }
 
     sensorUpdated = (id: string) => {

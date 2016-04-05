@@ -2,7 +2,8 @@ export class SensorData{
     id: string;
     value: number;
     date:Date;
-    type:string
+    type:string;
+    name:string;
 }
 
 export interface HashTable<T> {

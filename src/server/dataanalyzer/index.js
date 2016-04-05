@@ -1,13 +1,12 @@
 var sensorFactory = require('../models/sensorFactory');
-var ProbeRepository = require('../models/probeRepository');
-var probeRepository = new ProbeRepository();
-var SensorRepository = require('../models/sensorRepository');
+var probeRepository = require('../models/probeRepository');
+var sensorRepository = require('../models/sensorRepository');
 
 var addSensors = function(sensors, io) {
-    SensorRepository.addSensors(sensors);
+    sensorRepository.addSensors(sensors);
     sensors.forEach(function(sensor) {
         if (sensor.id) {
-            SensorRepository.addSensorMeasure(sensor);
+            sensorRepository.addSensorMeasure(sensor);
         }
         io.sockets.emit('message', sensor);
         console.log('sensor sent : ' + JSON.stringify(sensor));

@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import { Component } from 'angular2/core';
 import { AfterViewInit } from 'angular2/core';
 import { MainHeaderComponent } from './layout/main-header.component';
 import { MainSidebarComponent } from './layout/main-sidebar.component';
@@ -6,10 +6,12 @@ import { MainContentComponent } from './layout/main-content.component';
 import { MainFooterComponent } from './layout/main-footer.component';
 import { ControlSidebarComponent } from './layout/control-sidebar.component';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
+import { HTTP_PROVIDERS} from 'angular2/http';
 import { SensorListComponent } from './sensor/sensor-list.component';
 import { SensorDetailComponent } from './sensor/sensor-detail.component';
 import { ConsoleComponent } from './console/console.component';
 import { SensorService } from './sensor/sensor.service'
+import { ProbeService } from './sensor/probe.service'
 
 declare var loadAdminLTE: any;
 
@@ -17,7 +19,7 @@ declare var loadAdminLTE: any;
     selector: 'homecenter',
     templateUrl: './app/app.component.html',
     directives: [MainHeaderComponent, MainSidebarComponent, MainContentComponent, MainFooterComponent, ControlSidebarComponent]
-    , providers: [ROUTER_PROVIDERS, SensorService]
+    , providers: [ROUTER_PROVIDERS, HTTP_PROVIDERS, SensorService, ProbeService]
 })
 
 @RouteConfig([

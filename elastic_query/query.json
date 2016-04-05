@@ -21,6 +21,9 @@ POST homecenter
         "id": {
           "type": "string"
         },
+        "location": {
+          "type": "string"
+        },
         "startdate": {
           "type": "date"
         },

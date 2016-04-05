@@ -1,9 +1,11 @@
+var sensorRepository = require('../models/sensorRepository');
+
 var countProp = 1;
 
 var Sensor = function(data) {
     this.id = data.nodeid + '.' + countProp++;
-    this.name = '';
     this.date = data.date;
+    this.name = sensorRepository.getSensorName(this);
 };
 
 function TempSensor(data) {

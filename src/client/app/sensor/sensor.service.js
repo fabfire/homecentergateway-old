@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,19 +10,25 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, Rx_1;
+    var core_1, http_1, Rx_1, probe_service_1;
     var SensorService;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
+            function (http_1_1) {
+                http_1 = http_1_1;
+            },
             function (Rx_1_1) {
                 Rx_1 = Rx_1_1;
+            },
+            function (probe_service_1_1) {
+                probe_service_1 = probe_service_1_1;
             }],
         execute: function() {
             SensorService = (function () {
-                function SensorService() {
+                function SensorService(probeService, http) {
                     var _this = this;
                     this.messages = [];
                     // Observable string ressource for showing update of one sensor
@@ -40,7 +46,15 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                         var updated = false;
                         // update sensor data if it exists
                         _this._dataStore.sensorData.forEach(function (sensor, i) {
-                            if (sensor.id === data.id && sensor.type === data.type) {
+                            if (!updated && sensor.id === data.id && sensor.type === data.type) {
+                                if (_this._dataStore.sensorData[i].name !== data.name) {
+                                    // call probe.service to update probe location
+                                    var probe = {
+                                        id: data.id,
+                                        location: data.name
+                                    };
+                                    _this.probeService.updateProbe(probe);
+                                }
                                 _this._dataStore.sensorData[i] = data;
                                 updated = true;
                             }
@@ -54,6 +68,25 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                         }
                         _this.sensorUpdated(data.id);
                     };
+                    this.updateSensorInfo = function (data) {
+                        var updated = false;
+                        console.log("update : " + JSON.stringify(_this._dataStore.sensorData));
+                        console.log("data : " + JSON.stringify(data));
+                        _this._dataStore.sensorData.forEach(function (sensor, i) {
+                            if (!updated && sensor.id === data.id && sensor.type === data.type) {
+                                if (_this._dataStore.sensorData[i].name !== data.name) {
+                                    // call probe.service to update probe location
+                                    var probe = {
+                                        id: data.id.substring(0, data.id.indexOf('.')),
+                                        location: data.name
+                                    };
+                                    _this.probeService.updateProbe(probe);
+                                }
+                                _this._dataStore.sensorData[i] = data;
+                                updated = true;
+                            }
+                        });
+                    };
                     this.sensorUpdated = function (id) {
                         _this._sensorUpdated.next(id);
                     };
@@ -66,6 +99,7 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                     // Create Observable Stream to output our data
                     this.sensorsData$ = new Rx_1.Observable(function (observer) { return _this._sensorDataObserver = observer; }).share();
                     this._dataStore = { sensorData: [] };
+                    this.probeService = probeService;
                 }
                 SensorService.prototype.getSensor = function (id, type) {
                     var foundSensor;
@@ -79,7 +113,7 @@ System.register(['angular2/core', 'rxjs/Rx'], function(exports_1, context_1) {
                 };
                 SensorService = __decorate([
                     core_1.Injectable(), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [probe_service_1.ProbeService, http_1.Http])
                 ], SensorService);
                 return SensorService;
             }());

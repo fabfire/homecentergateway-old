@@ -10,7 +10,7 @@ var indexName = 'homecenter';
 * Delete an existing index
 */
 function deleteIndex() {
-    console.log('Deleting index : ' + indexName);
+    console.log('elastic : Deleting index : ' + indexName);
     return elasticClient.indices.delete({
         index: indexName
     });
@@ -21,7 +21,7 @@ exports.deleteIndex = deleteIndex;
 * create the index
 */
 function initIndex() {
-    console.log('Creating index : ' + indexName);
+    console.log('elastic : Creating index : ' + indexName);
     return elasticClient.indices.create({
         index: indexName
     });
@@ -32,7 +32,7 @@ exports.initIndex = initIndex;
 * check if the index exists
 */
 function indexExists() {
-    console.log('Exists index : ' + indexName);
+    console.log('elastic : Exists index : ' + indexName);
     return elasticClient.indices.exists({
         index: indexName
     });
@@ -49,15 +49,15 @@ function pingES() {
         hello: '"elasticsearch!'
     }, function(error) {
         if (error) {
-            console.trace('elasticsearch cluster is down!\n');
+            console.trace('elastic : elasticsearch cluster is down!\n');
         } else {
-            console.log('elasticsearch cluster is UP !!!\n');
+            console.log('elastic : elasticsearch cluster is UP !!!\n');
         }
     });
 
     elasticClient.info(function(err, response, status) {
         if (err) {
-            console.trace('error gathering info on cluster');
+            console.trace('elastic : error gathering info on cluster');
         } else {
             // console.log(response);
         }
@@ -81,10 +81,10 @@ function createTypes() {
         },
         function(err, response, status) {
             if (err) {
-                console.trace('error creating type Probelocation \n' + err);
+                console.trace('elastic : error creating type Probelocation \n' + err);
             }
             else {
-                console.log('type creation successfull : Probelocation');
+                console.log('elastic : type creation successfull : Probelocation');
             }
         }
     );
@@ -104,10 +104,10 @@ function createTypes() {
         },
         function(err, response, status) {
             if (err) {
-                console.trace('error creating type Sensors \n' + err);
+                console.trace('elastic : error creating type Sensors \n' + err);
             }
             else {
-                console.log('type creation successfull : Sensors');
+                console.log('elastic : type creation successfull : Sensors');
             }
         }
     );
@@ -127,10 +127,10 @@ function createTypes() {
         },
         function(err, response, status) {
             if (err) {
-                console.trace('error creating type Sensors measures \n' + err);
+                console.trace('elastic : error creating type Sensors measures \n' + err);
             }
             else {
-                console.log('type creation successfull : sensorsmeasures');
+                console.log('elastic : type creation successfull : sensorsmeasures');
             }
         }
     );
@@ -148,11 +148,30 @@ function addSensor(sensor) {
         }
     }, function(err, response) {
         if (err) {
-            console.error('error creating sensor \n' + err);
+            console.error('elastic : error creating sensor \n' + err);
         }
     });
 }
 exports.addSensor = addSensor;
+
+function addProbe(probe) {
+    elasticClient.create({
+        index: indexName,
+        type: 'probelocation',
+        id: probe.id,
+        body: {
+            id: probe.id,
+            location: probe.location,
+            startdate: probe.startdate,
+            enddate: probe.enddate
+        }
+    }, function(err, response) {
+        if (err) {
+            console.error('elastic : error creating probe \n' + err);
+        }
+    });
+}
+exports.addProbe = addProbe;
 
 function addSensorMeasure(sensor) {
     elasticClient.index({
@@ -165,7 +184,7 @@ function addSensorMeasure(sensor) {
         }
     }, function(err, response) {
         if (err) {
-            console.error('error adding sensor measure\n' + err);
+            console.error('elastic : error adding sensor measure\n' + err);
         }
     });
 }
@@ -177,7 +196,7 @@ function getSensors(callback) {
         type: 'sensors'
     }, function(err, response) {
         if (err) {
-            console.error('error getting sensors \n' + err);
+            console.error('elastic : error getting sensors \n' + err);
         }
         else {
             callback(response.hits.hits);
@@ -185,3 +204,39 @@ function getSensors(callback) {
     });
 }
 exports.getSensors = getSensors;
+
+function getProbes(callback) {
+    elasticClient.search({
+        index: indexName,
+        type: 'probelocation'
+    }, function(err, response) {
+        if (err) {
+            console.error('elastic : error getting probes \n' + err);
+        }
+        else {
+            callback(response.hits.hits);
+        }
+    });
+}
+exports.getProbes = getProbes;
+
+function updateProbe(probe, callback) {
+    elasticClient.update({
+        index: indexName,
+        type: 'probelocation',
+        id: probe.id,
+        body: {
+            doc: { // put the partial document under the `doc` key
+                location: probe.location
+            }
+        }
+    }, function(err, response) {
+        if (err) {
+            console.error('elastic : error updating probe \n' + err);
+        }
+        else {
+            callback(response);
+        }
+    });
+}
+exports.updateProbe = updateProbe;

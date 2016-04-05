@@ -9,6 +9,7 @@ var messageBus = new events.EventEmitter();
 var serialport = require('./serial/index')(logger, io, messageBus);
 var config = require('./config');
 var analyzer = require('./dataanalyzer/index');
+var probeRepository = require('./models/probeRepository');
 var sensorRepository = require('./models/sensorRepository');
 
 var port = config.port;
@@ -25,6 +26,9 @@ messageBus.on('data', function(data) {
     //     analyzer.analyze(probe2, io);
     // }
 });
+// TODO : test only
+// analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,"date":"2016-04-03T14:32:35.487Z"', io);
+// analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2389,"date":"2016-04-03T14:32:38.486Z"', io);
 
 console.log('Launching node');
 console.log('PORT=' + port);
@@ -44,19 +48,22 @@ server.listen(port, function() {
 // });
 // elastic.createTypes();
 
+probeRepository.initProbesFromDB();
 sensorRepository.initSensorsFromDB();
 
 /************************************************************** */
 /*                               Tests                          */
 /************************************************************** */
-// setTimeout(function() {
-//     simulateSensorsPackets();
-// }, 7000);
+setTimeout(function() {
+    simulateSensorsPackets();
+}, 5000);
 // setInterval(function() {
 //     simulateSensorsPackets();
-// }, 30000); 
+// }, 30000);
 
 function simulateSensorsPackets() {
+    analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,"date":"2016-04-03T14:32:35.487Z"', io);
+
     var sensors = [
         {
             id: '40.1',

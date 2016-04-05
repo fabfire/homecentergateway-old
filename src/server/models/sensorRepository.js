@@ -1,7 +1,21 @@
+var probeRepository = require('../models/probeRepository');
 var elastic = require('../db/elasticsearch');
 
 // this variables cache sensors data
 var sensors = {};
+
+var getProbeId = function(sensorId) {
+    return sensorId.substring(0, sensorId.indexOf('.'));
+};
+
+var getSensorName = function(sensor) {
+    var probes = probeRepository.getProbes();
+    var probeId = getProbeId(sensor.id);
+    if (probes[probeId]) {
+        return probes[probeId].location;
+    }
+};
+exports.getSensorName = getSensorName;
 
 // when we launch the app, we query the database to get sensors data
 var initSensorsFromDB = function() {
@@ -10,6 +24,7 @@ var initSensorsFromDB = function() {
         response.forEach(function(_sensor) {
             var sensor = {};
             sensor.id = _sensor._id;
+            sensor.name = getSensorName(sensor);
             sensor.type = _sensor._source.type;
             sensor.description = _sensor._source.description;
             sensors[_sensor._id] = sensor;

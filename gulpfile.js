@@ -145,6 +145,7 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
         './lib/angular2/system.js',
         './lib/angular2/Rx.js',
         './lib/angular2/angular2.dev.js',
+        './lib/angular2/http.dev.js',
         './lib/angular2/router.dev.js'
     ], {
         read: false,
