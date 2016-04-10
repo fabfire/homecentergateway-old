@@ -1,12 +1,26 @@
+get _cluster/health
+get _stats
+get _all
+get _nodes
+
 GET homecenter
 
 GET homecenter/_mapping
 
 GET homecenter/sensors/_mapping
 
+POST homecenter/probelocation/3?op_type=create
+{
+  "id": "3"
+}
+
 DELETE homecenter/
 
+GET homecenter/_search
+
 GET homecenter/sensors/_search
+
+GET homecenter/probelocation/_search
 
 GET homecenter/sensorsmeasures/_search
 {

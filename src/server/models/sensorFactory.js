@@ -34,7 +34,7 @@ PressureSensor.prototype.constructor = PressureSensor;
 
 function VCCSensor(data) {
     Sensor.call(this, data);
-    this.value = data.pres;
+    this.value = data.vcc / 1000;
     this.type = 'vcc';
 }
 VCCSensor.prototype = Object.create(Sensor.prototype);
@@ -45,7 +45,7 @@ var Message = function(data) {
     this.date = data.date;
 };
 
-function createSensor(data){
+function createSensor(data) {
     var sensors = [];
     countProp = 1;
     for (var property in data) {

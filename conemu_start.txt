@@ -1,4 +1,4 @@
-"E:\Modis\Perso\Dev\elasticsearch\elasticsearch-2.3.0\bin\elasticsearch.bat" 
+"E:\Modis\Perso\Dev\elasticsearch\elasticsearch-2.3.1\bin\elasticsearch.bat" 
 "E:\Modis\Perso\Dev\elasticsearch\kibana-4.5.0-windows\bin\kibana.bat" 
 >cmd
 powershell
