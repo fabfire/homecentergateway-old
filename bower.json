@@ -14,7 +14,7 @@
     "jquery": "^2.2.0",
     "bootstrap": "~3.3.6",
     "intl": "^1.1.0",
-    "font-awesome": "~4.5.0",
+    "font-awesome": "~4.6.0",
     "kendo-ui": "kendo-ui-core#^2016.1.217",
     "moment": "~2.11.2",
     "PACE": "pace#^1.0.2",

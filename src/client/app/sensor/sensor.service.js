@@ -47,13 +47,15 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
                         // update sensor data if it exists
                         _this._dataStore.sensorData.forEach(function (sensor, i) {
                             if (!updated && sensor.id === data.id && sensor.type === data.type) {
+                                // Location changed, call the BO
                                 if (_this._dataStore.sensorData[i].name !== data.name) {
                                     // call probe.service to update probe location
                                     var probe = {
-                                        id: data.id,
+                                        pid: data.pid,
                                         location: data.name
                                     };
                                     _this.probeService.updateProbe(probe);
+                                    _this.updateSensorsName(probe.pid, probe.location);
                                 }
                                 _this._dataStore.sensorData[i] = data;
                                 updated = true;
@@ -68,30 +70,18 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
                         }
                         _this.sensorUpdated(data.id);
                     };
-                    this.updateSensorInfo = function (data) {
-                        var updated = false;
-                        console.log("update : " + JSON.stringify(_this._dataStore.sensorData));
-                        console.log("data : " + JSON.stringify(data));
-                        _this._dataStore.sensorData.forEach(function (sensor, i) {
-                            if (!updated && sensor.id === data.id && sensor.type === data.type) {
-                                if (_this._dataStore.sensorData[i].name !== data.name) {
-                                    // call probe.service to update probe location
-                                    var probe = {
-                                        id: data.id.substring(0, data.id.indexOf('.')),
-                                        location: data.name
-                                    };
-                                    _this.probeService.updateProbe(probe);
-                                }
-                                _this._dataStore.sensorData[i] = data;
-                                updated = true;
-                            }
-                        });
-                    };
                     this.sensorUpdated = function (id) {
                         _this._sensorUpdated.next(id);
                     };
                     this.loadSensorInfo = function () {
                         _this._sensorDataObserver.next(_this._dataStore.sensorData);
+                    };
+                    this.updateSensorsName = function (probeId, name) {
+                        _this._dataStore.sensorData.forEach(function (sensor, i) {
+                            if (sensor.id.startsWith(probeId + '.')) {
+                                sensor.name = name;
+                            }
+                        });
                     };
                     this.getMessage = function () {
                         return _this.messages;

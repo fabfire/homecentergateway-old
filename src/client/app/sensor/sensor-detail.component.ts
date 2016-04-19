@@ -39,7 +39,7 @@ export class SensorDetailComponent implements OnInit, CanReuse {
     routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
 
     save() {
-        this._sensorService.updateSensorInfo(this.editSensorData);
+        this._sensorService.updateSensor(this.editSensorData);
         this._router.navigate(['/Sensors']);
         return false; //to prevent Chrome to submit the form (refresh page)
     }

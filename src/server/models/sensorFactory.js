@@ -4,6 +4,7 @@ var countProp = 1;
 
 var Sensor = function(data) {
     this.id = data.nodeid + '.' + countProp++;
+    this.pid = data.nodeid;
     this.date = data.date;
     this.name = sensorRepository.getSensorName(this);
 };

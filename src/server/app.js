@@ -54,54 +54,55 @@ sensorRepository.initSensorsFromDB();
 /************************************************************** */
 /*                               Tests                          */
 /************************************************************** */
-// setTimeout(function() {
-//     simulateSensorsPackets();
-// }, 5000);
+setTimeout(function() {
+    simulateSensorsPackets();
+}, 5000);
 // setInterval(function() {
 //     simulateSensorsPackets();
 // }, 30000);
 
 function simulateSensorsPackets() {
-    analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,"date":"2016-04-03T14:32:35.487Z"', io);
+    analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,hum:4512,vcc:3001,"date":"2016-04-03T20:48:35.487Z"', io);
+   //analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,hum:4512,vcc:3102,"date":"2016-04-03T14:32:35.487Z"', io);
 
-    var sensors = [
-        {
-            id: '40.1',
-            value: 20.9,
-            type: 'temp',
-            date: new Date()
-        }, {
-            id: '40.2',
-            value: 59.7,
-            type: 'hum',
-            date: new Date()
-        }, {
-            id: '40.3',
-            value: 989,
-            type: 'pres',
-            date: new Date()
-        }, {
-            id:'50.1',
-            value: 78,
-            type: 'hum',
-            date: new Date()
-        }, {
-            id: '60.1',
-            value: 15.1,
-            type: 'temp',
-            date: new Date()
-        }, {
-            id: '70.1',
-            value: -10.8,
-            type: 'temp',
-            date: new Date()
-        }, {
-            id: '80.1',
-            value: 22.0,
-            type: 'temp',
-            date: new Date()
-        }
-    ];
+    // var sensors = [
+    //     {
+    //         id: '40.1',
+    //         value: 20.9,
+    //         type: 'temp',
+    //         date: new Date()
+    //     }, {
+    //         id: '40.2',
+    //         value: 59.7,
+    //         type: 'hum',
+    //         date: new Date()
+    //     }, {
+    //         id: '40.3',
+    //         value: 989,
+    //         type: 'pres',
+    //         date: new Date()
+    //     }, {
+    //         id:'50.1',
+    //         value: 78,
+    //         type: 'hum',
+    //         date: new Date()
+    //     }, {
+    //         id: '60.1',
+    //         value: 15.1,
+    //         type: 'temp',
+    //         date: new Date()
+    //     }, {
+    //         id: '70.1',
+    //         value: -10.8,
+    //         type: 'temp',
+    //         date: new Date()
+    //     }, {
+    //         id: '80.1',
+    //         value: 22.0,
+    //         type: 'temp',
+    //         date: new Date()
+    //     }
+    // ];
 
-    analyzer.addSensors(sensors, io);
+    // analyzer.addSensors(sensors, io);
 }

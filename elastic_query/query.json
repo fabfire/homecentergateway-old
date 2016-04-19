@@ -9,12 +9,17 @@ GET homecenter/_mapping
 
 GET homecenter/sensors/_mapping
 
-POST homecenter/probelocation/3?op_type=create
+POST homecenter/probelocation/
 {
   "id": "3"
 }
 
-DELETE homecenter/
+POST homecenter/sensorsmeasures
+  {
+    "id": "3.1",
+    "date": "2016-04-03T14:32:35.487Z",
+    "value": 21.56
+  }
 
 GET homecenter/_search
 
@@ -24,7 +29,26 @@ GET homecenter/probelocation/_search
 
 GET homecenter/sensorsmeasures/_search
 {
-  "sort": { "date": { "order": "desc" }}
+  size:0,
+  "sort": { "date": { "order": "desc" }},
+  "aggs": {
+    "group_by_state": {
+      "terms": {
+        "field": "id"
+      }
+    }
+  }
+}
+
+GET homecenter/sensors/_search
+{
+    "query": {
+        "match_phrase_prefix": {
+            "id": {
+                "query": "3."
+            }
+        }
+    }
 }
 
 POST homecenter

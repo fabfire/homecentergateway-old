@@ -1,1 +1,67 @@
-<probe-list><h2>Probes</h2></probe-list>
+<h2>Probes list</h2>
+
+<div class="row">
+    <div *ngFor="#data of probes ">
+
+        <div class="col-lg-3 col-md-4 col-sm-6 ">
+            <!-- Widget: user widget style 1 -->
+            <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-black" style="background: url('../dist/img/photo1.png') center center;">
+                    <h3 class="widget-user-username">{{data.location}}</h3>
+                    <h5 class="widget-user-desc">{{data.pid}}</h5>
+                </div>
+
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-sm-4 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">2</h5>
+                                <span class="description-text">Capteurs</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-4 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">13,000</h5>
+                                <span class="description-text">Mesures</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-4">
+                            <div class="description-block">
+                                <h5 class="description-header">3.12</h5>
+                                <span class="description-text">VCC</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+            <!-- /.widget-user -->
+        </div>
+        <!-- small box -->
+        <!--<a href='#' [routerLink]="['SensorDetail', {type:data.type, id: data.id}]">
+                <div class="small-box" [attr.data-id]="data.id" [ngClass]="{'bg-yellow': data.type == 'temp', 'bg-aqua': data.type =='hum', 'bg-green': data.type =='pres', 'bg-red': data.type =='vcc'}">
+                    <div class="inner">
+                        <p *ngIf="data.name"> {{data.name}}</p>
+                        <p *ngIf="! data.name">id : {{data.id}}</p>
+                        <h3>{{ data.value | number:'.1-1' }}
+                        <i [ngClass]="{'wi wi-degrees': data.type == 'temp', 'fa fa-percent': data.type =='hum'}"></i></h3>
+                    </div>
+                    <div class="icon">
+                        <i [ngClass]="{'wi wi-thermometer': data.type == 'temp', 'wi wi-humidity': data.type =='hum', 'wi wi-barometer': data.type =='pres', 'wi': true}"></i>
+
+                    </div>
+                    <span href="#" class="small-box-footer">
+                    <i class="wi wi-time-8"></i> {{ data.date | date:'dd MM yyyy HH:mm' }}
+                    </span>
+                </div>
+            </a>-->
+
+    </div>
+</div>

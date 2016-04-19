@@ -73,7 +73,7 @@ function createTypes() {
             type: 'probelocation',
             body: {
                 properties: {
-                    id: { type: 'string' },
+                    pid: { type: 'string' },
                     startdate: { type: 'date' },
                     enddate: { type: 'date' }
                 }
@@ -97,6 +97,7 @@ function createTypes() {
             body: {
                 properties: {
                     id: { type: 'string' },
+                    pid: { type: 'string' },
                     type: { type: 'string' },
                     description: { type: 'string' }
                 }
@@ -120,6 +121,7 @@ function createTypes() {
             body: {
                 properties: {
                     id: { type: 'string' },
+                    pid: { type: 'string' },
                     date: { type: 'date' },
                     value: { type: 'short' }
                 }
@@ -144,6 +146,7 @@ function addSensor(sensor) {
         id: sensor.id,
         body: {
             id: sensor.id,
+            pid:sensor.pid,
             type: sensor.type
         }
     }, function(err, response) {
@@ -158,9 +161,9 @@ function addProbe(probe) {
     elasticClient.create({
         index: indexName,
         type: 'probelocation',
-        id: probe.id,
+        id: probe.pid,
         body: {
-            id: probe.id,
+            pid: probe.pid,
             location: probe.location,
             startdate: probe.startdate,
             enddate: probe.enddate
@@ -179,6 +182,7 @@ function addSensorMeasure(sensor) {
         type: 'sensorsmeasures',
         body: {
             id: sensor.id.toString(),
+            pid:sensor.pid,
             date: sensor.date,
             value: sensor.value
         }
@@ -220,11 +224,69 @@ function getProbes(callback) {
 }
 exports.getProbes = getProbes;
 
+function getProbesExt(callback) {
+    elasticClient.msearch({
+        body:[
+            // Probelocation
+            {index: indexName, type: 'probelocation'},
+            {query: {match_all: {}}},
+            // Sensors
+            {index: indexName, type: 'sensors'},
+            {
+                aggs: {
+                    group_by_probe: {
+                        terms: {
+                            field: 'pid'
+                        }
+                    }
+                }
+            },
+            // SensorsMeasures
+            {index: indexName, type: 'sensorsmeasures'},
+            {
+                size:0,
+                aggs: {
+                    group_by_probe: {
+                        terms: {
+                            field: 'pid'
+                        },
+                        aggs: {
+                            group_by_sensor: {
+                                terms: {
+                                    field: 'id'
+                                },                            
+                                aggs:{
+                                    last_value:{
+                                        top_hits:{
+                                            size:1,
+                                            sort: { 'date': { order: 'desc' }}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        ]    
+    },
+    function(err, response) {
+        if (err) {
+            console.error('elastic : error getting probes \n' + err);
+        }
+        else {
+            console.info(JSON.stringify(response));
+            callback(response);
+        }
+    });
+}
+exports.getProbesExt = getProbesExt;
+
 function updateProbe(probe, callback) {
     elasticClient.update({
         index: indexName,
         type: 'probelocation',
-        id: probe.id,
+        id: probe.pid,
         body: {
             doc: { // put the partial document under the `doc` key
                 location: probe.location

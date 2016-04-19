@@ -26,21 +26,25 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
                     var _this = this;
                     this.http = http;
                     this.getProbes = function () {
-                        var probes;
-                        _this.http.get("api/probes")
-                            .map(function (response) { return response.json(); })
-                            .subscribe(function (data) { return probes = data; }, function (err) { return _this.logError(err); });
+                        _this.probes$ = _this.http.get("api/probes")
+                            .map(function (response) { return response.json(); });
+                        // .subscribe(
+                        // data => this.probes$ = data,
+                        // err => this.logError(err)
+                        // // () => console.log('subscribe ')
+                        // );
                     };
                     this.updateProbe = function (_probe) {
                         var probe;
                         var body = JSON.stringify(_probe);
                         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
                         var options = new http_1.RequestOptions({ headers: headers });
-                        _this.http.put('api/probe/' + _probe.id, body, options)
+                        _this.http.put('api/probe/' + _probe.pid, body, options)
                             .map(function (response) { return response.json(); })
                             .subscribe(function (data) { return probe = data; }, function (err) { return _this.logError(err); });
                         // () => console.log('subscribe ')
                     };
+                    this.getProbes();
                 }
                 ProbeService.prototype.logError = function (err) {
                     console.error('There was an error: ' + err);

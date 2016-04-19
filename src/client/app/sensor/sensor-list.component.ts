@@ -22,7 +22,7 @@ export class SensorListComponent implements OnInit, CanReuse {
 
     ngOnInit() {
 
-        // Two of doing subscription to observables :
+        // Two ways of doing subscription to observables :
         // 1 : explicitly subscribe
         this.listSubscription = this._sensorService.sensorsData$.subscribe(
             updatedData => { this.sensorsData = updatedData;});

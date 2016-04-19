@@ -47,7 +47,7 @@ System.register(['angular2/core', 'angular2/router', './sensor.service'], functi
                 };
                 SensorDetailComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 SensorDetailComponent.prototype.save = function () {
-                    this._sensorService.updateSensorInfo(this.editSensorData);
+                    this._sensorService.updateSensor(this.editSensorData);
                     this._router.navigate(['/Sensors']);
                     return false; //to prevent Chrome to submit the form (refresh page)
                 };

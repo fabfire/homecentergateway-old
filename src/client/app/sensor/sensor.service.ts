@@ -43,13 +43,15 @@ export class SensorService {
         // update sensor data if it exists
         this._dataStore.sensorData.forEach((sensor, i) => {
             if (!updated && sensor.id === data.id && sensor.type === data.type) {
+                // Location changed, call the BO
                 if (this._dataStore.sensorData[i].name !== data.name) {
                     // call probe.service to update probe location
                     var probe = {
-                        id: data.id,
+                        pid: data.pid,
                         location: data.name
                     };
                     this.probeService.updateProbe(probe);
+                    this.updateSensorsName(probe.pid, probe.location);
                 }
                 this._dataStore.sensorData[i] = data;
                 updated = true;
@@ -65,33 +67,20 @@ export class SensorService {
         this.sensorUpdated(data.id);
     }
 
-    updateSensorInfo = (data) => {
-        var updated = false;
-        console.log("update : " + JSON.stringify( this._dataStore.sensorData));
-        console.log("data : " + JSON.stringify(data));
-        this._dataStore.sensorData.forEach((sensor, i) => {
-            if (!updated && sensor.id === data.id && sensor.type === data.type) {
-                if (this._dataStore.sensorData[i].name !== data.name) {
-                    // call probe.service to update probe location
-
-                    var probe = {
-                        id: data.id.substring(0, data.id.indexOf('.')),
-                        location: data.name
-                    };
-                    this.probeService.updateProbe(probe);
-                }
-                this._dataStore.sensorData[i] = data;
-                updated = true;
-            }
-        });
-    }
-
     sensorUpdated = (id: string) => {
         this._sensorUpdated.next(id);
     }
 
     loadSensorInfo = () => {
         this._sensorDataObserver.next(this._dataStore.sensorData);
+    }
+
+    updateSensorsName = (probeId, name) => {
+        this._dataStore.sensorData.forEach((sensor, i) => {
+            if(sensor.id.startsWith(probeId + '.')) {
+                sensor.name = name
+            }
+        });
     }
 
     getSensor(id, type): SensorData {
