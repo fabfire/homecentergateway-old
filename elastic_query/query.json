@@ -3,15 +3,13 @@ get _stats
 get _all
 get _nodes
 
-GET homecenter
-
-GET homecenter/_mapping
+GET homecenter/
 
 GET homecenter/sensors/_mapping
 
 POST homecenter/probelocation/
 {
-  "id": "3"
+  "id": "38"
 }
 
 POST homecenter/sensorsmeasures
@@ -20,8 +18,9 @@ POST homecenter/sensorsmeasures
     "date": "2016-04-03T14:32:35.487Z",
     "value": 21.56
   }
+DELETE homecenter/sensors/_mapping
 
-GET homecenter/_search
+GET homecenter/sensorsmeasures/_search
 
 GET homecenter/sensors/_search
 
@@ -29,12 +28,12 @@ GET homecenter/probelocation/_search
 
 GET homecenter/sensorsmeasures/_search
 {
-  size:0,
+  "size":0,
   "sort": { "date": { "order": "desc" }},
   "aggs": {
     "group_by_state": {
       "terms": {
-        "field": "id"
+        "field": "pid"
       }
     }
   }
@@ -56,7 +55,7 @@ POST homecenter
   "mappings": {
     "probelocation": {
       "properties": {
-        "id": {
+        "pid": {
           "type": "string"
         },
         "location": {
@@ -75,6 +74,9 @@ POST homecenter
         "id": {
           "type": "string"
         },
+        "pid": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "index": "not_analyzed"
@@ -88,6 +90,9 @@ POST homecenter
     "sensorsmeasures": {
       "properties": {
         "id": {
+          "type": "string"
+        },
+        "pid": {
           "type": "string"
         },
         "date": {
@@ -104,7 +109,7 @@ POST homecenter
 PUT http://localhost:9200/homecenter/_mapping/probelocation
 {
   "properties": {
-    "id": {
+    "pid": {
       "type": "string"
     },
     "startdate": {
@@ -122,6 +127,9 @@ PUT http://localhost:9200/homecenter/_mapping/sensors
     "id": {
       "type": "string"
     },
+    "pid": {
+      "type": "string"
+    },
     "type": {
       "type": "string"
     },
@@ -135,6 +143,9 @@ PUT http://localhost:9200/homecenter/_mapping/sensorsmeasures
 {
   "properties": {
     "id": {
+      "type": "string"
+    },
+    "pid": {
       "type": "string"
     },
     "date": {
