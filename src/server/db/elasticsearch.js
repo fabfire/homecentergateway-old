@@ -259,7 +259,7 @@ function getProbesExt(callback) {
                                     last_value:{
                                         top_hits:{
                                             size:1,
-                                            sort: { 'date': { order: 'desc' }}
+                                            sort: {'date': {order: 'desc'}}
                                         }
                                     }
                                 }
@@ -275,7 +275,7 @@ function getProbesExt(callback) {
             console.error('elastic : error getting probes \n' + err);
         }
         else {
-            console.info(JSON.stringify(response));
+            //console.info(JSON.stringify(response));
             callback(response);
         }
     });

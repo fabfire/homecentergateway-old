@@ -39,7 +39,25 @@ exports.getProbes = getProbes;
 
 var getProbesExt = function (callback) {
     elastic.getProbesExt(function (response) {
-        callback(response);
+        if (response.responses.length !== 3) {
+            return { 'err': 'ko' };
+        }
+        var probes = {};
+        // TODO : use response to send an array of probes with
+        // probeid, location count of sensors, count of measures, last VCC
+        response.responses[0].hits.hits.forEach(function (_probe) {
+            var probe = {};
+            probe.pid = _probe._id;
+            probe.location = _probe._source.location;
+            probes[_probe._id] = probe;
+        });
+        response.responses[1].aggregations.group_by_probe.buckets.forEach(function (_probe) {
+            probes[_probe.key].numberofsensors = _probe.doc_count;
+        });
+        response.responses[2].aggregations.group_by_probe.buckets.forEach(function (_probe) {
+            probes[_probe.key].numberofmeasures = _probe.doc_count;
+        });
+        callback(probes);
     });
 };
 exports.getProbesExt = getProbesExt;
