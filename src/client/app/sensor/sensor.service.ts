@@ -24,7 +24,7 @@ export class SensorService {
 
     constructor(probeService: ProbeService, http: Http) {
         // Create Observable Stream to output our data
-        this.sensorsData$ = new Observable(observer => this._sensorDataObserver = observer).share();
+        this.sensorsData$ = new Observable<SensorData[]>(observer => this._sensorDataObserver = observer).share();
         this._dataStore = { sensorData: [] };
         this.probeService = probeService;
     }

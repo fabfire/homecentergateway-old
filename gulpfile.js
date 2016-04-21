@@ -126,7 +126,7 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
     log('Wire up the app css into the html, and call wiredep ');
 
     var injectVendorJS = gulp.src([
-        './node_modules/socket.io/node_modules/socket.io-client/socket.io.js',
+        './node_modules/socket.io-client/socket.io.js',
         config.themejs,
         './src/client/lib/kendo.console/js/kendo.console.js'
     ], {
