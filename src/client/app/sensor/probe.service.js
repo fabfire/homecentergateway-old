@@ -26,7 +26,7 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
                     var _this = this;
                     this.http = http;
                     this.getProbes = function () {
-                        _this.probes$ = _this.http.get("api/probesext")
+                        _this.probes$ = _this.http.get("api/probeslist")
                             .map(function (response) { return response.json(); });
                         // .subscribe(
                         // data => this.probes$ = data,

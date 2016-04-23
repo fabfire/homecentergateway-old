@@ -10,7 +10,7 @@ export class ProbeService {
     constructor(private http: Http) { this.getProbes();}
 
     getProbes = () => {
-        this.probes$ = this.http.get("api/probesext")
+        this.probes$ = this.http.get("api/probeslist")
             .map(response => response.json());
             // .subscribe(
             // data => this.probes$ = data,

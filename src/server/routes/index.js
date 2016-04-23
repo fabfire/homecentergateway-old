@@ -6,7 +6,7 @@ var sensorRepository = require('../models/sensorRepository');
 module.exports = function (app) {
     var api = '/api';
     app.get(api + '/probes', getProbes);
-    app.get(api + '/probesext', getProbesExt);
+    app.get(api + '/probeslist', getProbesList);
     app.put(api + '/probe/:id', updateProbe); // /probes/:id
 
     function getProbes(req, res) {
@@ -15,9 +15,9 @@ module.exports = function (app) {
         res.status(200).send(probes);
     }
 
-    function getProbesExt(req, res) {
+    function getProbesList(req, res) {
         console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
-        probeRepository.getProbesExt(function (response) {
+        probeRepository.getProbesList(function (response) {
 
             res.status(200).send(response);
         });

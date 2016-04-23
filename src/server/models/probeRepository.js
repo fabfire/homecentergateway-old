@@ -39,7 +39,7 @@ var getProbes = function (data) {
 };
 exports.getProbes = getProbes;
 
-var getProbesExt = function (callback) {
+var getProbesList = function (callback) {
     elastic.getProbesExt(function (response) {//callback(response);
         if (response.responses.length !== 3) {
             return { 'err': 'ko' };
@@ -70,7 +70,7 @@ var getProbesExt = function (callback) {
        callback(Object.keys(probes).map(function (key) { return probes[key]; }));
     });
 };
-exports.getProbesExt = getProbesExt;
+exports.getProbesList = getProbesList;
 
 var getProbeName = function (id) {
     if (allProbes[id]) {
