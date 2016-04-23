@@ -1,0 +1,450 @@
+{
+  "responses": [
+    {
+      "took": 23,
+      "timed_out": false,
+      "_shards": {
+        "total": 5,
+        "successful": 5,
+        "failed": 0
+      },
+      "hits": {
+        "total": 3,
+        "max_score": 1,
+        "hits": [
+          {
+            "_index": "homecenter",
+            "_type": "probelocation",
+            "_id": "5",
+            "_score": 1,
+            "_source": {
+              "pid": "5"
+            }
+          },
+          {
+            "_index": "homecenter",
+            "_type": "probelocation",
+            "_id": "4",
+            "_score": 1,
+            "_source": {
+              "pid": "4"
+            }
+          },
+          {
+            "_index": "homecenter",
+            "_type": "probelocation",
+            "_id": "3",
+            "_score": 1,
+            "_source": {
+              "pid": "3",
+              "location": "Cuisine"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "took": 76,
+      "timed_out": false,
+      "_shards": {
+        "total": 5,
+        "successful": 5,
+        "failed": 0
+      },
+      "hits": {
+        "total": 7,
+        "max_score": 1,
+        "hits": [
+          {
+            "_index": "homecenter",
+            "_type": "sensors",
+            "_id": "4.3",
+            "_score": 1,
+            "_source": {
+              "id": "4.3",
+              "pid": "4",
+              "type": "vcc"
+            }
+          },
+          {
+            "_index": "homecenter",
+            "_type": "sensors",
+            "_id": "4.2",
+            "_score": 1,
+            "_source": {
+              "id": "4.2",
+              "pid": "4",
+              "type": "hum"
+            }
+          },
+          {
+            "_index": "homecenter",
+            "_type": "sensors",
+            "_id": "3.1",
+            "_score": 1,
+            "_source": {
+              "id": "3.1",
+              "pid": "3",
+              "type": "temp"
+            }
+          },
+          {
+            "_index": "homecenter",
+            "_type": "sensors",
+            "_id": "4.1",
+            "_score": 1,
+            "_source": {
+              "id": "4.1",
+              "pid": "4",
+              "type": "temp"
+            }
+          },
+          {
+            "_index": "homecenter",
+            "_type": "sensors",
+            "_id": "3.2",
+            "_score": 1,
+            "_source": {
+              "id": "3.2",
+              "pid": "3",
+              "type": "hum"
+            }
+          },
+          {
+            "_index": "homecenter",
+            "_type": "sensors",
+            "_id": "5.1",
+            "_score": 1,
+            "_source": {
+              "id": "5.1",
+              "pid": "5",
+              "type": "temp"
+            }
+          },
+          {
+            "_index": "homecenter",
+            "_type": "sensors",
+            "_id": "3.3",
+            "_score": 1,
+            "_source": {
+              "id": "3.3",
+              "pid": "3",
+              "type": "vcc"
+            }
+          }
+        ]
+      },
+      "aggregations": {
+        "groupByProbe": {
+          "doc_count_error_upper_bound": 0,
+          "sum_other_doc_count": 0,
+          "buckets": [
+            {
+              "key": "3",
+              "doc_count": 3,
+              "vccByProbe": {
+                "doc_count": 1,
+                "vccSensor": {
+                  "hits": {
+                    "total": 1,
+                    "max_score": null,
+                    "hits": [
+                      {
+                        "_index": "homecenter",
+                        "_type": "sensors",
+                        "_id": "3.3",
+                        "_score": null,
+                        "sort": [
+                          -9223372036854776000
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "key": "4",
+              "doc_count": 3,
+              "vccByProbe": {
+                "doc_count": 1,
+                "vccSensor": {
+                  "hits": {
+                    "total": 1,
+                    "max_score": null,
+                    "hits": [
+                      {
+                        "_index": "homecenter",
+                        "_type": "sensors",
+                        "_id": "4.3",
+                        "_score": null,
+                        "sort": [
+                          -9223372036854776000
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "key": "5",
+              "doc_count": 1,
+              "vccByProbe": {
+                "doc_count": 0,
+                "vccSensor": {
+                  "hits": {
+                    "total": 0,
+                    "max_score": null,
+                    "hits": []
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "took": 75,
+      "timed_out": false,
+      "_shards": {
+        "total": 5,
+        "successful": 5,
+        "failed": 0
+      },
+      "hits": {
+        "total": 211,
+        "max_score": 0,
+        "hits": []
+      },
+      "aggregations": {
+        "groupByProbe": {
+          "doc_count_error_upper_bound": 0,
+          "sum_other_doc_count": 0,
+          "buckets": [
+            {
+              "key": "3",
+              "doc_count": 201,
+              "groupBySensor": {
+                "doc_count_error_upper_bound": 0,
+                "sum_other_doc_count": 0,
+                "buckets": [
+                  {
+                    "key": "3.1",
+                    "doc_count": 70,
+                    "last_value": {
+                      "hits": {
+                        "total": 70,
+                        "max_score": null,
+                        "hits": [
+                          {
+                            "_index": "homecenter",
+                            "_type": "sensorsmeasures",
+                            "_id": "AVQ5OMTJvoUwzMu7hDeU",
+                            "_score": null,
+                            "_source": {
+                              "id": "3.1",
+                              "pid": "3",
+                              "date": "2016-04-03T20:48:35.487Z",
+                              "value": 21.56
+                            },
+                            "sort": [
+                              1459716515487
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "key": "3.2",
+                    "doc_count": 70,
+                    "last_value": {
+                      "hits": {
+                        "total": 70,
+                        "max_score": null,
+                        "hits": [
+                          {
+                            "_index": "homecenter",
+                            "_type": "sensorsmeasures",
+                            "_id": "AVQwUeVsG84buiZuVwMc",
+                            "_score": null,
+                            "_source": {
+                              "id": "3.2",
+                              "pid": "3",
+                              "date": "2016-04-03T20:48:35.487Z",
+                              "value": 45.12
+                            },
+                            "sort": [
+                              1459716515487
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "key": "3.3",
+                    "doc_count": 61,
+                    "last_value": {
+                      "hits": {
+                        "total": 61,
+                        "max_score": null,
+                        "hits": [
+                          {
+                            "_index": "homecenter",
+                            "_type": "sensorsmeasures",
+                            "_id": "AVQwUqDTG84buiZuVwMf",
+                            "_score": null,
+                            "_source": {
+                              "id": "3.3",
+                              "pid": "3",
+                              "date": "2016-04-03T20:48:35.487Z",
+                              "value": 3.001
+                            },
+                            "sort": [
+                              1459716515487
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "key": "4",
+              "doc_count": 9,
+              "groupBySensor": {
+                "doc_count_error_upper_bound": 0,
+                "sum_other_doc_count": 0,
+                "buckets": [
+                  {
+                    "key": "4.1",
+                    "doc_count": 4,
+                    "last_value": {
+                      "hits": {
+                        "total": 4,
+                        "max_score": null,
+                        "hits": [
+                          {
+                            "_index": "homecenter",
+                            "_type": "sensorsmeasures",
+                            "_id": "AVQwKld-G84buiZuVwLk",
+                            "_score": null,
+                            "_source": {
+                              "id": "4.1",
+                              "pid": "4",
+                              "date": "2016-04-03T14:32:35.487Z",
+                              "value": 21.56
+                            },
+                            "sort": [
+                              1459693955487
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "key": "4.2",
+                    "doc_count": 4,
+                    "last_value": {
+                      "hits": {
+                        "total": 4,
+                        "max_score": null,
+                        "hits": [
+                          {
+                            "_index": "homecenter",
+                            "_type": "sensorsmeasures",
+                            "_id": "AVQwKld-G84buiZuVwLl",
+                            "_score": null,
+                            "_source": {
+                              "id": "4.2",
+                              "pid": "4",
+                              "date": "2016-04-03T14:32:35.487Z",
+                              "value": 45.12
+                            },
+                            "sort": [
+                              1459693955487
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "key": "4.3",
+                    "doc_count": 1,
+                    "last_value": {
+                      "hits": {
+                        "total": 1,
+                        "max_score": null,
+                        "hits": [
+                          {
+                            "_index": "homecenter",
+                            "_type": "sensorsmeasures",
+                            "_id": "AVQwKjfpG84buiZuVwLj",
+                            "_score": null,
+                            "_source": {
+                              "id": "4.3",
+                              "pid": "4",
+                              "date": "2016-04-03T14:32:35.487Z",
+                              "value": 3.102
+                            },
+                            "sort": [
+                              1459693955487
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "key": "5",
+              "doc_count": 1,
+              "groupBySensor": {
+                "doc_count_error_upper_bound": 0,
+                "sum_other_doc_count": 0,
+                "buckets": [
+                  {
+                    "key": "5.1",
+                    "doc_count": 1,
+                    "last_value": {
+                      "hits": {
+                        "total": 1,
+                        "max_score": null,
+                        "hits": [
+                          {
+                            "_index": "homecenter",
+                            "_type": "sensorsmeasures",
+                            "_id": "AVQwK8buG84buiZuVwLu",
+                            "_score": null,
+                            "_source": {
+                              "id": "5.1",
+                              "pid": "5",
+                              "date": "2016-04-03T14:32:35.487Z",
+                              "value": 21.56
+                            },
+                            "sort": [
+                              1459693955487
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -47,7 +47,7 @@ function pingES() {
 
         // undocumented params are appended to the query string 
         hello: '"elasticsearch!'
-    }, function(error) {
+    }, function (error) {
         if (error) {
             console.trace('elastic : elasticsearch cluster is down!\n');
         } else {
@@ -55,7 +55,7 @@ function pingES() {
         }
     });
 
-    elasticClient.info(function(err, response, status) {
+    elasticClient.info(function (err, response, status) {
         if (err) {
             console.trace('elastic : error gathering info on cluster');
         } else {
@@ -79,7 +79,7 @@ function createTypes() {
                 }
             }
         },
-        function(err, response, status) {
+        function (err, response, status) {
             if (err) {
                 console.trace('elastic : error creating type Probelocation \n' + err);
             }
@@ -103,7 +103,7 @@ function createTypes() {
                 }
             }
         },
-        function(err, response, status) {
+        function (err, response, status) {
             if (err) {
                 console.trace('elastic : error creating type Sensors \n' + err);
             }
@@ -127,7 +127,7 @@ function createTypes() {
                 }
             }
         },
-        function(err, response, status) {
+        function (err, response, status) {
             if (err) {
                 console.trace('elastic : error creating type Sensors measures \n' + err);
             }
@@ -146,10 +146,10 @@ function addSensor(sensor) {
         id: sensor.id,
         body: {
             id: sensor.id,
-            pid:sensor.pid,
+            pid: sensor.pid,
             type: sensor.type
         }
-    }, function(err, response) {
+    }, function (err, response) {
         if (err) {
             console.error('elastic : error creating sensor \n' + err);
         }
@@ -168,7 +168,7 @@ function addProbe(probe) {
             startdate: probe.startdate,
             enddate: probe.enddate
         }
-    }, function(err, response) {
+    }, function (err, response) {
         if (err) {
             console.error('elastic : error creating probe \n' + err);
         }
@@ -182,11 +182,11 @@ function addSensorMeasure(sensor) {
         type: 'sensorsmeasures',
         body: {
             id: sensor.id.toString(),
-            pid:sensor.pid,
+            pid: sensor.pid,
             date: sensor.date,
             value: sensor.value
         }
-    }, function(err, response) {
+    }, function (err, response) {
         if (err) {
             console.error('elastic : error adding sensor measure\n' + err);
         }
@@ -198,7 +198,7 @@ function getSensors(callback) {
     elasticClient.search({
         index: indexName,
         type: 'sensors'
-    }, function(err, response) {
+    }, function (err, response) {
         if (err) {
             console.error('elastic : error getting sensors \n' + err);
         }
@@ -213,7 +213,7 @@ function getProbes(callback) {
     elasticClient.search({
         index: indexName,
         type: 'probelocation'
-    }, function(err, response) {
+    }, function (err, response) {
         if (err) {
             console.error('elastic : error getting probes \n' + err);
         }
@@ -226,40 +226,58 @@ exports.getProbes = getProbes;
 
 function getProbesExt(callback) {
     elasticClient.msearch({
-        body:[
+        body: [
             // Probelocation
-            {index: indexName, type: 'probelocation'},
-            {query: {match_all: {}}},
+            { index: indexName, type: 'probelocation' },
+            { query: { match_all: {} } },
             // Sensors
-            {index: indexName, type: 'sensors'},
+            { index: indexName, type: 'sensors' },
             {
                 aggs: {
-                    group_by_probe: {
+                    groupByProbe: {
                         terms: {
                             field: 'pid'
+                        },
+                        aggs: {
+                            vccByProbe: {
+                                filter : { term: { type: 'vcc' } },
+                                 aggs: {
+                                    vccSensor: {
+                                        top_hits: {
+                                            size: 1,
+                                            sort: { 'date': { order: 'desc' } },
+                                            _source:false
+                                        }
+                                    }
+                                }
+                                // terms: {
+                                //     field: 'type',
+                                //     include: 'vcc',
+                                // }
+                            }
                         }
                     }
                 }
             },
             // SensorsMeasures
-            {index: indexName, type: 'sensorsmeasures'},
+            { index: indexName, type: 'sensorsmeasures' },
             {
-                size:0,
+                size: 0,
                 aggs: {
-                    group_by_probe: {
+                    groupByProbe: {
                         terms: {
                             field: 'pid'
                         },
                         aggs: {
-                            group_by_sensor: {
+                            groupBySensor: {
                                 terms: {
                                     field: 'id'
-                                },                            
-                                aggs:{
-                                    last_value:{
-                                        top_hits:{
-                                            size:1,
-                                            sort: {'date': {order: 'desc'}}
+                                },
+                                aggs: {
+                                    last_value: {
+                                        top_hits: {
+                                            size: 1,
+                                            sort: { 'date': { order: 'desc' } }
                                         }
                                     }
                                 }
@@ -268,17 +286,17 @@ function getProbesExt(callback) {
                     }
                 }
             },
-        ]    
+        ]
     },
-    function(err, response) {
-        if (err) {
-            console.error('elastic : error getting probes \n' + err);
-        }
-        else {
-            //console.info(JSON.stringify(response));
-            callback(response);
-        }
-    });
+        function (err, response) {
+            if (err) {
+                console.error('elastic : error getting probes \n' + err);
+            }
+            else {
+                //console.info(JSON.stringify(response));
+                callback(response);
+            }
+        });
 }
 exports.getProbesExt = getProbesExt;
 
@@ -292,7 +310,7 @@ function updateProbe(probe, callback) {
                 location: probe.location
             }
         }
-    }, function(err, response) {
+    }, function (err, response) {
         if (err) {
             console.error('elastic : error updating probe \n' + err);
         }

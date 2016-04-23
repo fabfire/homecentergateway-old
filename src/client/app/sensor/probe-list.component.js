@@ -31,7 +31,8 @@ System.register(['angular2/core', 'angular2/router', './probe.service'], functio
                 ProbeListComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this._probeService.probes$
-                        .subscribe(function (_probes) { return _this.probes = _probes; }, console.error, function () { return console.log('Completed!'); });
+                        .subscribe(function (_probes) { return _this.probes = _probes; }, console.error);
+                    //() => console.log('Completed!'));
                     //this._probeService.getProbes();
                 };
                 ProbeListComponent.prototype.routerCanReuse = function (next, prev) { return true; };

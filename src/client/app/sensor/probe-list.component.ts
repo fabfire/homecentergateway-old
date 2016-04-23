@@ -17,8 +17,8 @@ export class ProbeListComponent implements OnInit, CanReuse {
     ngOnInit() {
         this._probeService.probes$
             .subscribe(_probes => this.probes = _probes,
-            console.error,
-            () => console.log('Completed!'));
+            console.error);
+            //() => console.log('Completed!'));
                     
         //this._probeService.getProbes();
     }

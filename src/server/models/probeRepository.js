@@ -1,6 +1,8 @@
 
 var elastic = require('../db/elasticsearch');
 var moment = require('moment');
+var _ = require('lodash');
+
 var activesProbes = {};
 var allProbes = {};
 
@@ -38,26 +40,33 @@ var getProbes = function (data) {
 exports.getProbes = getProbes;
 
 var getProbesExt = function (callback) {
-    elastic.getProbesExt(function (response) {
+    elastic.getProbesExt(function (response) {//callback(response);return;
         if (response.responses.length !== 3) {
             return { 'err': 'ko' };
         }
         var probes = {};
-        // TODO : use response to send an array of probes with
-        // probeid, location count of sensors, count of measures, last VCC
+        // return array of probes with probeid, location, count of sensors, count of measures, last VCC
         response.responses[0].hits.hits.forEach(function (_probe) {
             var probe = {};
             probe.pid = _probe._id;
             probe.location = _probe._source.location;
             probes[_probe._id] = probe;
         });
-        response.responses[1].aggregations.group_by_probe.buckets.forEach(function (_probe) {
+        response.responses[1].aggregations.groupByProbe.buckets.forEach(function (_probe) {
             probes[_probe.key].numberofsensors = _probe.doc_count;
+            if (_probe.vccByProbe.vccSensor.hits.hits.length > 0) {
+                probes[_probe.key].vccSensorId = _probe.vccByProbe.vccSensor.hits.hits[0]._id;
+            }
         });
-        response.responses[2].aggregations.group_by_probe.buckets.forEach(function (_probe) {
+        response.responses[2].aggregations.groupByProbe.buckets.forEach(function (_probe) {
             probes[_probe.key].numberofmeasures = _probe.doc_count;
+            if (probes[_probe.key].vccSensorId) {
+                var vccSensor = _.find(_probe.groupBySensor.buckets, { 'key': '' + probes[_probe.key].vccSensorId + '' });
+                probes[_probe.key].vcc = vccSensor.last_value.hits.hits[0]._source.value;
+                delete probes[_probe.key].vccSensorId;
+            }
         });
-        callback(probes);
+        callback(Object.keys(probes).map(function (key) { return probes[key]; }));
     });
 };
 exports.getProbesExt = getProbesExt;

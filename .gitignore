@@ -9,3 +9,4 @@ _theme
 logs.*
 typings
 *.js.map
+.vscode
