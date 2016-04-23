@@ -24,13 +24,8 @@
         margin-bottom: 5px;
     }
 }
-
-/*.wi-thermometer, .wi-humidity, .wi-barometer {
-    display: inline-block;
-    font-family: 'weathericons';
-    font-style: normal;
-    font-weight: normal;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}*/
+.widget-user-username span, .widget-user-desc span{
+    background-color:rgba(120, 120, 120, 0.6);
+    border-radius: 3px;
+    padding: 0 5px;
+}

@@ -57,9 +57,9 @@ sensorRepository.initSensorsFromDB();
 setTimeout(function() {
     simulateSensorsPackets();
 }, 5000);
-// setInterval(function() {
-//     simulateSensorsPackets();
-// }, 30000);
+setInterval(function() {
+    simulateSensorsPackets();
+}, 30000);
 
 function simulateSensorsPackets() {
     analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,hum:4512,vcc:3001,"date":"2016-04-03T20:48:35.487Z"', io);

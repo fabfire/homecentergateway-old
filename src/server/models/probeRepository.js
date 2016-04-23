@@ -40,7 +40,7 @@ var getProbes = function (data) {
 exports.getProbes = getProbes;
 
 var getProbesExt = function (callback) {
-    elastic.getProbesExt(function (response) {//callback(response);return;
+    elastic.getProbesExt(function (response) {//callback(response);
         if (response.responses.length !== 3) {
             return { 'err': 'ko' };
         }
@@ -50,6 +50,7 @@ var getProbesExt = function (callback) {
             var probe = {};
             probe.pid = _probe._id;
             probe.location = _probe._source.location;
+            probe.image = _probe._source.image;
             probes[_probe._id] = probe;
         });
         response.responses[1].aggregations.groupByProbe.buckets.forEach(function (_probe) {
@@ -66,7 +67,7 @@ var getProbesExt = function (callback) {
                 delete probes[_probe.key].vccSensorId;
             }
         });
-        callback(Object.keys(probes).map(function (key) { return probes[key]; }));
+       callback(Object.keys(probes).map(function (key) { return probes[key]; }));
     });
 };
 exports.getProbesExt = getProbesExt;

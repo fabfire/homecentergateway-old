@@ -8,6 +8,7 @@ import { ControlSidebarComponent } from './layout/control-sidebar.component';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
 import { HTTP_PROVIDERS} from 'angular2/http';
 import { ProbeListComponent } from './sensor/probe-list.component';
+import { ProbeDetailComponent } from './sensor/probe-detail.component';
 import { SensorListComponent } from './sensor/sensor-list.component';
 import { SensorDetailComponent } from './sensor/sensor-detail.component';
 import { ConsoleComponent } from './console/console.component';
@@ -27,6 +28,7 @@ declare var loadAdminLTE: any;
     { path: '/', name: 'Sensors', component: SensorListComponent, useAsDefault: true },
     { path: '/sensor/:type/:id', name: 'SensorDetail', component: SensorDetailComponent },
     { path: '/probes', name: 'Probes', component: ProbeListComponent },
+    { path: '/probe/:id', name: 'ProbeDetail', component: ProbeDetailComponent },
     { path: '/console', name: 'Console', component: ConsoleComponent }
 ])
 export class AppComponent implements AfterViewInit {
