@@ -1,10 +1,20 @@
-export class ProbeListData{
+export class ProbeData{
     pid: string;
     location: string;
     image: Object;
     numberofsensors:number;
     numberofmeasures:number;
     vcc:number;
+}
+
+export class ProbeDetailData{
+    pid: string;
+    sensorstats:SensorStats[];
+}
+
+export class SensorStats{
+    sensordata:SensorData;
+    count:number;
 }
 
 export class SensorData{

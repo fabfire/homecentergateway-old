@@ -28,20 +28,47 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
                     this.getProbes = function () {
                         _this.probesList$ = _this.http.get("api/probeslist")
                             .map(function (response) { return response.json(); });
-                        // .subscribe(
-                        // data => this.probes$ = data,
-                        // err => this.logError(err)
-                        // // () => console.log('subscribe ')
-                        // );
+                        _this.probesList$.subscribe(function (_probe) {
+                            var $this = _this;
+                            _probe.forEach(function (probe, i) {
+                                $this._listDataStore.probeData[i] = probe;
+                            });
+                        }, function (err) { return _this.logError(err); });
+                    };
+                    this.getProbe = function (id) {
+                        var foundProbe;
+                        _this._listDataStore.probeData.some(function (probe, i) {
+                            if (probe.pid === id) {
+                                foundProbe = probe;
+                                return true;
+                            }
+                        });
+                        if (!foundProbe) {
+                            console.log('probe not found');
+                            _this.getProbes();
+                        }
+                        return foundProbe;
+                    };
+                    this.getProbeDetail = function (id) {
+                        return _this.http.get("api/getprobesensorsstats/" + id)
+                            .map(function (response) { return response.json(); });
                     };
                     this.updateProbe = function (_probe) {
                         var probe;
                         var body = JSON.stringify(_probe);
                         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
                         var options = new http_1.RequestOptions({ headers: headers });
+                        var $this = _this;
                         _this.http.put('api/probe/' + _probe.pid, body, options)
                             .map(function (response) { return response.json(); })
-                            .subscribe(function (data) { return probe = data; }, function (err) { return _this.logError(err); });
+                            .subscribe(function (data) {
+                            $this._listDataStore.probeData.some(function (probe, i) {
+                                if (probe.pid === _probe.pid) {
+                                    probe.location = data.location;
+                                    return true;
+                                }
+                            });
+                        }, function (err) { return _this.logError(err); });
                         // () => console.log('subscribe ')
                     };
                     this._listDataStore = { probeData: [] };

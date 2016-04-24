@@ -15,7 +15,7 @@ var sensorRepository = require('./models/sensorRepository');
 var port = config.port;
 var environment = config.environment;
 
-messageBus.on('data', function(data) {
+messageBus.on('data', function (data) {
     analyzer.analyze(data, io);
     //TODO : remove fake data
     // if (data.indexOf('msg') === -1) {
@@ -34,7 +34,7 @@ console.log('Launching node');
 console.log('PORT=' + port);
 console.log('NODE_ENV=' + environment);
 
-server.listen(port, function() {
+server.listen(port, function () {
     console.log('Express server listening on port ' + port);
     console.log('__dirname = ' + __dirname +
         '\nprocess.cwd = ' + process.cwd());
@@ -54,16 +54,17 @@ sensorRepository.initSensorsFromDB();
 /************************************************************** */
 /*                               Tests                          */
 /************************************************************** */
-setTimeout(function() {
+setTimeout(function () {
     simulateSensorsPackets();
 }, 5000);
-setInterval(function() {
+setInterval(function () {
     simulateSensorsPackets();
 }, 30000);
 
 function simulateSensorsPackets() {
-    analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,hum:4512,vcc:3001,"date":"2016-04-03T20:48:35.487Z"', io);
-   //analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,hum:4512,vcc:3102,"date":"2016-04-03T14:32:35.487Z"', io);
+    analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,hum:4512,vcc:3001,"date":"' + new Date().toJSON() + '"', io);
+    analyzer.analyze('"nodeid":"4","rx_rssi":"-55",temp:1745,vcc:3102,"date":"' + new Date().toJSON() + '"', io);
+    analyzer.analyze('"nodeid":"5","rx_rssi":"-78",temp:-1212,"date":"' + new Date().toJSON() + '"', io);
 
     // var sensors = [
     //     {

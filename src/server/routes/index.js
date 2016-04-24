@@ -7,6 +7,7 @@ module.exports = function (app) {
     var api = '/api';
     app.get(api + '/probes', getProbes);
     app.get(api + '/probeslist', getProbesList);
+    app.get(api + '/getprobesensorsstats/:id', getProbeSensorsStats);
     app.put(api + '/probe/:id', updateProbe); // /probes/:id
 
     function getProbes(req, res) {
@@ -21,6 +22,24 @@ module.exports = function (app) {
 
             res.status(200).send(response);
         });
+    }
+
+    function getProbeSensorsStats(req, res) {
+        console.log(req.params.id);
+        if (isNaN(parseInt(req.params.id))) {
+            res.respond(new Error('Id must be a valid integer'), 400);
+        } else {
+            probeRepository.getProbeSensorsStats(req.params.id, function (probe, err) {
+                if (err) {
+                    res.status(500).send(err);
+                }
+                else {
+                    res.status(200).send(probe);
+                }
+            });
+
+            res.status(200);
+        }
     }
 
     function updateProbe(req, res) {

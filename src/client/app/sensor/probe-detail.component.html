@@ -1,1 +1,63 @@
-Probe detail
+<div class="row">
+    <div class="col-md-6">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header bg-black" style="background: url('{{editProbeData.image}}') 0 no-repeat;">
+                <h3 class="widget-user-username"><span>{{editProbeData.location}}</span></h3>
+                <h5 class="widget-user-desc"><span>{{editProbeData.pid}}</span></h5>
+            </div>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div [ngClass]="{'col-sm-4': editProbeData.vcc, 'col-sm-6': ! editProbeData.vcc, 'border-right':true}">
+                        <div class="description-block">
+                            <h5 class="description-header">{{editProbeData.numberofsensors}}</h5>
+                            <span class="description-text">{{editProbeData.numberofsensors > 1 ? 'Capteurs':'Capteur'}} </span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div [ngClass]="{'col-sm-4': editProbeData.vcc, 'col-sm-6': ! editProbeData.vcc, 'border-right':true}">
+                        <div class="description-block">
+                            <h5 class="description-header">{{editProbeData.numberofmeasures}}</h5>
+                            <span class="description-text">{{editProbeData.numberofmeasures > 1 ? 'Mesures':'Mesure'}}</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div *ngIf="editProbeData.vcc" class="col-sm-4">
+                        <div class="description-block">
+                            <h5 class="description-header">{{editProbeData.vcc}}</h5>
+                            <span class="description-text">VCC</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
+        <!-- /.widget-user -->
+    </div>
+    <div *ngIf="probeDetailedData" class="col-md-6">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user-2">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header bg-gray">
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    
+                </div>
+                <h3 class="widget-user-username">{{editProbeData.numberofsensors > 1 ? 'Capteurs':'Capteur'}}</h3>
+            </div>
+            <div class="box-footer no-padding">
+                <ul class="nav nav-stacked">
+                    <li *ngFor="#detail of probeDetailedData.sensorstats"> {{_utilsService.getTypeLabel(detail.sensordata.type)}}
+                        <span class="pull-right badge {{_utilsService.getTypeColor(detail.sensordata.type)}}">{{detail.count}} </span></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.widget-user -->
+    </div>
+</div>

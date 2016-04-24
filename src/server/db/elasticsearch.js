@@ -241,7 +241,7 @@ function getProbesExt(callback) {
                         aggs: {
                             vccByProbe: {
                                 filter : { term: { type: 'vcc' } },
-                                 aggs: {
+                                aggs: {
                                     vccSensor: {
                                         top_hits: {
                                             size: 1,
@@ -250,10 +250,6 @@ function getProbesExt(callback) {
                                         }
                                     }
                                 }
-                                // terms: {
-                                //     field: 'type',
-                                //     include: 'vcc',
-                                // }
                             }
                         }
                     }
@@ -288,17 +284,65 @@ function getProbesExt(callback) {
             },
         ]
     },
-        function (err, response) {
-            if (err) {
-                console.error('elastic : error getting probes \n' + err);
-            }
-            else {
-                //console.info(JSON.stringify(response));
-                callback(response);
-            }
-        });
+    function (err, response) {
+        if (err) {
+            console.error('elastic : error getting probes \n' + err);
+        }
+        else {
+            //console.info(JSON.stringify(response));
+            callback(response);
+        }
+    });
 }
 exports.getProbesExt = getProbesExt;
+
+function getProbeSensorsStats(id, callback) {
+    elasticClient.msearch({
+        body: [
+            // Sensors
+            { index: indexName, type: 'sensors' },
+            {
+                query: {
+                    match: {
+                        pid: {
+                            query: id
+                        }
+                    }
+                },
+                sort: { 'id': { order: 'asc' } }
+            },
+            // SensorsMeasures
+            { index: indexName, type: 'sensorsmeasures' },
+            {
+                query: {
+                    match: {
+                        pid: {
+                            query: id
+                        }
+                    }
+                },
+                size: 0,
+                aggs: {
+                    groupBySensor: {
+                        terms: {
+                            field: 'id'
+                        }
+                    }   
+                }
+            },
+        ]
+    },
+    function (err, response) {
+        if (err) {
+            console.error('elastic : error getting probedetail ' + id + ' \n' + err);
+        }
+        else {
+            //console.info(JSON.stringify(response));
+            callback(response);
+        }
+    });
+}
+exports.getProbeSensorsStats = getProbeSensorsStats;
 
 function updateProbe(probe, callback) {
     elasticClient.update({

@@ -2,7 +2,7 @@ import {Component, OnInit} from 'angular2/core';
 import {CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from 'angular2/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {ProbeService} from './probe.service'
-import {ProbeListData, HashTable} from './model';
+import {ProbeData, HashTable} from './model';
 
 declare var $: any;
 
@@ -12,7 +12,7 @@ declare var $: any;
     directives: [ROUTER_DIRECTIVES],
 })
 export class ProbeListComponent implements OnInit, CanReuse {
-    probes: ProbeListData[];
+    probes: ProbeData[];
 
     constructor(private _probeService: ProbeService) { }
 

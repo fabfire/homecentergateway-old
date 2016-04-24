@@ -1,15 +1,24 @@
 import {Inject, Injectable} from 'angular2/core';
-import {Observable} from 'rxjs/Rx';
+import {Observable, Subject} from 'rxjs/Rx';
 import {Http, Headers, RequestOptions} from 'angular2/http';
-import {ProbeListData} from './model';
+import {ProbeData} from './model';
 
 @Injectable()
 export class ProbeService {
-    probesList$: Observable<ProbeListData[]>;
+    // Observable for update detection of the probe list info
+    probesList$: Observable<ProbeData[]>;
+    // Observable for update detection of probe detail info
+    probeDetail$: Observable<ProbeData>;
+
+    // Observable string ressource for showing update of one probe
+    //private _probeUpdated = new Subject<string>();
+    // Observable streams
+    //probeUpdated$ = this._probeUpdated.asObservable();
+
     private _listDataStore: {
-        probeData: ProbeListData[]
+        probeData: ProbeData[]
     };
-    
+
     constructor(private http: Http) {
         this._listDataStore = { probeData: [] };
     }
@@ -17,11 +26,34 @@ export class ProbeService {
     getProbes = () => {
         this.probesList$ = this.http.get("api/probeslist")
             .map(response => response.json());
-        // .subscribe(
-        // data => this.probes$ = data,
-        // err => this.logError(err)
-        // // () => console.log('subscribe ')
-        // );
+        this.probesList$.subscribe(_probe => {
+            var $this = this;
+            _probe.forEach((probe, i) => {
+                $this._listDataStore.probeData[i] = probe;
+            })
+        }, err => this.logError(err)
+            //, () => console.log('subscribe ')
+        );
+    };
+
+    getProbe = (id: string) => {
+        var foundProbe: ProbeData;
+        this._listDataStore.probeData.some((probe, i) => {
+            if (probe.pid === id) {
+                foundProbe = probe;
+                return true;
+            }
+        });
+        if (!foundProbe) {
+            console.log('probe not found');
+            this.getProbes();
+        }
+        return foundProbe;
+    }
+
+    getProbeDetail = (id: string) => {
+        return this.http.get("api/getprobesensorsstats/" + id)
+            .map(response => response.json());
     };
 
     updateProbe = (_probe) => {
@@ -30,10 +62,18 @@ export class ProbeService {
         var headers = new Headers({ 'Content-Type': 'application/json' });
         var options = new RequestOptions({ headers: headers });
 
+        var $this = this;
         this.http.put('api/probe/' + _probe.pid, body, options)
             .map(response => response.json())
             .subscribe(
-            data => probe = data,
+            data => {
+                $this._listDataStore.probeData.some((probe, i) => {
+                    if (probe.pid === _probe.pid) {
+                        probe.location = data.location;
+                        return true;
+                    }
+                });
+            },
             err => this.logError(err));
         // () => console.log('subscribe ')
 

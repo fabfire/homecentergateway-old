@@ -67,10 +67,32 @@ var getProbesList = function (callback) {
                 delete probes[_probe.key].vccSensorId;
             }
         });
-       callback(Object.keys(probes).map(function (key) { return probes[key]; }));
+        callback(Object.keys(probes).map(function (key) { return probes[key]; }));
     });
 };
 exports.getProbesList = getProbesList;
+
+var getProbeSensorsStats = function (id, callback) {
+    elastic.getProbeSensorsStats(id, function (response) {//callback(response);
+        var probe = {
+            pid: id,
+            sensorstats:{}
+        };
+        response.responses[0].hits.hits.forEach(function (_sensor) {
+            var sensor = {};
+            sensor.id = _sensor._id;
+            sensor.type = _sensor._source.type;
+            probe.sensorstats[sensor.id] = {};
+            probe.sensorstats[sensor.id].sensordata = sensor;
+        });
+        response.responses[1].aggregations.groupBySensor.buckets.forEach(function (_sensor) {
+           probe.sensorstats[_sensor.key].count = _sensor.doc_count;
+        });
+        probe.sensorstats = Object.keys(probe.sensorstats).map(function (key) { return probe.sensorstats[key]; })
+        callback(probe);
+    });
+};
+exports.getProbeSensorsStats = getProbeSensorsStats;
 
 var getProbeName = function (id) {
     if (allProbes[id]) {

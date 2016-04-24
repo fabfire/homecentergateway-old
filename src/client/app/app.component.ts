@@ -14,6 +14,7 @@ import { SensorDetailComponent } from './sensor/sensor-detail.component';
 import { ConsoleComponent } from './console/console.component';
 import { SensorService } from './sensor/sensor.service'
 import { ProbeService } from './sensor/probe.service'
+import { SensorUtilsService } from './sensor/utils.service'
 
 declare var loadAdminLTE: any;
 
@@ -21,7 +22,7 @@ declare var loadAdminLTE: any;
     selector: 'homecenter',
     templateUrl: './app/app.component.html',
     directives: [MainHeaderComponent, MainSidebarComponent, MainContentComponent, MainFooterComponent, ControlSidebarComponent]
-    , providers: [ROUTER_PROVIDERS, HTTP_PROVIDERS, SensorService, ProbeService]
+    , providers: [ROUTER_PROVIDERS, HTTP_PROVIDERS, SensorService, ProbeService, SensorUtilsService]
 })
 
 @RouteConfig([
