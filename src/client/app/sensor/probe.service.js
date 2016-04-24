@@ -26,7 +26,7 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
                     var _this = this;
                     this.http = http;
                     this.getProbes = function () {
-                        _this.probes$ = _this.http.get("api/probeslist")
+                        _this.probesList$ = _this.http.get("api/probeslist")
                             .map(function (response) { return response.json(); });
                         // .subscribe(
                         // data => this.probes$ = data,
@@ -44,7 +44,7 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
                             .subscribe(function (data) { return probe = data; }, function (err) { return _this.logError(err); });
                         // () => console.log('subscribe ')
                     };
-                    this.getProbes();
+                    this._listDataStore = { probeData: [] };
                 }
                 ProbeService.prototype.logError = function (err) {
                     console.error('There was an error: ' + err);

@@ -2,7 +2,7 @@ import {Component, OnInit} from 'angular2/core';
 import {CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from 'angular2/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
-import {SensorData, HashTable} from './sensor.model';
+import {SensorData, HashTable} from './model';
 
 declare var $: any;
 

@@ -1,16 +1,16 @@
 System.register([], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var ProbeData, SensorData;
+    var ProbeListData, SensorData;
     return {
         setters:[],
         execute: function() {
-            ProbeData = (function () {
-                function ProbeData() {
+            ProbeListData = (function () {
+                function ProbeListData() {
                 }
-                return ProbeData;
+                return ProbeListData;
             }());
-            exports_1("ProbeData", ProbeData);
+            exports_1("ProbeListData", ProbeListData);
             SensorData = (function () {
                 function SensorData() {
                 }
@@ -20,4 +20,4 @@ System.register([], function(exports_1, context_1) {
         }
     }
 });
-//# sourceMappingURL=sensor.model.js.map
+//# sourceMappingURL=model.js.map

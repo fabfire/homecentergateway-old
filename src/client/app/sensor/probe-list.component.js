@@ -30,10 +30,22 @@ System.register(['angular2/core', 'angular2/router', './probe.service'], functio
                 }
                 ProbeListComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    this._probeService.probes$
-                        .subscribe(function (_probes) { return _this.probes = _probes; }, console.error);
-                    //() => console.log('Completed!'));
-                    //this._probeService.getProbes();
+                    this._probeService.getProbes();
+                    this._probeService.probesList$
+                        .subscribe(function (_probes) {
+                        _this.probes = _probes;
+                        setTimeout(function () {
+                            $('.box').hover(function () {
+                                $(this).find('.widget-user-header').stop().animate({
+                                    'background-position': '20%'
+                                }, 800, 'linear');
+                            }, function () {
+                                $(this).find('.widget-user-header').stop().animate({
+                                    'background-position': '0%'
+                                }, 800, 'linear');
+                            });
+                        }, 200);
+                    }, console.error);
                 };
                 ProbeListComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 ProbeListComponent = __decorate([

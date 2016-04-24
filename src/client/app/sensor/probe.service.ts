@@ -1,22 +1,27 @@
 import {Inject, Injectable} from 'angular2/core';
 import {Observable} from 'rxjs/Rx';
 import {Http, Headers, RequestOptions} from 'angular2/http';
-import {ProbeData} from './sensor.model';
+import {ProbeListData} from './model';
 
 @Injectable()
 export class ProbeService {
-    probes$: Observable<ProbeData[]>;
-
-    constructor(private http: Http) { this.getProbes();}
+    probesList$: Observable<ProbeListData[]>;
+    private _listDataStore: {
+        probeData: ProbeListData[]
+    };
+    
+    constructor(private http: Http) {
+        this._listDataStore = { probeData: [] };
+    }
 
     getProbes = () => {
-        this.probes$ = this.http.get("api/probeslist")
+        this.probesList$ = this.http.get("api/probeslist")
             .map(response => response.json());
-            // .subscribe(
-            // data => this.probes$ = data,
-            // err => this.logError(err)
-            // // () => console.log('subscribe ')
-            // );
+        // .subscribe(
+        // data => this.probes$ = data,
+        // err => this.logError(err)
+        // // () => console.log('subscribe ')
+        // );
     };
 
     updateProbe = (_probe) => {

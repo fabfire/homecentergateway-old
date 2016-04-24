@@ -1,7 +1,7 @@
 import {Inject, Injectable} from 'angular2/core';
 import {Http} from 'angular2/http';
 import {Observable, Observer, Subject} from 'rxjs/Rx';
-import {SensorData, HashTable} from './sensor.model';
+import {SensorData, HashTable} from './model';
 import {ProbeService} from './probe.service';
 
 @Injectable()
