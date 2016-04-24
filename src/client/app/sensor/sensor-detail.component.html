@@ -9,6 +9,9 @@
                 <template ngSwitchDefault>Type inconnu </template>
                 </span> -
                 <span *ngIf="editSensorData.name"> {{editSensorData.name}}</span><span *ngIf="! editSensorData.name">id : {{editSensorData.id}}</span></h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -50,4 +53,8 @@
             </form>
         </div>
     </div>
+</div>
+
+<div class="row">
+    <sensor-chart [sensorid]="sensorid" [lastValueDate]="lastDate"></sensor-chart>
 </div>

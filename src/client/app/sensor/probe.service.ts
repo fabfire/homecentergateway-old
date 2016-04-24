@@ -11,9 +11,9 @@ export class ProbeService {
     probeDetail$: Observable<ProbeData>;
 
     // Observable string ressource for showing update of one probe
-    //private _probeUpdated = new Subject<string>();
+    private _probeUpdated = new Subject<string>();
     // Observable streams
-    //probeUpdated$ = this._probeUpdated.asObservable();
+    probeUpdated$ = this._probeUpdated.asObservable();
 
     private _listDataStore: {
         probeData: ProbeData[]
@@ -30,10 +30,12 @@ export class ProbeService {
             var $this = this;
             _probe.forEach((probe, i) => {
                 $this._listDataStore.probeData[i] = probe;
+                this._probeUpdated.next(probe.pid);
             })
         }, err => this.logError(err)
             //, () => console.log('subscribe ')
         );
+        
     };
 
     getProbe = (id: string) => {
@@ -44,10 +46,6 @@ export class ProbeService {
                 return true;
             }
         });
-        if (!foundProbe) {
-            console.log('probe not found');
-            this.getProbes();
-        }
         return foundProbe;
     }
 

@@ -25,7 +25,7 @@ module.exports = function (app) {
     }
 
     function getProbeSensorsStats(req, res) {
-        console.log(req.params.id);
+        console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
         if (isNaN(parseInt(req.params.id))) {
             res.respond(new Error('Id must be a valid integer'), 400);
         } else {

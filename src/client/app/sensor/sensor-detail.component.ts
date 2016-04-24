@@ -2,16 +2,19 @@ import {Component, OnInit} from 'angular2/core';
 import {Router, RouteParams, CanReuse, ComponentInstruction} from 'angular2/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
+import {SensorChartComponent} from './sensor-chart-component'
 import {SensorData, HashTable} from './model';
 
 declare var $: any;
 
 @Component({
     selector: 'sensor-detail',
-    templateUrl: './app/sensor/sensor-detail.component.html'
+    templateUrl: './app/sensor/sensor-detail.component.html',
+    directives:[SensorChartComponent]
 })
 export class SensorDetailComponent implements OnInit, CanReuse {
-
+    sensorid:string;
+    lastDate:string;
     sensorData: SensorData;
     editSensorData: SensorData;
     subscription: Subscription;
@@ -21,7 +24,8 @@ export class SensorDetailComponent implements OnInit, CanReuse {
     ngOnInit() {
         let id = this._routeParams.get('id');
         let type = this._routeParams.get('type');
-
+        this.sensorid = id;
+        
         // automatically update sensor view when new data comes
         this.subscription = this._sensorService.sensorUpdated$.subscribe(
             _id => {
@@ -51,6 +55,7 @@ export class SensorDetailComponent implements OnInit, CanReuse {
     private getSensor(id, type) {
         this.sensorData = this._sensorService.getSensor(id, type);
         this.editSensorData = this.clone(this.sensorData);
+        this.lastDate = this.editSensorData.date.toISOString();
     }
 
     private clone(obj) {

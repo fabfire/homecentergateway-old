@@ -28,6 +28,7 @@ System.register(['angular2/core', 'angular2/router', './probe.service', './utils
             }],
         execute: function() {
             ProbeDetailComponent = (function () {
+                // subscriptionDetail: Subscription;
                 function ProbeDetailComponent(_router, _routeParams, _probeService, _utilsService) {
                     this._router = _router;
                     this._routeParams = _routeParams;
@@ -36,21 +37,27 @@ System.register(['angular2/core', 'angular2/router', './probe.service', './utils
                 }
                 ProbeDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    console.log('detail ngOnInit');
                     var id = this._routeParams.get('id');
                     // automatically update sensor view when new data comes
-                    // this.subscription = this._probeService.probeUpdated$.subscribe(
-                    //     _id => {
-                    //         if (id === _id) {
-                    //             this.getProbe(id);
-                    //         }
-                    //     });
+                    this.subscription = this._probeService.probeUpdated$.subscribe(function (_id) {
+                        if (id === _id) {
+                            _this.getProbe(id);
+                        }
+                    });
                     this.getProbe(id);
                     this._probeService.getProbeDetail(id).subscribe(function (updatedData) { console.log(updatedData); _this.probeDetailedData = updatedData; });
                 };
                 ProbeDetailComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 ProbeDetailComponent.prototype.getProbe = function (id) {
+                    var _this = this;
                     this.probeData = this._probeService.getProbe(id);
+                    if (!this.probeData) {
+                        this._probeService.getProbes();
+                        this._probeService.probesList$
+                            .subscribe(function (_probes) {
+                            _this.probeData = _this._probeService.getProbe(id);
+                        }, console.error);
+                    }
                     this.editProbeData = this.clone(this.probeData);
                 };
                 ProbeDetailComponent.prototype.clone = function (obj) {

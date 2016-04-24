@@ -21,8 +21,8 @@ declare var loadAdminLTE: any;
 @Component({
     selector: 'homecenter',
     templateUrl: './app/app.component.html',
-    directives: [MainHeaderComponent, MainSidebarComponent, MainContentComponent, MainFooterComponent, ControlSidebarComponent]
-    , providers: [ROUTER_PROVIDERS, HTTP_PROVIDERS, SensorService, ProbeService, SensorUtilsService]
+    directives: [MainHeaderComponent, MainSidebarComponent, MainContentComponent, MainFooterComponent, ControlSidebarComponent],
+    providers: [ROUTER_PROVIDERS, HTTP_PROVIDERS, SensorService, ProbeService, SensorUtilsService]
 })
 
 @RouteConfig([

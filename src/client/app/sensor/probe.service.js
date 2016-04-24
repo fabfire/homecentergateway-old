@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http'], function(exports_1, context_1) {
+System.register(['angular2/core', 'rxjs/Rx', 'angular2/http'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,12 +10,15 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1;
+    var core_1, Rx_1, http_1;
     var ProbeService;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
+            },
+            function (Rx_1_1) {
+                Rx_1 = Rx_1_1;
             },
             function (http_1_1) {
                 http_1 = http_1_1;
@@ -25,6 +28,10 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
                 function ProbeService(http) {
                     var _this = this;
                     this.http = http;
+                    // Observable string ressource for showing update of one probe
+                    this._probeUpdated = new Rx_1.Subject();
+                    // Observable streams
+                    this.probeUpdated$ = this._probeUpdated.asObservable();
                     this.getProbes = function () {
                         _this.probesList$ = _this.http.get("api/probeslist")
                             .map(function (response) { return response.json(); });
@@ -32,6 +39,7 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
                             var $this = _this;
                             _probe.forEach(function (probe, i) {
                                 $this._listDataStore.probeData[i] = probe;
+                                _this._probeUpdated.next(probe.pid);
                             });
                         }, function (err) { return _this.logError(err); });
                     };
@@ -43,10 +51,6 @@ System.register(['angular2/core', 'angular2/http'], function(exports_1, context_
                                 return true;
                             }
                         });
-                        if (!foundProbe) {
-                            console.log('probe not found');
-                            _this.getProbes();
-                        }
                         return foundProbe;
                     };
                     this.getProbeDetail = function (id) {
