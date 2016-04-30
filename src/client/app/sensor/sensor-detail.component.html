@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-12">
-        <div *ngIf="editSensorData" [ngClass]="{'box-warning': editSensorData.type == 'temp', 'box-info': editSensorData.type =='hum', 'box-success': editSensorData.type =='pres', 'box':true}">
+        <div *ngIf="editSensorData" 
+        [ngClass]="{'box-warning': editSensorData.type == 'temp', 'box-info': editSensorData.type =='hum', 'box-success': editSensorData.type =='pres', 'box-danger': editSensorData.type =='vcc', 'box':true}">
             <div class="box-header with-border">
                 <h3 class="box-title">Détail du capteur :<span [ngSwitch]="editSensorData.type">
                 <template [ngSwitchWhen]="'temp'">Température </template>

@@ -128,7 +128,7 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                                         valueDecimals: 1
                                     },
                                     dataGrouping: {
-                                        enabled: false
+                                        enabled: true
                                     }
                                 }]
                         };

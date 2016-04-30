@@ -53,7 +53,7 @@
             <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                     <li *ngFor="#detail of probeDetailedData.sensorstats">
-                        <a href="{{_router.root.currentInstruction.component.urlPath}}#{{detail.sensordata.id}}"> {{_utilsService.getTypeLabel(detail.sensordata.type)}}
+                        <a href='#' [routerLink]="['SensorDetail', {type:detail.sensordata.type, id: detail.sensordata.id}]"> {{_utilsService.getTypeLabel(detail.sensordata.type)}}
                             <span class="pull-right badge {{_utilsService.getTypeColor(detail.sensordata.type)}}">{{detail.count}} </span>
                         </a>
                     </li>

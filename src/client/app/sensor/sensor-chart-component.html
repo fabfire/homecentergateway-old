@@ -1,5 +1,5 @@
 <div class="col-md-12">
-    <div [ngClass]="{'box-warning': sensorType == 'temp', 'box-info': sensorType =='hum', 'box-success': sensorType =='pres', 'box':true}">
+    <div [ngClass]="{'box-warning': sensorType == 'temp', 'box-info': sensorType =='hum', 'box-success': sensorType =='pres', 'box-danger': sensorType =='vcc', 'box':true}">
         <div class="box-header with-border">
             <h3 class="box-title">Graphique</h3>
             <div class="box-tools pull-right">
@@ -7,6 +7,8 @@
             </div>
         </div>
         <!-- /.box-header -->
-        <div [ng2-highstocks]="chartStock" class="graph"></div>
+        <div class="box-body">
+            <div [ng2-highstocks]="chartStock" class="graph"></div>
+        </div>
     </div>
 </div>

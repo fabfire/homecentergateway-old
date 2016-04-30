@@ -122,7 +122,7 @@ export class SensorChartComponent implements OnInit, CanReuse {
 							valueDecimals: 1
 						},
 						dataGrouping: {
-							enabled: false
+							enabled: true
 						}
 					}]
 				};
