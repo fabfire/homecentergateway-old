@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/bower_components/toastr/toastr.css" />
     <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.css" />
     <link rel="stylesheet" href="/bower_components/weather-icons/css/weather-icons.css" />
+    <link rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" />
     <!-- endbower -->
     <!-- inject:vendorcss -->
 
@@ -72,7 +73,7 @@
     <script src="lib/angular2/router.dev.js"></script>
 
     <!-- endinject -->
-    
+
     <!-- build:js js/lib.js-->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
@@ -83,6 +84,9 @@
     <script src="/bower_components/moment/min/moment-with-locales.js"></script>
     <script src="/bower_components/PACE/pace.js"></script>
     <script src="/bower_components/toastr/toastr.js"></script>
+    <script src="/bower_components/highcharts/highstock.js"></script>
+    <script src="/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min.js"></script>
     <!--  endbower -->
     <!-- inject:vendorjs -->
     <script src="node_modules/socket.io-client/socket.io.js"></script>
@@ -90,14 +94,21 @@
     <script src="src/client/lib/kendo.console/js/kendo.console.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
-    
+
     <!-- 2. Configure SystemJS -->
     <script>
         System.config({
+            map: {
+                'ng2-highcharts': 'node_modules/ng2-highcharts'
+            },
             packages: {             
                 app: {
                     format: 'register',
                     defaultExtension: 'js'
+                },
+                'ng2-highcharts' : {
+                    main: 'ng2-highcharts',
+                    defaultExtension: 'js',
                 }
             }
         });

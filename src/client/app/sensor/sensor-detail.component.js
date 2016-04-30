@@ -38,6 +38,7 @@ System.register(['angular2/core', 'angular2/router', './sensor.service', './sens
                     var id = this._routeParams.get('id');
                     var type = this._routeParams.get('type');
                     this.sensorid = id;
+                    this.sensortype = type;
                     // automatically update sensor view when new data comes
                     this.subscription = this._sensorService.sensorUpdated$.subscribe(function (_id) {
                         if (id === _id) {
@@ -61,7 +62,9 @@ System.register(['angular2/core', 'angular2/router', './sensor.service', './sens
                 SensorDetailComponent.prototype.getSensor = function (id, type) {
                     this.sensorData = this._sensorService.getSensor(id, type);
                     this.editSensorData = this.clone(this.sensorData);
-                    this.lastDate = this.editSensorData.date.toISOString();
+                    if (this.editSensorData && this.editSensorData.date) {
+                        this.lastDate = this.editSensorData.date.toISOString();
+                    }
                 };
                 SensorDetailComponent.prototype.clone = function (obj) {
                     return Object.assign({}, obj);

@@ -42,4 +42,23 @@ export class SensorUtilsService {
         };
         return str;
     };
+
+    getTypeAxisLabel = (type: string) => {
+        var str;
+        switch (type) {
+            case "temp":
+                str = "Temperature (°C)";
+                break;
+            case "hum":
+                str = "Humidité (%)";
+                break;
+            case "pres":
+                str = "Pression (mb)";
+                break;
+            case "vcc":
+                str = "Voltage (V)";
+                break;
+        };
+        return str;
+    };
 }

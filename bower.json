@@ -21,7 +21,9 @@
     "toastr": "~2.1.2",
     "Ionicons": "ionicons#^2.0.1",
     "socket.io": "^1.4.5",
-    "weather-icons": "^2.0.10"
+    "weather-icons": "^2.0.10",
+    "highcharts": "^4.2.4",
+    "bootstrap-datepicker": "^1.6.0"
   },
   "overrides": {
     "bootstrap": {
@@ -31,10 +33,22 @@
         "less/bootstrap.less"
       ]
     },
+    "bootstrap-datepicker": {
+      "main": [
+        "dist/css/bootstrap-datepicker3.css",
+        "dist/js/bootstrap-datepicker.min.js",
+        "dist/locales/bootstrap-datepicker.fr.min.js"
+      ]
+    },
     "font-awesome": {
       "main": [
         "css/font-awesome.css",
         "css/font-awesome.less"
+      ]
+    },
+    "highcharts": {
+      "main": [
+        "highstock.js"
       ]
     },
     "PACE": {

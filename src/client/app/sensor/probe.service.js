@@ -54,8 +54,14 @@ System.register(['angular2/core', 'rxjs/Rx', 'angular2/http'], function(exports_
                         return foundProbe;
                     };
                     this.getProbeDetail = function (id) {
-                        return _this.http.get("api/getprobesensorsstats/" + id)
+                        return _this.http.get("api/probesensorsstats/" + id)
                             .map(function (response) { return response.json(); });
+                    };
+                    this.getChartData = function (id, start, end) {
+                        return _this.http.get("api/sensorchartdata/" + id + (start === '' ? '' : '/' + start + '/' + end))
+                            .map(function (response) { return response.json(); });
+                        // Test file
+                        // return this.http.get('a.json');
                     };
                     this.updateProbe = function (_probe) {
                         var probe;

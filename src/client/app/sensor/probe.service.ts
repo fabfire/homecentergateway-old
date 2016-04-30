@@ -35,7 +35,7 @@ export class ProbeService {
         }, err => this.logError(err)
             //, () => console.log('subscribe ')
         );
-        
+
     };
 
     getProbe = (id: string) => {
@@ -50,10 +50,17 @@ export class ProbeService {
     }
 
     getProbeDetail = (id: string) => {
-        return this.http.get("api/getprobesensorsstats/" + id)
+        return this.http.get("api/probesensorsstats/" + id)
             .map(response => response.json());
     };
-
+    
+    getChartData = (id: string, start: string, end: string) => {
+        return this.http.get("api/sensorchartdata/" + id + (start === '' ? '' : '/' + start + '/' + end))
+            .map(response => response.json());
+        // Test file
+        // return this.http.get('a.json');
+    };
+    
     updateProbe = (_probe) => {
         var probe;
         var body = JSON.stringify(_probe);

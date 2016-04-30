@@ -61,6 +61,25 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                         ;
                         return str;
                     };
+                    this.getTypeAxisLabel = function (type) {
+                        var str;
+                        switch (type) {
+                            case "temp":
+                                str = "Temperature (°C)";
+                                break;
+                            case "hum":
+                                str = "Humidité (%)";
+                                break;
+                            case "pres":
+                                str = "Pression (mb)";
+                                break;
+                            case "vcc":
+                                str = "Voltage (V)";
+                                break;
+                        }
+                        ;
+                        return str;
+                    };
                 }
                 SensorUtilsService = __decorate([
                     core_1.Injectable(), 

@@ -10,11 +10,12 @@ declare var $: any;
 @Component({
     selector: 'sensor-detail',
     templateUrl: './app/sensor/sensor-detail.component.html',
-    directives:[SensorChartComponent]
+    directives: [SensorChartComponent]
 })
 export class SensorDetailComponent implements OnInit, CanReuse {
-    sensorid:string;
-    lastDate:string;
+    sensorid: string;
+    sensortype: string;
+    lastDate: string;
     sensorData: SensorData;
     editSensorData: SensorData;
     subscription: Subscription;
@@ -25,11 +26,12 @@ export class SensorDetailComponent implements OnInit, CanReuse {
         let id = this._routeParams.get('id');
         let type = this._routeParams.get('type');
         this.sensorid = id;
-        
+        this.sensortype = type;
+
         // automatically update sensor view when new data comes
         this.subscription = this._sensorService.sensorUpdated$.subscribe(
             _id => {
-                 if (id === _id) {
+                if (id === _id) {
                     this.getSensor(id, type);
                 }
             });
@@ -55,7 +57,9 @@ export class SensorDetailComponent implements OnInit, CanReuse {
     private getSensor(id, type) {
         this.sensorData = this._sensorService.getSensor(id, type);
         this.editSensorData = this.clone(this.sensorData);
-        this.lastDate = this.editSensorData.date.toISOString();
+        if (this.editSensorData && this.editSensorData.date) {
+            this.lastDate = this.editSensorData.date.toISOString();
+        }
     }
 
     private clone(obj) {

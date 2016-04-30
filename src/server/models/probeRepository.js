@@ -76,7 +76,7 @@ var getProbeSensorsStats = function (id, callback) {
     elastic.getProbeSensorsStats(id, function (response) {//callback(response);
         var probe = {
             pid: id,
-            sensorstats:{}
+            sensorstats: {}
         };
         response.responses[0].hits.hits.forEach(function (_sensor) {
             var sensor = {};
@@ -86,13 +86,25 @@ var getProbeSensorsStats = function (id, callback) {
             probe.sensorstats[sensor.id].sensordata = sensor;
         });
         response.responses[1].aggregations.groupBySensor.buckets.forEach(function (_sensor) {
-           probe.sensorstats[_sensor.key].count = _sensor.doc_count;
+            probe.sensorstats[_sensor.key].count = _sensor.doc_count;
         });
         probe.sensorstats = Object.keys(probe.sensorstats).map(function (key) { return probe.sensorstats[key]; })
         callback(probe);
     });
 };
 exports.getProbeSensorsStats = getProbeSensorsStats;
+
+var getChartData = function (id, start, end, callback) {
+    elastic.getChartData(id, start, end, function (response) {//callback(response);
+        var all = [];
+        console.log("size" , response.aggregations.dataOverTime.buckets.length);
+        response.aggregations.dataOverTime.buckets.forEach(function (_item) {
+            all.push([_item.key, _item.avgData.value])
+        })
+        callback(all);
+    });
+};
+exports.getChartData = getChartData;
 
 var getProbeName = function (id) {
     if (allProbes[id]) {
