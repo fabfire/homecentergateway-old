@@ -149,11 +149,13 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
         './lib/angular2/router.dev.js'
     ], {
         read: false,
-        cwd: './src/client/'
+        cwd: './src/client/',
     });
     var angularOptionsJS = {
         starttag: '<!-- inject:angularjs -->',
-        addRootSlash: false
+        addRootSlash: false,
+        ignorePath: 'src/client/',
+        relative: true
     };
 
     var injectVendorCSS = gulp.src([].concat(config.themecss,

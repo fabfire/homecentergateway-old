@@ -123,9 +123,9 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                                     data: data
                                 }
                             },
-                            // scrollbar: {
-                            // 	liveRedraw: false
-                            // },
+                            scrollbar: {
+                                liveRedraw: false
+                            },
                             series: [{
                                     name: 'Valeur',
                                     data: data,

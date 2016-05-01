@@ -115,9 +115,9 @@ export class SensorChartComponent implements OnInit, CanReuse {
 					data: data
 				}
 			},
-			// scrollbar: {
-			// 	liveRedraw: false
-			// },
+			scrollbar: {
+				liveRedraw: false
+			},
 			series: [{
 				name: 'Valeur',
 				data: data,

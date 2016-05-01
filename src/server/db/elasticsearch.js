@@ -1,6 +1,7 @@
 var elasticsearch = require('elasticsearch');
 var elasticClient = new elasticsearch.Client({
-    host: 'localhost:9200',
+    // host: 'localhost:9200',
+    host: '192.168.1.99',
     log: 'info'
 });
 
@@ -123,7 +124,7 @@ function createTypes() {
                     id: { type: 'string' },
                     pid: { type: 'string' },
                     date: { type: 'date' },
-                    value: { type: 'short' }
+                    value: { type: 'float' }
                 }
             }
         },
@@ -382,7 +383,8 @@ function getChartData(id, startDate, endDate, interval, callback) {
                     date_histogram: {
                         field: 'date',
                         interval: interval,
-                        time_zone: 'Europe/Paris'
+                        time_zone: 'Europe/Paris',
+                        min_doc_count: 1
                     },
                     aggs: {
                         avgData: {
