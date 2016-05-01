@@ -65,91 +65,94 @@ export class SensorChartComponent implements OnInit, CanReuse {
 		this._probeService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), end.toISOString()).subscribe(
 			data => {
 				this.chartStock = {
+					chart:{
+						panning: true
+					},
 					rangeSelector: {
-						buttons: [
-							{
-								type: 'day',
-								count: 1,
-								text: 'jour'
-							}, {
-								type: 'week',
-								count: 1,
-								text: 'sem'
-							}, {
-								type: 'month',
-								count: 1,
-								text: 'mois'
-							}, {
-								type: 'month',
-								count: 3,
-								text: 'tri'
-							}, {
-								type: 'year',
-								count: 1,
-								text: 'an'
-							}, {
-								type: 'all',
-								text: 'tout'
-							}],
+					buttons: [
+						{
+							type: 'day',
+							count: 1,
+							text: 'jour'
+						}, {
+							type: 'week',
+							count: 1,
+							text: 'sem'
+						}, {
+							type: 'month',
+							count: 1,
+							text: 'mois'
+						}, {
+							type: 'month',
+							count: 3,
+							text: 'tri'
+						}, {
+							type: 'year',
+							count: 1,
+							text: 'an'
+						}, {
+							type: 'all',
+							text: 'tout'
+						}],
 						selected: selectedRange,
-						// inputDateFormat: '%Y-%m-%d',
-						// inputEditDateFormat: '%Y-%m-%d'
-					},
-					xAxis: {
-						events: {
-							afterSetExtremes: this.afterSetExtremes
-						},
-						minRange: 3600 * 1000 // one hour
-					},
-					yAxis: {
-						title: {
-							text: this._utilsService.getTypeAxisLabel(this.sensorType)
-						}
-					},
-					navigator: {
-						adaptToUpdatedData: false,
-						series: {
-							data: data
-						}
-					},
-					scrollbar: {
-						liveRedraw: false
-					},
-					series: [{
-						name: 'Valeur',
-						data: data,
-						tooltip: {
-							valueDecimals: 1
-						},
-						dataGrouping: {
-							enabled: true
-						}
-					}]
+							inputDateFormat: '%Y-%m-%d',
+								inputEditDateFormat: '%Y-%m-%d'
+				},
+			xAxis: {
+				events: {
+					afterSetExtremes: this.afterSetExtremes
+				},
+				minRange: 3600 * 1000 // one hour
+			},
+			yAxis: {
+				title: {
+					text: this._utilsService.getTypeAxisLabel(this.sensorType)
+				}
+			},
+			navigator: {
+				adaptToUpdatedData: false,
+				series: {
+					data: data
+				}
+			},
+			// scrollbar: {
+			// 	liveRedraw: false
+			// },
+			series: [{
+				name: 'Valeur',
+				data: data,
+				tooltip: {
+					valueDecimals: 1
+				},
+				dataGrouping: {
+					enabled: true
+				}
+			}]
 				};
 				// apply the date pickers
 				setTimeout(function () {
-					$('input.highcharts-range-selector').datepicker({
-						format: "yyyy-mm-dd",
-						autoclose: true,
-						language: "fr",
-						todayHighlight: true
-					});
+		$('input.highcharts-range-selector').datepicker({
+			format: "yyyy-mm-dd",
+			autoclose: true,
+			language: "fr",
+			todayHighlight: true
+		});
 				}, 50);
-			},
-			err => {
+},
+err => {
 				console.error('Error loading sensor data', this.sensorId, err);
-			});
+});
     }
 
-	afterSetExtremes(e) {
-		var chart = $($('.graph')).highcharts();
-		chart.showLoading('Chargement des données...');
-		$this._probeService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(
-			data => {
-				chart.series[0].setData(data);
-				chart.hideLoading();
-			});
-	}
+afterSetExtremes(e) {
+	var chart = $('#graph').highcharts();
+	chart.showLoading('Chargement des données...');
+	$this._probeService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(
+		data => {
+			chart.series[0].setData(data);
+			chart.hideLoading();
+		});
+}
 
-	routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
+routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
 }

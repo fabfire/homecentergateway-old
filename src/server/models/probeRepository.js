@@ -95,9 +95,40 @@ var getProbeSensorsStats = function (id, callback) {
 exports.getProbeSensorsStats = getProbeSensorsStats;
 
 var getChartData = function (id, start, end, callback) {
-    elastic.getChartData(id, start, end, function (response) {//callback(response);
+    var startDate = new Date(start);
+    var endDate = new Date(end);
+    var diff = endDate.getTime() - startDate.getTime();
+    var interval;
+    // console.log('diff', diff);
+    if (diff <= 604800000) // one week
+    {
+        // console.info('one week');
+        interval = '5m';
+    }
+    else if (diff <= 2678400000) // one month
+    {
+        // console.info('one month');
+        interval = '30m';
+    }
+    else if (diff <= 8035200000) // tree month
+    {
+        // console.info('tree month');
+        interval = '2h';
+    }
+    else if (diff <= 31536000000) // one year
+    {
+        // console.info('one year');
+        interval = '8h';
+    }
+    else // more than one year
+    {
+        // console.info('several years');
+        interval = '24h';
+    }
+
+    elastic.getChartData(id, startDate, endDate, interval, function (response) {//callback(response);
         var all = [];
-        console.log("size" , response.aggregations.dataOverTime.buckets.length);
+        // console.log("size", response.aggregations.dataOverTime.buckets.length);
         response.aggregations.dataOverTime.buckets.forEach(function (_item) {
             all.push([_item.key, _item.avgData.value])
         })

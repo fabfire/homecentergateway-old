@@ -73,6 +73,9 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                     });
                     this._probeService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), end.toISOString()).subscribe(function (data) {
                         _this.chartStock = {
+                            chart: {
+                                panning: true
+                            },
                             rangeSelector: {
                                 buttons: [
                                     {
@@ -100,6 +103,8 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                                         text: 'tout'
                                     }],
                                 selected: selectedRange,
+                                inputDateFormat: '%Y-%m-%d',
+                                inputEditDateFormat: '%Y-%m-%d'
                             },
                             xAxis: {
                                 events: {
@@ -118,9 +123,9 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                                     data: data
                                 }
                             },
-                            scrollbar: {
-                                liveRedraw: false
-                            },
+                            // scrollbar: {
+                            // 	liveRedraw: false
+                            // },
                             series: [{
                                     name: 'Valeur',
                                     data: data,
@@ -146,7 +151,7 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                     });
                 };
                 SensorChartComponent.prototype.afterSetExtremes = function (e) {
-                    var chart = $($('.graph')).highcharts();
+                    var chart = $('#graph').highcharts();
                     chart.showLoading('Chargement des données...');
                     $this._probeService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(function (data) {
                         chart.series[0].setData(data);

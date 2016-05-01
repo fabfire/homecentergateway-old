@@ -344,39 +344,8 @@ function getProbeSensorsStats(id, callback) {
 }
 exports.getProbeSensorsStats = getProbeSensorsStats;
 
-function getChartData(id, start, end, callback) {
-    var startDate = new Date(start);
-    var endDate = new Date(end);
-    var diff = endDate.getTime() - startDate.getTime();
-    var interval;
-    console.log('startDate', start);
-    console.log('startDate', new Date(start));
-    console.log('diff', diff);
-    if (diff <= 604800000) // one week 
-    {
-        console.info('one week');
-        interval = '5m';
-    }
-    else if (diff <= 2678400000) // one month 
-    {
-        console.info('one month');
-        interval = '30m';
-    }
-    else if (diff <= 8035200000) // tree month 
-    {
-        console.info('tree month');
-        interval = '2h';
-    }
-    else if (diff <= 31536000000) // one year 
-    {
-        console.info('one year');
-        interval = '8h';
-    }
-    else // more than one year 
-    {
-        console.info('several years');
-        interval = '24h';
-    }
+function getChartData(id, startDate, endDate, interval, callback) {
+
 
     var allValues = [];
     // first we do a search, and specify a scroll timeout
