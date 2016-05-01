@@ -13,20 +13,18 @@ declare var kendoConsole: any;
 
 export class MainContentComponent implements OnInit {
     socket: any;
-    private sensorService : SensorService;
     
-    constructor (private _sensorService : SensorService) { 
-        this.sensorService = this._sensorService;
-    }
+    constructor (private _sensorService : SensorService) {}
     
     ngOnInit() {
         //this.socket = io.connect('http://localhost:5000');
         this.socket = io.connect();
         this.socket.on("message", (msg) => {
             //this.messages.push(msg);
-            this.sensorService.messageReceived(msg);
+            this._sensorService.messageReceived(msg);
             console.log(msg);
             kendoConsole.log(JSON.stringify(msg));
         });
+
     }
 }

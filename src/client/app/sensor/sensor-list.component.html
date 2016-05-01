@@ -1,7 +1,7 @@
 <h2>Sensors list</h2>
 
 <div class="row">
-    <div *ngFor="let data of sensorsData ">
+    <div *ngFor="let data of sensorsData">
         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
             <!-- small box -->
             <a href='#' [routerLink]="['SensorDetail', {type:data.type, id: data.id}]">

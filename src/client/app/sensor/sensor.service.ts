@@ -15,14 +15,12 @@ export class SensorService {
     private _sensorUpdated = new Subject<string>();
     // Observable streams
     sensorUpdated$ = this._sensorUpdated.asObservable();
-    // ProbeService instance
-    private probeService: ProbeService;
 
     private _dataStore: {
         sensorData: SensorData[]
     };
 
-    constructor(probeService: ProbeService, http: Http) {
+    constructor(private probeService: ProbeService, private http: Http) {
         // Create Observable Stream to output our data
         this.sensorsData$ = new Observable<SensorData[]>(observer => this._sensorDataObserver = observer).share();
         this._dataStore = { sensorData: [] };
@@ -36,6 +34,17 @@ export class SensorService {
             this.updateSensor(msg);
         }
     };
+
+    getSensors = () => {
+        this.http.get("api/sensors")
+            .map(response => response.json())
+            .subscribe(sensors => {
+                sensors.forEach((sensor) => {
+                    this.updateSensor(sensor);
+                });
+            });
+    };
+
 
     updateSensor = (data) => {
         data.date = new Date(data.date);
@@ -77,7 +86,7 @@ export class SensorService {
 
     updateSensorsName = (probeId, name) => {
         this._dataStore.sensorData.forEach((sensor, i) => {
-            if(sensor.id.startsWith(probeId + '.')) {
+            if (sensor.id.startsWith(probeId + '.')) {
                 sensor.name = name
             }
         });

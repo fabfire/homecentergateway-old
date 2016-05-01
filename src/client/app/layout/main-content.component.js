@@ -27,7 +27,6 @@ System.register(['angular2/core', 'angular2/router', '../sensor/sensor.service']
             MainContentComponent = (function () {
                 function MainContentComponent(_sensorService) {
                     this._sensorService = _sensorService;
-                    this.sensorService = this._sensorService;
                 }
                 MainContentComponent.prototype.ngOnInit = function () {
                     var _this = this;
@@ -35,7 +34,7 @@ System.register(['angular2/core', 'angular2/router', '../sensor/sensor.service']
                     this.socket = io.connect();
                     this.socket.on("message", function (msg) {
                         //this.messages.push(msg);
-                        _this.sensorService.messageReceived(msg);
+                        _this._sensorService.messageReceived(msg);
                         console.log(msg);
                         kendoConsole.log(JSON.stringify(msg));
                     });

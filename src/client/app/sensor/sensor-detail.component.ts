@@ -4,6 +4,7 @@ import {Observable, Subscription} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
 import {SensorChartComponent} from './sensor-chart-component'
 import {SensorData, HashTable} from './model';
+import {SensorUtilsService} from './utils.service'
 
 declare var $: any;
 
@@ -20,7 +21,7 @@ export class SensorDetailComponent implements OnInit, CanReuse {
     editSensorData: SensorData;
     subscription: Subscription;
 
-    constructor(private _router: Router, private _routeParams: RouteParams, private _sensorService: SensorService) { }
+    constructor(private _router: Router, private _routeParams: RouteParams, private _sensorService: SensorService, private _utilsService: SensorUtilsService) { }
 
     ngOnInit() {
         let id = this._routeParams.get('id');

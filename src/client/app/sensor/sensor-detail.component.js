@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', './sensor.service', './sensor-chart-component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', './sensor.service', './sensor-chart-component', './utils.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', './sensor.service', './sens
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, sensor_service_1, sensor_chart_component_1;
+    var core_1, router_1, sensor_service_1, sensor_chart_component_1, utils_service_1;
     var SensorDetailComponent;
     return {
         setters:[
@@ -25,13 +25,17 @@ System.register(['angular2/core', 'angular2/router', './sensor.service', './sens
             },
             function (sensor_chart_component_1_1) {
                 sensor_chart_component_1 = sensor_chart_component_1_1;
+            },
+            function (utils_service_1_1) {
+                utils_service_1 = utils_service_1_1;
             }],
         execute: function() {
             SensorDetailComponent = (function () {
-                function SensorDetailComponent(_router, _routeParams, _sensorService) {
+                function SensorDetailComponent(_router, _routeParams, _sensorService, _utilsService) {
                     this._router = _router;
                     this._routeParams = _routeParams;
                     this._sensorService = _sensorService;
+                    this._utilsService = _utilsService;
                 }
                 SensorDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
@@ -75,7 +79,7 @@ System.register(['angular2/core', 'angular2/router', './sensor.service', './sens
                         templateUrl: './app/sensor/sensor-detail.component.html',
                         directives: [sensor_chart_component_1.SensorChartComponent]
                     }), 
-                    __metadata('design:paramtypes', [router_1.Router, router_1.RouteParams, sensor_service_1.SensorService])
+                    __metadata('design:paramtypes', [router_1.Router, router_1.RouteParams, sensor_service_1.SensorService, utils_service_1.SensorUtilsService])
                 ], SensorDetailComponent);
                 return SensorDetailComponent;
             }());

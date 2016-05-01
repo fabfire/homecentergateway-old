@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', './sensor.service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', './sensor.service', '../orderby'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', './sensor.service'], functi
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, sensor_service_1;
+    var core_1, router_1, sensor_service_1, orderby_1;
     var SensorListComponent;
     return {
         setters:[
@@ -22,6 +22,9 @@ System.register(['angular2/core', 'angular2/router', './sensor.service'], functi
             },
             function (sensor_service_1_1) {
                 sensor_service_1 = sensor_service_1_1;
+            },
+            function (orderby_1_1) {
+                orderby_1 = orderby_1_1;
             }],
         execute: function() {
             SensorListComponent = (function () {
@@ -43,7 +46,8 @@ System.register(['angular2/core', 'angular2/router', './sensor.service'], functi
                             });
                         }, 200);
                     });
-                    this._sensorService.loadSensorInfo();
+                    //this._sensorService.loadSensorInfo();
+                    this._sensorService.getSensors();
                 };
                 SensorListComponent.prototype.ngOnDestroy = function () {
                     this.listSubscription.unsubscribe();
@@ -55,6 +59,7 @@ System.register(['angular2/core', 'angular2/router', './sensor.service'], functi
                         selector: 'sensor-list',
                         templateUrl: './app/sensor/sensor-list.component.html',
                         directives: [router_1.ROUTER_DIRECTIVES],
+                        pipes: [orderby_1.OrderBy]
                     }), 
                     __metadata('design:paramtypes', [sensor_service_1.SensorService])
                 ], SensorListComponent);

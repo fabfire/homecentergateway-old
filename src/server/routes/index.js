@@ -11,11 +11,19 @@ module.exports = function (app) {
     app.get(api + '/sensorchartdata/:id/:start/:end', getChartData);
     app.get(api + '/sensorchartdata/:id', getChartData);
     app.put(api + '/probe/:id', updateProbe);
+    app.get(api + '/sensors', getSensors);
 
     function getProbes(req, res) {
         console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
         var probes = probeRepository.getProbes();
         res.status(200).send(probes);
+    }
+
+    function getSensors(req, res) {
+        console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
+        var sensors = sensorRepository.getSensors(function (sensors) {
+            res.status(200).send(sensors);
+        });
     }
 
     function getProbesList(req, res) {
@@ -49,8 +57,8 @@ module.exports = function (app) {
         // } else {
         var start = req.params.start;
         var end = req.params.end;
-        if(undefined === start) start = new Date(2010,01,01);
-        if(undefined === end) end = new Date();
+        if (undefined === start) start = new Date(2010, 01, 01);
+        if (undefined === end) end = new Date();
         probeRepository.getChartData(req.params.id, start, end, function (data, err) {
             if (err) {
                 res.status(500).send(err);

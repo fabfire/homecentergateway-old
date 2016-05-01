@@ -3,23 +3,23 @@ get _stats
 get _all
 get _nodes
 
-DELETE homecenter
+DELETE homecenterbis
 
 GET homecenter/_mapping
 
 GET homecenter/sensorsmeasures/_mapping
 
-POST homecenter/probelocation/
+POST homecenter/sensors/10.2/_update
 {
-  "id": "38"
+  "doc": {"type":"hum"} 
 }
 
 POST homecenter/sensorsmeasures
-  {
-    "id": "3.1",
-    "date": "2016-04-03T14:32:35.487Z",
-    "value": 21.56
-  }
+{
+  "id": "3.1",
+  "date": "2016-04-03T14:32:35.487Z",
+  "value": 21.56
+}
 
 GET homecenter/_search
 
@@ -27,18 +27,35 @@ GET homecenter/sensors/_search
 
 GET homecenter/probelocation/_search
 
-GET homecenter/probelocation,sensors,sensorsmeasures/_search
+GET homecenter/sensors/_search
 {
   "query": {"match": {
-    "pid": "10"
+    "id": "10.2"
+    }
+  }
+}
+DELETE homecenter/sensorsmeasures/_query
+{
+  "query": {
+    "term": {
+      "id": "10.2"
+    }
+  }
+}
+
+GET homecenterbis/probelocation,sensors,sensorsmeasures/_search
+{
+  "query": {"match": {
+    "id": "4.3"
     }
   },
-  size:1,
+  size:20,
   aggs: {
     dataOverTime: {
       date_histogram: {
           field: "date",
-          interval: "week"
+          interval: "hour",
+          "min_doc_count": 1
       },
       aggs: {
           avgData: {
@@ -49,7 +66,7 @@ GET homecenter/probelocation,sensors,sensorsmeasures/_search
       }
     }
   },
-  "sort": { "date": { "order": "asc" }}
+  "sort": { "date": { "order": "desc" }}
 }
 
 GET homecenter/sensorsmeasures/_search
@@ -148,7 +165,7 @@ POST homecenter
           "type": "date"
         },
         "value": {
-          "type": "short"
+          "type": "float"
         }
       }
     }
@@ -207,8 +224,18 @@ PUT http://localhost:9200/homecenter/_mapping/sensorsmeasures
       "type": "date"
     },
     "value": {
-      "type": "short"
+      "type": "float"
     }
+  }
+}
+
+POST /_reindex
+{
+  "source": {
+    "index": "homecenterbis"
+  },
+  "dest": {
+    "index": "homecenter"
   }
 }
 

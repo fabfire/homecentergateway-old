@@ -1,7 +1,7 @@
 var elasticsearch = require('elasticsearch');
 var elasticClient = new elasticsearch.Client({
-    // host: 'localhost:9200',
-    host: '192.168.1.99',
+    host: 'localhost:9200',
+    //host: '192.168.1.99',
     log: 'info'
 });
 
@@ -209,6 +209,45 @@ function getSensors(callback) {
     });
 }
 exports.getSensors = getSensors;
+
+function getSensorsWithLastValue(callback) {
+    elasticClient.msearch({
+        body: [
+            // Sensors
+            { index: indexName, type: 'sensors' },
+            { size:10000, query: { match_all: {} } },
+            // SensorsMeasures
+            { index: indexName, type: 'sensorsmeasures' },
+            {
+                size: 0,
+                aggs: {
+                    groupBySensor: {
+                        terms: {
+                            field: 'id'
+                        },
+                        aggs: {
+                            last_value: {
+                                top_hits: {
+                                    size: 1,
+                                    sort: { 'date': { order: 'desc' } }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    }, function (err, response) {
+        if (err) {
+            console.error('elastic : error getting Sensors Last Values \n' + err);
+        }
+        else {
+            //console.info(JSON.stringify(response));
+            callback(response);
+        }
+    });
+}
+exports.getSensorsWithLastValue = getSensorsWithLastValue;
 
 function getProbes(callback) {
     elasticClient.search({

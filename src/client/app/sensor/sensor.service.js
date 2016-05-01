@@ -30,6 +30,8 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
             SensorService = (function () {
                 function SensorService(probeService, http) {
                     var _this = this;
+                    this.probeService = probeService;
+                    this.http = http;
                     this.messages = [];
                     // Observable string ressource for showing update of one sensor
                     this._sensorUpdated = new Rx_1.Subject();
@@ -40,6 +42,15 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
                         if (!msg.hasOwnProperty('msg')) {
                             _this.updateSensor(msg);
                         }
+                    };
+                    this.getSensors = function () {
+                        _this.http.get("api/sensors")
+                            .map(function (response) { return response.json(); })
+                            .subscribe(function (sensors) {
+                            sensors.forEach(function (sensor) {
+                                _this.updateSensor(sensor);
+                            });
+                        });
                     };
                     this.updateSensor = function (data) {
                         data.date = new Date(data.date);

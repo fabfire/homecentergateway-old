@@ -62,7 +62,7 @@ setInterval(function () {
 }, 30000);
 
 function simulateSensorsPackets() {
-    //analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,hum:4512,vcc:3001,"date":"' + new Date().toJSON() + '"', io);
+    analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:2156,hum:4512,vcc:3001,"date":"' + new Date().toJSON() + '"', io);
     //analyzer.analyze('"nodeid":"4","rx_rssi":"-55",temp:1745,vcc:3102,"date":"' + new Date().toJSON() + '"', io);
     //analyzer.analyze('"nodeid":"5","rx_rssi":"-78",temp:-1212,"date":"' + new Date().toJSON() + '"', io);
 
