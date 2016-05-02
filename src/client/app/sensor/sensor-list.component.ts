@@ -6,6 +6,7 @@ import {SensorData, HashTable} from './model';
 import {OrderBy} from '../orderby';
 
 declare var $: any;
+declare var moment: any;
 
 @Component({
     selector: 'sensor-list',
@@ -19,6 +20,7 @@ export class SensorListComponent implements OnInit, CanReuse {
     sensorsData: SensorData[];
     listSubscription: Subscription;
     animationSubscription: Subscription;
+    limitDate: Date;
 
     constructor(private _sensorService: SensorService) { }
 
@@ -27,7 +29,10 @@ export class SensorListComponent implements OnInit, CanReuse {
         // Two ways of doing subscription to observables :
         // 1 : explicitly subscribe
         this.listSubscription = this._sensorService.sensorsData$.subscribe(
-            updatedData => { this.sensorsData = updatedData; }
+            updatedData => {
+                this.sensorsData = updatedData;
+                this.limitDate = moment().subtract(1, 'hour');
+            }
         );
         // 2 : bind member and use async pipe into the view, but it doesn't work as expected : the view is not refreshed when the view is reloaded
         //this.sensorsData$ = this._sensorService.sensorsData$;

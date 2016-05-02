@@ -35,7 +35,10 @@ System.register(['angular2/core', 'angular2/router', './sensor.service', '../ord
                     var _this = this;
                     // Two ways of doing subscription to observables :
                     // 1 : explicitly subscribe
-                    this.listSubscription = this._sensorService.sensorsData$.subscribe(function (updatedData) { _this.sensorsData = updatedData; });
+                    this.listSubscription = this._sensorService.sensorsData$.subscribe(function (updatedData) {
+                        _this.sensorsData = updatedData;
+                        _this.limitDate = moment().subtract(1, 'hour');
+                    });
                     // 2 : bind member and use async pipe into the view, but it doesn't work as expected : the view is not refreshed when the view is reloaded
                     //this.sensorsData$ = this._sensorService.sensorsData$;
                     // add a small animation when a particular sensor is update

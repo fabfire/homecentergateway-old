@@ -43,3 +43,6 @@
     margin-left: 0px;
 }
 
+div[class^="bg-"], div[class*=" bg-"].disabled{
+    opacity: .65;
+}
