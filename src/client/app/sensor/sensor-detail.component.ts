@@ -16,7 +16,8 @@ declare var $: any;
 export class SensorDetailComponent implements OnInit, CanReuse {
     sensorid: string;
     sensortype: string;
-    lastDate: string;
+    minDate: Date;
+    lastDate: Date;
     sensorData: SensorData;
     editSensorData: SensorData;
     subscription: Subscription;
@@ -59,8 +60,8 @@ export class SensorDetailComponent implements OnInit, CanReuse {
         this.sensorData = this._sensorService.getSensor(id, type);
         this.editSensorData = this.clone(this.sensorData);
         if (this.editSensorData && this.editSensorData.date) {
-            this.lastDate = this.editSensorData.date.toISOString();
-        }
+            this.lastDate = this.editSensorData.date;
+        } 
     }
 
     private clone(obj) {

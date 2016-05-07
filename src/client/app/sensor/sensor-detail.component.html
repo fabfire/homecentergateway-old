@@ -1,7 +1,10 @@
 <div class="row">
+    <sensor-chart [sensorId]="sensorid" [sensorType]="sensortype" [lastValueDate]="editSensorData.date" [minDate]="editSensorData.mindate"></sensor-chart>
+</div>
+
+<div class="row">
     <div class="col-md-12">
-        <div *ngIf="editSensorData" 
-        [ngClass]="{'box-warning': editSensorData.type == 'temp', 'box-info': editSensorData.type =='hum', 'box-success': editSensorData.type =='pres', 'box-danger': editSensorData.type =='vcc', 'box':true}">
+        <div *ngIf="editSensorData" [ngClass]="{'box-warning': editSensorData.type == 'temp', 'box-info': editSensorData.type =='hum', 'box-success': editSensorData.type =='pres', 'box-danger': editSensorData.type =='vcc', 'box':true}">
             <div class="box-header with-border">
                 <h3 class="box-title">Détail du capteur : {{_utilsService.getTypeLabel(editSensorData.type)}} -
                 <span *ngIf="editSensorData.name"> {{editSensorData.name}}</span><span *ngIf="! editSensorData.name">id : {{editSensorData.id}}</span></h3>
@@ -49,8 +52,4 @@
             </form>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <sensor-chart [sensorId]="sensorid" [sensorType]="sensortype" [lastValueDate]="lastDate"></sensor-chart>
 </div>

@@ -54,6 +54,9 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
                     };
                     this.updateSensor = function (data) {
                         data.date = new Date(data.date);
+                        if (data.mindate) {
+                            data.mindate = new Date(data.mindate);
+                        }
                         var updated = false;
                         // update sensor data if it exists
                         _this._dataStore.sensorData.forEach(function (sensor, i) {
@@ -68,7 +71,9 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
                                     _this.probeService.updateProbe(probe);
                                     _this.updateSensorsName(probe.pid, probe.location);
                                 }
-                                _this._dataStore.sensorData[i] = data;
+                                _this._dataStore.sensorData[i].date = data.date;
+                                _this._dataStore.sensorData[i].value = data.value;
+                                _this._dataStore.sensorData[i].name = data.name;
                                 updated = true;
                             }
                         });
@@ -96,6 +101,23 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
                     };
                     this.getMessage = function () {
                         return _this.messages;
+                    };
+                    this.getChartData = function (id, start, end) {
+                        return _this.http.get("api/sensorchartdata/" + id + (start === '' ? '' : '/' + start + '/' + end))
+                            .map(function (response) { return response.json(); });
+                        // Test file
+                        // return this.http.get('a.json');
+                    };
+                    this.getSensorMeasureId = function (id, date, value) {
+                        var body = {
+                            id: id,
+                            date: date,
+                            value: value
+                        };
+                        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+                        var options = new http_1.RequestOptions({ headers: headers });
+                        return _this.http.post("api/getsensormeasureid/", JSON.stringify(body), options)
+                            .map(function (response) { return response.json(); });
                     };
                     // Create Observable Stream to output our data
                     this.sensorsData$ = new Rx_1.Observable(function (observer) { return _this._sensorDataObserver = observer; }).share();

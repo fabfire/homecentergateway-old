@@ -1,5 +1,5 @@
 import {Inject, Injectable} from 'angular2/core';
-import {Http} from 'angular2/http';
+import {Http, Headers, RequestOptions} from 'angular2/http';
 import {Observable, Observer, Subject} from 'rxjs/Rx';
 import {SensorData, HashTable} from './model';
 import {ProbeService} from './probe.service';
@@ -48,6 +48,9 @@ export class SensorService {
 
     updateSensor = (data) => {
         data.date = new Date(data.date);
+        if (data.mindate) {
+            data.mindate = new Date(data.mindate);
+        }
         var updated = false;
         // update sensor data if it exists
         this._dataStore.sensorData.forEach((sensor, i) => {
@@ -62,7 +65,9 @@ export class SensorService {
                     this.probeService.updateProbe(probe);
                     this.updateSensorsName(probe.pid, probe.location);
                 }
-                this._dataStore.sensorData[i] = data;
+                this._dataStore.sensorData[i].date = data.date;
+                this._dataStore.sensorData[i].value = data.value;
+                this._dataStore.sensorData[i].name = data.name;
                 updated = true;
             }
         });
@@ -107,5 +112,25 @@ export class SensorService {
     getMessage = () => {
         return this.messages;
     };
+
+    getChartData = (id: string, start: string, end: string) => {
+        return this.http.get("api/sensorchartdata/" + id + (start === '' ? '' : '/' + start + '/' + end))
+            .map(response => response.json());
+        // Test file
+        // return this.http.get('a.json');
+    };
+
+    getSensorMeasureId = (id: string, date: Date, value: number) => {
+        var body = {
+            id: id,
+            date: date,
+            value: value
+        }
+        var headers = new Headers({ 'Content-Type': 'application/json' });
+        var options = new RequestOptions({ headers: headers });
+
+        return this.http.post("api/getsensormeasureid/", JSON.stringify(body), options)
+            .map(response => response.json());
+    }
 }
 

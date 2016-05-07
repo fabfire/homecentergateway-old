@@ -2,7 +2,7 @@ import {Input, Component, OnInit} from 'angular2/core';
 import {CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from 'angular2/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Ng2Highstocks} from 'ng2-highcharts';
-import {ProbeService} from './probe.service'
+import {SensorService} from './sensor.service'
 import {ProbeData, ProbeDetailData, HashTable} from './model';
 import {SensorUtilsService} from './utils.service'
 
@@ -18,26 +18,17 @@ var $this;
 export class SensorChartComponent implements OnInit, CanReuse {
     @Input() sensorId: string;
     @Input() sensorType: string;
-    @Input() lastValueDate: string;
+    @Input() minDate: Date;
+    @Input() lastValueDate: Date;
     chartStock = {};
 
-    constructor(private _probeService: ProbeService, private _utilsService: SensorUtilsService) { }
+    constructor(private _sensorService: SensorService, private _utilsService: SensorUtilsService) { }
 
     ngOnInit() {
 		$this = this;
-        var lastDate = new Date(this.lastValueDate);
-		var start, end = new Date();
-        var now = moment();
-		var selectedRange = 1;
-        if (lastDate > now.subtract(1, 'h')) {
-            console.log('up to date', this.sensorType);
-			start = moment().subtract(1, 'w');
-        }
-        else {
-            console.log('not up to date', this.sensorType);
-			selectedRange = 5;
-        }
-
+		var start = this.minDate;
+		var end = this.lastValueDate;
+		moment.locale('fr');
 		var options = Highcharts.setOptions({
 			lang: {
 				loading: 'Chargement...',
@@ -62,97 +53,127 @@ export class SensorChartComponent implements OnInit, CanReuse {
 			}
 		});
 
-		this._probeService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), end.toISOString()).subscribe(
+		this._sensorService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), end.toISOString()).subscribe(
 			data => {
 				this.chartStock = {
-					chart:{
-						panning: true
+					chart: {
+						zoomType: 'x',
+						panning: true,
+						panKey: 'shift'
 					},
 					rangeSelector: {
-					buttons: [
-						{
-							type: 'day',
-							count: 1,
-							text: 'jour'
-						}, {
-							type: 'week',
-							count: 1,
-							text: 'sem'
-						}, {
-							type: 'month',
-							count: 1,
-							text: 'mois'
-						}, {
-							type: 'month',
-							count: 3,
-							text: 'tri'
-						}, {
-							type: 'year',
-							count: 1,
-							text: 'an'
-						}, {
-							type: 'all',
-							text: 'tout'
-						}],
-						selected: selectedRange,
-							inputDateFormat: '%Y-%m-%d',
-								inputEditDateFormat: '%Y-%m-%d'
-				},
-			xAxis: {
-				events: {
-					afterSetExtremes: this.afterSetExtremes
-				},
-				minRange: 3600 * 1000 // one hour
-			},
-			yAxis: {
-				title: {
-					text: this._utilsService.getTypeAxisLabel(this.sensorType)
-				}
-			},
-			navigator: {
-				adaptToUpdatedData: false,
-				series: {
-					data: data
-				}
-			},
-			scrollbar: {
-				liveRedraw: false
-			},
-			series: [{
-				name: 'Valeur',
-				data: data,
-				tooltip: {
-					valueDecimals: 1
-				},
-				dataGrouping: {
-					enabled: true
-				}
-			}]
+						buttons: [
+							{
+								type: 'day',
+								count: 1,
+								text: 'jour'
+							}, {
+								type: 'week',
+								count: 1,
+								text: 'sem'
+							}, {
+								type: 'month',
+								count: 1,
+								text: 'mois'
+							}, {
+								type: 'month',
+								count: 3,
+								text: 'tri'
+							}, {
+								type: 'year',
+								count: 1,
+								text: 'an'
+							}, {
+								type: 'all',
+								text: 'tout'
+							}],
+						selected: 5,
+						inputDateFormat: '%Y-%m-%d',
+						inputEditDateFormat: '%Y-%m-%d'
+					},
+					xAxis: {
+						events: {
+							afterSetExtremes: this.afterSetExtremes
+						},
+						minRange: 3600 * 1000 // one hour
+					},
+					yAxis: {
+						title: {
+							text: this._utilsService.getTypeAxisLabel(this.sensorType)
+						}
+					},
+					plotOptions: {
+						series: {
+							cursor: 'pointer',
+							states: {
+								hover: {
+									lineWidthPlus: 0
+								}
+							},
+							point: {
+								events: {
+									click: this.pointClick
+								}
+							}
+						}
+					},
+					navigator: {
+						adaptToUpdatedData: false,
+						series: {
+							data: data
+						}
+					},
+					scrollbar: {
+						liveRedraw: false
+					},
+					series: [{
+						name: 'Valeur',
+						data: data,
+						tooltip: {
+							valueDecimals: 1,
+							dateTimeLabelFormats: 'seconds'
+						},
+						dataGrouping: {
+							enabled: true
+						}
+					}]
 				};
 				// apply the date pickers
 				setTimeout(function () {
-		$('input.highcharts-range-selector').datepicker({
-			format: "yyyy-mm-dd",
-			autoclose: true,
-			language: "fr",
-			todayHighlight: true
-		});
+					$('input.highcharts-range-selector').datepicker({
+						format: "yyyy-mm-dd",
+						autoclose: true,
+						language: "fr",
+						todayHighlight: true
+					});
 				}, 50);
-},
-err => {
+			},
+			err => {
 				console.error('Error loading sensor data', this.sensorId, err);
-});
+			});
     }
 
-afterSetExtremes(e) {
-	var chart = $('#graph').highcharts();
-	chart.showLoading('Chargement des données...');
-	$this._probeService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(
-		data => {
-			chart.series[0].setData(data);
-			chart.hideLoading();
+	afterSetExtremes(e) {
+		var chart = $('#graph').highcharts();
+		chart.showLoading('Chargement des données...');
+		$this._sensorService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(
+			data => {
+				chart.series[0].setData(data);
+				chart.hideLoading();
+			});
+	}
+	
+	pointClick(e) {
+		var date = new moment(e.point.category);
+		var value = e.point.y;
+		$this._sensorService.getSensorMeasureId($this.sensorId, date, value).subscribe(data => {
+			$(".modal-body #editid").val(data);
 		});
-}
 
-routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
+		$(".modal-body #editdate").val(date.format("dddd DD MMMM YYYY, HH:mm:ss"));
+		$(".modal-body #editvalue").val(value);
+		$('#chart-edit-modal').modal('show');
+	}
+	
+	routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
 }

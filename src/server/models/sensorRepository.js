@@ -33,10 +33,11 @@ exports.initSensorsFromDB = initSensorsFromDB;
 // getSensors from cache
 var getSensors = function (callback) {
     var sensors = {};
-    elastic.getSensorsWithLastValue(function (response) {//callback(response);
+    elastic.getSensorsWithLastValue(function (response) {//callback(response);return;
         response.responses[1].aggregations.groupBySensor.buckets.forEach(function (_item) {
             var sensor = _item.last_value.hits.hits[0]._source;
             sensor.name = getSensorName(sensor);
+            sensor.mindate = _item.min_value.hits.hits[0]._source.date;
             sensors[sensor.id] = sensor;
         });
         response.responses[0].hits.hits.forEach(function (_item) {
@@ -67,3 +68,54 @@ var addSensorMeasure = function (sensor) {
     elastic.addSensorMeasure(sensor);
 };
 exports.addSensorMeasure = addSensorMeasure;
+
+var getChartData = function (id, start, end, callback) {
+    var startDate = new Date(start);
+    var endDate = new Date(end);
+    var diff = endDate.getTime() - startDate.getTime();
+    var interval;
+    // console.log('diff', diff);
+    if (diff <= 604800000) // one week
+    {
+        //console.info('one week');
+        interval = '5m';
+    }
+    else if (diff <= 2678400000) // one month
+    {
+        // console.info('one month');
+        interval = '30m';
+    }
+    else if (diff <= 8035200000) // tree month
+    {
+        // console.info('tree month');
+        interval = '2h';
+    }
+    else if (diff <= 31536000000) // one year
+    {
+        // console.info('one year');
+        interval = '8h';
+    }
+    else // more than one year
+    {
+        // console.info('several years');
+        interval = '24h';
+    }
+
+    elastic.getChartData(id, startDate, endDate, interval, function (response) {//callback(response);
+        var all = [];
+        // console.log("size", response.aggregations.dataOverTime.buckets.length);
+        response.aggregations.dataOverTime.buckets.forEach(function (_item) {
+            all.push([_item.key, _item.avgData.value])
+        })
+        callback(all);
+    });
+};
+exports.getChartData = getChartData;
+
+var getSensorMeasureId = function (id, date, value, callback) {
+    elastic.getSensorMeasureId(id, date, value, function (response) {
+        callback(response);
+    });
+}
+exports.getSensorMeasureId = getSensorMeasureId;
+

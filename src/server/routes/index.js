@@ -12,6 +12,7 @@ module.exports = function (app) {
     app.get(api + '/sensorchartdata/:id', getChartData);
     app.put(api + '/probe/:id', updateProbe);
     app.get(api + '/sensors', getSensors);
+    app.post(api + '/getsensormeasureid', getSensorMeasureId);
 
     function getProbes(req, res) {
         console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
@@ -59,7 +60,7 @@ module.exports = function (app) {
         var end = req.params.end;
         if (undefined === start) start = new Date(2010, 01, 01);
         if (undefined === end) end = new Date();
-        probeRepository.getChartData(req.params.id, start, end, function (data, err) {
+        sensorRepository.getChartData(req.params.id, start, end, function (data, err) {
             if (err) {
                 res.status(500).send(err);
             }
@@ -87,4 +88,20 @@ module.exports = function (app) {
             });
         }
     }
+
+    function getSensorMeasureId(req, res) {
+        console.log(JSON.stringify(req.body));
+        if ('undefined' !== typeof req.body.id) {
+            sensorRepository.getSensorMeasureId(req.body.id, req.body.date, req.body.value,
+                function (data, err) {
+                    if (err) {
+                        res.status(500).send(err);
+                    }
+                    else {
+                        res.status(200).send(data);
+                    }
+                });
+        }
+    }
+
 };

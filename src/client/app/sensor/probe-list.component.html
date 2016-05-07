@@ -32,7 +32,7 @@
                         <!-- /.col -->
                         <div *ngIf="data.vcc" class="col-sm-4">
                             <div class="description-block">
-                                <h5 class="description-header">{{data.vcc}}</h5>
+                                <h5 class="description-header">{{data.vcc | number:'.1-1'}}</h5>
                                 <span class="description-text">VCC</span>
                             </div>
                             <!-- /.description-block -->

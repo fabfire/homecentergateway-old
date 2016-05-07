@@ -215,7 +215,7 @@ function getSensorsWithLastValue(callback) {
         body: [
             // Sensors
             { index: indexName, type: 'sensors' },
-            { size:10000, query: { match_all: {} } },
+            { size: 10000, query: { match_all: {} } },
             // SensorsMeasures
             { index: indexName, type: 'sensorsmeasures' },
             {
@@ -230,6 +230,12 @@ function getSensorsWithLastValue(callback) {
                                 top_hits: {
                                     size: 1,
                                     sort: { 'date': { order: 'desc' } }
+                                }
+                            },
+                            min_value: {
+                                top_hits: {
+                                    size: 1,
+                                    sort: { 'date': { order: 'asc' } }
                                 }
                             }
                         }
@@ -385,18 +391,13 @@ function getProbeSensorsStats(id, callback) {
 exports.getProbeSensorsStats = getProbeSensorsStats;
 
 function getChartData(id, startDate, endDate, interval, callback) {
-
-
     var allValues = [];
-    // first we do a search, and specify a scroll timeout
+
     elasticClient.search({
         index: indexName,
         type: 'sensorsmeasures',
-        // Set to 30 seconds because we are calling right back
-        //scroll: '30s',
         size: 0,
         fields: ['date', 'value'],
-        //q: 'id:' + id,
         body: {
             query: {
                 bool: {
@@ -482,3 +483,33 @@ function updateProbe(probe, callback) {
     });
 }
 exports.updateProbe = updateProbe;
+
+function getSensorMeasureId(id, date, value, callback) {
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+
+    elasticClient.search({
+        index: indexName,
+        type: 'sensorsmeasures',
+        size: 1,
+        body: {
+            query: {
+                bool: {
+                    must: [
+                        { term: { id: id } },
+                        { term: { date: date } },
+                        { term: { value: value } }
+                    ]
+                }
+            }
+        }
+    }, function (err, response) {
+        if (err) {
+            console.error('elastic : error getting sensor measure\n' + err);
+        }
+        else {
+            console.log(JSON.stringify(response));
+            callback(response);
+        }
+    });
+}
+exports.getSensorMeasureId = getSensorMeasureId;

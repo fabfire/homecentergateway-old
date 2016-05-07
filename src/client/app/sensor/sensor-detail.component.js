@@ -67,7 +67,7 @@ System.register(['angular2/core', 'angular2/router', './sensor.service', './sens
                     this.sensorData = this._sensorService.getSensor(id, type);
                     this.editSensorData = this.clone(this.sensorData);
                     if (this.editSensorData && this.editSensorData.date) {
-                        this.lastDate = this.editSensorData.date.toISOString();
+                        this.lastDate = this.editSensorData.date;
                     }
                 };
                 SensorDetailComponent.prototype.clone = function (obj) {

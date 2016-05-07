@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, ng2_highcharts_1, probe_service_1, utils_service_1;
+    var core_1, ng2_highcharts_1, sensor_service_1, utils_service_1;
     var $this, SensorChartComponent;
     return {
         setters:[
@@ -20,34 +20,25 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
             function (ng2_highcharts_1_1) {
                 ng2_highcharts_1 = ng2_highcharts_1_1;
             },
-            function (probe_service_1_1) {
-                probe_service_1 = probe_service_1_1;
+            function (sensor_service_1_1) {
+                sensor_service_1 = sensor_service_1_1;
             },
             function (utils_service_1_1) {
                 utils_service_1 = utils_service_1_1;
             }],
         execute: function() {
             SensorChartComponent = (function () {
-                function SensorChartComponent(_probeService, _utilsService) {
-                    this._probeService = _probeService;
+                function SensorChartComponent(_sensorService, _utilsService) {
+                    this._sensorService = _sensorService;
                     this._utilsService = _utilsService;
                     this.chartStock = {};
                 }
                 SensorChartComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     $this = this;
-                    var lastDate = new Date(this.lastValueDate);
-                    var start, end = new Date();
-                    var now = moment();
-                    var selectedRange = 1;
-                    if (lastDate > now.subtract(1, 'h')) {
-                        console.log('up to date', this.sensorType);
-                        start = moment().subtract(1, 'w');
-                    }
-                    else {
-                        console.log('not up to date', this.sensorType);
-                        selectedRange = 5;
-                    }
+                    var start = this.minDate;
+                    var end = this.lastValueDate;
+                    moment.locale('fr');
                     var options = Highcharts.setOptions({
                         lang: {
                             loading: 'Chargement...',
@@ -71,10 +62,12 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                             useUTC: false
                         }
                     });
-                    this._probeService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), end.toISOString()).subscribe(function (data) {
+                    this._sensorService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), end.toISOString()).subscribe(function (data) {
                         _this.chartStock = {
                             chart: {
-                                panning: true
+                                zoomType: 'x',
+                                panning: true,
+                                panKey: 'shift'
                             },
                             rangeSelector: {
                                 buttons: [
@@ -102,7 +95,7 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                                         type: 'all',
                                         text: 'tout'
                                     }],
-                                selected: selectedRange,
+                                selected: 5,
                                 inputDateFormat: '%Y-%m-%d',
                                 inputEditDateFormat: '%Y-%m-%d'
                             },
@@ -115,6 +108,21 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                             yAxis: {
                                 title: {
                                     text: _this._utilsService.getTypeAxisLabel(_this.sensorType)
+                                }
+                            },
+                            plotOptions: {
+                                series: {
+                                    cursor: 'pointer',
+                                    states: {
+                                        hover: {
+                                            lineWidthPlus: 0
+                                        }
+                                    },
+                                    point: {
+                                        events: {
+                                            click: _this.pointClick
+                                        }
+                                    }
                                 }
                             },
                             navigator: {
@@ -130,7 +138,8 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                                     name: 'Valeur',
                                     data: data,
                                     tooltip: {
-                                        valueDecimals: 1
+                                        valueDecimals: 1,
+                                        dateTimeLabelFormats: 'seconds'
                                     },
                                     dataGrouping: {
                                         enabled: true
@@ -153,10 +162,20 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                 SensorChartComponent.prototype.afterSetExtremes = function (e) {
                     var chart = $('#graph').highcharts();
                     chart.showLoading('Chargement des données...');
-                    $this._probeService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(function (data) {
+                    $this._sensorService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(function (data) {
                         chart.series[0].setData(data);
                         chart.hideLoading();
                     });
+                };
+                SensorChartComponent.prototype.pointClick = function (e) {
+                    var date = new moment(e.point.category);
+                    var value = e.point.y;
+                    $this._sensorService.getSensorMeasureId($this.sensorId, date, value).subscribe(function (data) {
+                        $(".modal-body #editid").val(data);
+                    });
+                    $(".modal-body #editdate").val(date.format("dddd DD MMMM YYYY, HH:mm:ss"));
+                    $(".modal-body #editvalue").val(value);
+                    $('#chart-edit-modal').modal('show');
                 };
                 SensorChartComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 __decorate([
@@ -169,7 +188,11 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                 ], SensorChartComponent.prototype, "sensorType", void 0);
                 __decorate([
                     core_1.Input(), 
-                    __metadata('design:type', String)
+                    __metadata('design:type', Date)
+                ], SensorChartComponent.prototype, "minDate", void 0);
+                __decorate([
+                    core_1.Input(), 
+                    __metadata('design:type', Date)
                 ], SensorChartComponent.prototype, "lastValueDate", void 0);
                 SensorChartComponent = __decorate([
                     core_1.Component({
@@ -177,7 +200,7 @@ System.register(['angular2/core', 'ng2-highcharts', './probe.service', './utils.
                         templateUrl: './app/sensor/sensor-chart-component.html',
                         directives: [ng2_highcharts_1.Ng2Highstocks]
                     }), 
-                    __metadata('design:paramtypes', [probe_service_1.ProbeService, utils_service_1.SensorUtilsService])
+                    __metadata('design:paramtypes', [sensor_service_1.SensorService, utils_service_1.SensorUtilsService])
                 ], SensorChartComponent);
                 return SensorChartComponent;
             }());

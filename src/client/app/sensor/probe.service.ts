@@ -54,13 +54,6 @@ export class ProbeService {
             .map(response => response.json());
     };
     
-    getChartData = (id: string, start: string, end: string) => {
-        return this.http.get("api/sensorchartdata/" + id + (start === '' ? '' : '/' + start + '/' + end))
-            .map(response => response.json());
-        // Test file
-        // return this.http.get('a.json');
-    };
-    
     updateProbe = (_probe) => {
         var probe;
         var body = JSON.stringify(_probe);
