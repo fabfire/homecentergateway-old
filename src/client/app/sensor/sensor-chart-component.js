@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils.service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './model', './utils.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, ng2_highcharts_1, sensor_service_1, utils_service_1;
+    var core_1, ng2_highcharts_1, sensor_service_1, model_1, utils_service_1;
     var $this, SensorChartComponent;
     return {
         setters:[
@@ -23,6 +23,9 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
             function (sensor_service_1_1) {
                 sensor_service_1 = sensor_service_1_1;
             },
+            function (model_1_1) {
+                model_1 = model_1_1;
+            },
             function (utils_service_1_1) {
                 utils_service_1 = utils_service_1_1;
             }],
@@ -32,6 +35,7 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
                     this._sensorService = _sensorService;
                     this._utilsService = _utilsService;
                     this.chartStock = {};
+                    this.pointEditData = new model_1.PointEditData();
                 }
                 SensorChartComponent.prototype.ngOnInit = function () {
                     var _this = this;
@@ -62,7 +66,7 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
                             useUTC: false
                         }
                     });
-                    this._sensorService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), end.toISOString()).subscribe(function (data) {
+                    this._sensorService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), (end === undefined ? '' : end.toISOString())).subscribe(function (data) {
                         _this.chartStock = {
                             chart: {
                                 zoomType: 'x',
@@ -100,9 +104,7 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
                                 inputEditDateFormat: '%Y-%m-%d'
                             },
                             xAxis: {
-                                events: {
-                                    afterSetExtremes: _this.afterSetExtremes
-                                },
+                                type: 'datetime',
                                 minRange: 3600 * 1000 // one hour
                             },
                             yAxis: {
@@ -126,10 +128,7 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
                                 }
                             },
                             navigator: {
-                                adaptToUpdatedData: false,
-                                series: {
-                                    data: data
-                                }
+                                adaptToUpdatedData: false
                             },
                             scrollbar: {
                                 liveRedraw: false
@@ -142,7 +141,7 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
                                         dateTimeLabelFormats: 'seconds'
                                     },
                                     dataGrouping: {
-                                        enabled: true
+                                        enabled: false
                                     }
                                 }]
                         };
@@ -155,14 +154,29 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
                                 todayHighlight: true
                             });
                         }, 50);
+                        // add afterSetExtremes after the first load to prevent multiple calls to the API.
+                        setTimeout(function () {
+                            (function (H) {
+                                var chart = $('#graph').highcharts();
+                                H.addEvent(chart.xAxis[0], 'afterSetExtremes', function (e) {
+                                    $this.afterSetExtremes(e);
+                                });
+                            }(Highcharts));
+                        }, 1000);
                     }, function (err) {
                         console.error('Error loading sensor data', _this.sensorId, err);
+                    });
+                    $('.sidebar-toggle').click(function () {
+                        console.log('resize');
+                        setTimeout(function () {
+                            $('#graph').highcharts().reflow();
+                        }, 500);
                     });
                 };
                 SensorChartComponent.prototype.afterSetExtremes = function (e) {
                     var chart = $('#graph').highcharts();
                     chart.showLoading('Chargement des données...');
-                    $this._sensorService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(function (data) {
+                    $this._sensorService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max + 43200000)).toISOString()).subscribe(function (data) {
                         chart.series[0].setData(data);
                         chart.hideLoading();
                     });
@@ -170,12 +184,26 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './utils
                 SensorChartComponent.prototype.pointClick = function (e) {
                     var date = new moment(e.point.category);
                     var value = e.point.y;
+                    $this.pointEditData.category = e.point.category;
+                    $this.pointEditData.date = date.format("dddd DD MMMM YYYY, HH:mm:ss");
+                    $this.pointEditData.value = value;
+                    $this.pointEditData.id = undefined;
+                    $this.pointEditData.index = e.point.index;
                     $this._sensorService.getSensorMeasureId($this.sensorId, date, value).subscribe(function (data) {
-                        $(".modal-body #editid").val(data);
+                        if (data.hasOwnProperty('_id')) {
+                            $this.pointEditData.id = data._id;
+                        }
                     });
-                    $(".modal-body #editdate").val(date.format("dddd DD MMMM YYYY, HH:mm:ss"));
-                    $(".modal-body #editvalue").val(value);
                     $('#chart-edit-modal').modal('show');
+                };
+                SensorChartComponent.prototype.changeValue = function () {
+                    $('#chart-edit-modal').modal('hide');
+                    var val = parseFloat($this.pointEditData.value);
+                    $this._sensorService.updateMeasure($this.pointEditData.id, val).subscribe(function (data) {
+                        if (data.successful === 1) {
+                            $('#graph').highcharts().series[0].data[$this.pointEditData.index].update({ y: val });
+                        }
+                    });
                 };
                 SensorChartComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 __decorate([

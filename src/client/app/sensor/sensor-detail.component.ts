@@ -44,6 +44,7 @@ export class SensorDetailComponent implements OnInit, CanReuse {
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
+    
     routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
 
     save() {

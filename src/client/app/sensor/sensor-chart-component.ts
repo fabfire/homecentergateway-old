@@ -3,7 +3,7 @@ import {CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from 'angular2/router
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Ng2Highstocks} from 'ng2-highcharts';
 import {SensorService} from './sensor.service'
-import {ProbeData, ProbeDetailData, HashTable} from './model';
+import {ProbeData, ProbeDetailData, PointEditData} from './model';
 import {SensorUtilsService} from './utils.service'
 
 declare var moment: any;
@@ -21,6 +21,7 @@ export class SensorChartComponent implements OnInit, CanReuse {
     @Input() minDate: Date;
     @Input() lastValueDate: Date;
     chartStock = {};
+	pointEditData: PointEditData = new PointEditData();
 
     constructor(private _sensorService: SensorService, private _utilsService: SensorUtilsService) { }
 
@@ -53,7 +54,7 @@ export class SensorChartComponent implements OnInit, CanReuse {
 			}
 		});
 
-		this._sensorService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), end.toISOString()).subscribe(
+		this._sensorService.getChartData(this.sensorId, (start === undefined ? '' : start.toISOString()), (end === undefined ? '' : end.toISOString())).subscribe(
 			data => {
 				this.chartStock = {
 					chart: {
@@ -92,9 +93,7 @@ export class SensorChartComponent implements OnInit, CanReuse {
 						inputEditDateFormat: '%Y-%m-%d'
 					},
 					xAxis: {
-						events: {
-							afterSetExtremes: this.afterSetExtremes
-						},
+						type: 'datetime',
 						minRange: 3600 * 1000 // one hour
 					},
 					yAxis: {
@@ -118,10 +117,7 @@ export class SensorChartComponent implements OnInit, CanReuse {
 						}
 					},
 					navigator: {
-						adaptToUpdatedData: false,
-						series: {
-							data: data
-						}
+						adaptToUpdatedData: false
 					},
 					scrollbar: {
 						liveRedraw: false
@@ -134,7 +130,7 @@ export class SensorChartComponent implements OnInit, CanReuse {
 							dateTimeLabelFormats: 'seconds'
 						},
 						dataGrouping: {
-							enabled: true
+							enabled: false
 						}
 					}]
 				};
@@ -147,33 +143,68 @@ export class SensorChartComponent implements OnInit, CanReuse {
 						todayHighlight: true
 					});
 				}, 50);
+
+				// add afterSetExtremes after the first load to prevent multiple calls to the API.
+				setTimeout(function () {
+					(function (H) {
+						var chart = $('#graph').highcharts();
+						H.addEvent(chart.xAxis[0], 'afterSetExtremes', function (e) {
+							$this.afterSetExtremes(e);
+						});
+
+					} (Highcharts));
+				}, 1000);
+
 			},
 			err => {
 				console.error('Error loading sensor data', this.sensorId, err);
 			});
+
+		$('.sidebar-toggle').click(function () {
+			console.log('resize');
+			setTimeout(function () {
+				$('#graph').highcharts().reflow();
+			}, 500);
+		});
     }
 
 	afterSetExtremes(e) {
 		var chart = $('#graph').highcharts();
 		chart.showLoading('Chargement des données...');
-		$this._sensorService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max)).toISOString()).subscribe(
+		$this._sensorService.getChartData($this.sensorId, new Date(Math.round(e.min)).toISOString(), new Date(Math.round(e.max + 43200000)).toISOString()).subscribe(
 			data => {
 				chart.series[0].setData(data);
 				chart.hideLoading();
 			});
 	}
-	
+
 	pointClick(e) {
 		var date = new moment(e.point.category);
 		var value = e.point.y;
-		$this._sensorService.getSensorMeasureId($this.sensorId, date, value).subscribe(data => {
-			$(".modal-body #editid").val(data);
-		});
 
-		$(".modal-body #editdate").val(date.format("dddd DD MMMM YYYY, HH:mm:ss"));
-		$(".modal-body #editvalue").val(value);
+		$this.pointEditData.category = e.point.category;
+		$this.pointEditData.date = date.format("dddd DD MMMM YYYY, HH:mm:ss");
+		$this.pointEditData.value = value;
+		$this.pointEditData.id = undefined;
+		$this.pointEditData.index = e.point.index;
+		$this._sensorService.getSensorMeasureId($this.sensorId, date, value).subscribe(data => {
+			if (data.hasOwnProperty('_id')) {
+				$this.pointEditData.id = data._id;
+			}
+		});
 		$('#chart-edit-modal').modal('show');
 	}
-	
+
+	changeValue() {
+		$('#chart-edit-modal').modal('hide');
+		var val = parseFloat($this.pointEditData.value);
+		$this._sensorService.updateMeasure($this.pointEditData.id, val).subscribe(
+			data => {
+				if (data.successful === 1) {
+					$('#graph').highcharts().series[0].data[$this.pointEditData.index].update({ y: val });
+				}
+			});
+	}
+
 	routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
 }

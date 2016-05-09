@@ -13,22 +13,23 @@ module.exports = function (app) {
     app.put(api + '/probe/:id', updateProbe);
     app.get(api + '/sensors', getSensors);
     app.post(api + '/getsensormeasureid', getSensorMeasureId);
+    app.put(api + '/updatesensormeasure', updateSensorMeasure);
 
     function getProbes(req, res) {
-        console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
+        console.log('API getProbes', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
         var probes = probeRepository.getProbes();
         res.status(200).send(probes);
     }
 
     function getSensors(req, res) {
-        console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
+        console.log('API getSensors', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
         var sensors = sensorRepository.getSensors(function (sensors) {
             res.status(200).send(sensors);
         });
     }
 
     function getProbesList(req, res) {
-        console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
+        console.log('API getProbesList', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
         probeRepository.getProbesList(function (response) {
 
             res.status(200).send(response);
@@ -36,7 +37,7 @@ module.exports = function (app) {
     }
 
     function getProbeSensorsStats(req, res) {
-        console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
+        console.log('API getProbeSensorsStats', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
         if (isNaN(parseInt(req.params.id))) {
             res.respond(new Error('Id must be a valid integer'), 400);
         } else {
@@ -52,14 +53,12 @@ module.exports = function (app) {
     }
 
     function getChartData(req, res) {
-        console.log('API call getChartData : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
-        // if (isNaN(parseInt(req.params.id))) {
-        //     res.respond(new Error('Id must be a valid integer'), 400);
-        // } else {
+        console.log('API getChartData' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
+
         var start = req.params.start;
         var end = req.params.end;
-        if (undefined === start) start = new Date(2010, 01, 01);
-        if (undefined === end) end = new Date();
+        if (undefined === start) { start = new Date(2010, 01, 01);}
+        if (undefined === end) { end = new Date();}
         sensorRepository.getChartData(req.params.id, start, end, function (data, err) {
             if (err) {
                 res.status(500).send(err);
@@ -68,11 +67,10 @@ module.exports = function (app) {
                 res.status(200).send(data);
             }
         });
-        //}
     }
 
     function updateProbe(req, res) {
-        console.log('API call : ' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
+        console.log('API updateProbe', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
         if (isNaN(parseInt(req.params.id))) {
             res.respond(new Error('Id must be a valid integer'), 400);
         } else if ('undefined' !== typeof req.body.id && req.body.id !== req.params.id) {
@@ -90,7 +88,7 @@ module.exports = function (app) {
     }
 
     function getSensorMeasureId(req, res) {
-        console.log(JSON.stringify(req.body));
+        console.log('API getSensorMeasureId', JSON.stringify(req.body));
         if ('undefined' !== typeof req.body.id) {
             sensorRepository.getSensorMeasureId(req.body.id, req.body.date, req.body.value,
                 function (data, err) {
@@ -100,7 +98,24 @@ module.exports = function (app) {
                     else {
                         res.status(200).send(data);
                     }
-                });
+                }
+            );
+        }
+    }
+
+    function updateSensorMeasure(req, res) {
+        console.log('API updateSensorMeasure', JSON.stringify(req.body));
+        if ('undefined' !== typeof req.body.id) {
+            sensorRepository.updateSensorMeasure(req.body.id, req.body.value,
+                function (data, err) {
+                    if (err) {
+                        res.status(500).send(err);
+                    }
+                    else {
+                        res.status(200).send(data);
+                    }
+                }
+            );
         }
     }
 

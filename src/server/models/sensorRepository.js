@@ -75,9 +75,13 @@ var getChartData = function (id, start, end, callback) {
     var diff = endDate.getTime() - startDate.getTime();
     var interval;
     // console.log('diff', diff);
-    if (diff <= 604800000) // one week
+    if (diff <= 86400000) // one day
     {
-        //console.info('one week');
+        console.info('one day, returning real values');
+        interval = undefined;
+    } else if (diff <= 604800000) // one week
+    {
+        // console.info('one week');
         interval = '5m';
     }
     else if (diff <= 2678400000) // one month
@@ -102,11 +106,19 @@ var getChartData = function (id, start, end, callback) {
     }
 
     elastic.getChartData(id, startDate, endDate, interval, function (response) {//callback(response);
+        //console.log(JSON.stringify(response));
         var all = [];
         // console.log("size", response.aggregations.dataOverTime.buckets.length);
-        response.aggregations.dataOverTime.buckets.forEach(function (_item) {
-            all.push([_item.key, _item.avgData.value])
-        })
+        if (interval !== undefined) {
+            response.aggregations.dataOverTime.buckets.forEach(function (_item) {
+                all.push([_item.key, _item.avgData.value]);
+            });
+        }
+        else {
+            response.hits.hits.forEach(function (_item) {
+                all.push([new Date(_item.fields.date[0]).getTime(), _item.fields.value[0]]);
+            });
+        }
         callback(all);
     });
 };
@@ -114,8 +126,18 @@ exports.getChartData = getChartData;
 
 var getSensorMeasureId = function (id, date, value, callback) {
     elastic.getSensorMeasureId(id, date, value, function (response) {
-        callback(response);
+        if (response.hits.total === 1) {
+            callback(response.hits.hits[0]);
+        }
+        else { callback({}); }
     });
 }
 exports.getSensorMeasureId = getSensorMeasureId;
+
+var updateSensorMeasure = function (id, value, callback) {
+    elastic.updateSensorMeasure(id, value, function (response) {
+        callback(response);
+    });
+}
+exports.updateSensorMeasure = updateSensorMeasure;
 

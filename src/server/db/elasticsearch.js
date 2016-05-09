@@ -392,11 +392,32 @@ exports.getProbeSensorsStats = getProbeSensorsStats;
 
 function getChartData(id, startDate, endDate, interval, callback) {
     var allValues = [];
+    var aggs, size = 5000;
+    if (interval !== undefined) {
+        aggs = {
+            dataOverTime: {
+                date_histogram: {
+                    field: 'date',
+                    interval: interval,
+                    time_zone: 'Europe/Paris',
+                    min_doc_count: 1
+                },
+                aggs: {
+                    avgData: {
+                        avg: {
+                            field: 'value'
+                        }
+                    }
+                }
+            }
+        };
+        size = 0;
+    }
 
     elasticClient.search({
         index: indexName,
         type: 'sensorsmeasures',
-        size: 0,
+        size: size,
         fields: ['date', 'value'],
         body: {
             query: {
@@ -418,28 +439,12 @@ function getChartData(id, startDate, endDate, interval, callback) {
                     ]
                 }
             },
-            aggs: {
-                dataOverTime: {
-                    date_histogram: {
-                        field: 'date',
-                        interval: interval,
-                        time_zone: 'Europe/Paris',
-                        min_doc_count: 1
-                    },
-                    aggs: {
-                        avgData: {
-                            avg: {
-                                field: 'value'
-                            }
-                        }
-                    }
-                }
-            }
+            aggs: aggs
         },
-        sort: 'date:asc',
-        //sort: { 'id': { order: 'asc' } }
-    }, function getMoreUntilDone(error, response) {
-        callback(response); return;
+        sort: 'date:asc'
+    }, function (error, response) {
+        callback(response);
+        //return;
         // collect the date and value from each response
         // response.hits.hits.forEach(function (hit) {
         //     allValues.push([new Date(hit.fields.date[0]).getTime(), hit.fields.value[0]]);
@@ -485,7 +490,6 @@ function updateProbe(probe, callback) {
 exports.updateProbe = updateProbe;
 
 function getSensorMeasureId(id, date, value, callback) {
-    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
 
     elasticClient.search({
         index: indexName,
@@ -507,9 +511,32 @@ function getSensorMeasureId(id, date, value, callback) {
             console.error('elastic : error getting sensor measure\n' + err);
         }
         else {
-            console.log(JSON.stringify(response));
+            //console.log(JSON.stringify(response));
             callback(response);
         }
     });
 }
 exports.getSensorMeasureId = getSensorMeasureId;
+
+function updateSensorMeasure(id, value, callback) {
+
+    elasticClient.update({
+        index: indexName,
+        type: 'sensorsmeasures',
+        id: id,
+        body: {
+            doc: {
+                value: value
+            }
+        }
+    }, function (err, response) {
+        if (err) {
+            console.error('elastic : error updating sensor measure\n' + err);
+        }
+        else {
+            console.log(JSON.stringify(response));
+            callback(response._shards);
+        }
+    });
+}
+exports.updateSensorMeasure = updateSensorMeasure;

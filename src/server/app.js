@@ -54,9 +54,9 @@ sensorRepository.initSensorsFromDB();
 /************************************************************** */
 /*                               Tests                          */
 /************************************************************** */
-// setTimeout(function () {
-//     simulateSensorsPackets();
-// }, 5000);
+setTimeout(function () {
+    simulateSensorsPackets();
+}, 5000);
 setInterval(function () {
     simulateSensorsPackets();
 }, 30000);

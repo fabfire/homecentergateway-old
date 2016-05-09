@@ -27,6 +27,13 @@ export class SensorData {
     name: string;
 }
 
+export class PointEditData {
+    date: string;
+    value: number;
+    id:string;
+    index:number;
+    category:any;
+}
 export interface HashTable<T> {
     [key: number]: T;
 }

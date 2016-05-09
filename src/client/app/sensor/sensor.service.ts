@@ -132,5 +132,17 @@ export class SensorService {
         return this.http.post("api/getsensormeasureid/", JSON.stringify(body), options)
             .map(response => response.json());
     }
+
+    updateMeasure = (id: string, value: number) => {
+        var body = {
+            id: id,
+            value: value
+        }
+        var headers = new Headers({ 'Content-Type': 'application/json' });
+        var options = new RequestOptions({ headers: headers });
+
+        return this.http.put("api/updatesensormeasure/", JSON.stringify(body), options)
+            .map(response => response.json());
+    }
 }
 

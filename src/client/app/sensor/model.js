@@ -1,7 +1,7 @@
 System.register([], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var ProbeData, ProbeDetailData, SensorStats, SensorData;
+    var ProbeData, ProbeDetailData, SensorStats, SensorData, PointEditData;
     return {
         setters:[],
         execute: function() {
@@ -29,6 +29,12 @@ System.register([], function(exports_1, context_1) {
                 return SensorData;
             }());
             exports_1("SensorData", SensorData);
+            PointEditData = (function () {
+                function PointEditData() {
+                }
+                return PointEditData;
+            }());
+            exports_1("PointEditData", PointEditData);
         }
     }
 });

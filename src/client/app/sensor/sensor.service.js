@@ -119,6 +119,16 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
                         return _this.http.post("api/getsensormeasureid/", JSON.stringify(body), options)
                             .map(function (response) { return response.json(); });
                     };
+                    this.updateMeasure = function (id, value) {
+                        var body = {
+                            id: id,
+                            value: value
+                        };
+                        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+                        var options = new http_1.RequestOptions({ headers: headers });
+                        return _this.http.put("api/updatesensormeasure/", JSON.stringify(body), options)
+                            .map(function (response) { return response.json(); });
+                    };
                     // Create Observable Stream to output our data
                     this.sensorsData$ = new Rx_1.Observable(function (observer) { return _this._sensorDataObserver = observer; }).share();
                     this._dataStore = { sensorData: [] };
