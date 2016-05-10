@@ -9,7 +9,7 @@ module.exports = function(logger, io, messageBus) {
     //environment = 'dev';
     // Load Serialport regarding environment
     switch (environment) {
-        case 'build':
+        case 'prod':
             serial = new serialport.SerialPort(config.serialport.prod, {
                 baudrate: config.serialport.baudrate,
                 parser: serialport.parsers.readline('\r\n')

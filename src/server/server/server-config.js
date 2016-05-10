@@ -23,8 +23,8 @@ var applyConfiguration = function(app) {
     var routes = require('../routes/index')(app);
     
     switch (environment) {
-        case 'build':
-            console.log('** BUILD **');
+        case 'prod':
+            console.log('** PROD **');
             app.use(express.static('./build/client')); // only for testing
             app.use(express.static('./'));
             app.use(express.static('./client'));

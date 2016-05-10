@@ -4,7 +4,7 @@
 ```
 npm install
 bower install
-gulp serve-build
+gulp serve-prod
 ```
 
 ## Packages list

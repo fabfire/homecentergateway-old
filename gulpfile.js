@@ -241,13 +241,13 @@ gulp.task('bump', function() {
         .pipe(gulp.dest(config.root));
 });
 
-gulp.task('replace-socketio-url-build', function() {
+gulp.task('replace-socketio-url-prod', function() {
     gulp.src(config.client + 'js/app.js')
         .pipe($.injectString.replace('var url = "http://localhost:3000";', 'var url;'))
         .pipe(gulp.dest(config.client + 'js/'));
 });
 
-gulp.task('serve-build', ['replace-socketio-url-build', 'optimize'], function() {
+gulp.task('serve-prod', ['replace-socketio-url-prod', 'optimize'], function() {
     serve(false);
 });
 
@@ -283,7 +283,7 @@ gulp.task('deploy', function() {
         });
 });
 
-gulp.task('deployfull', ['replace-socketio-url-build', 'optimize', 'prepare-server-files'], function() {
+gulp.task('deployfull', ['replace-socketio-url-prod', 'optimize', 'prepare-server-files'], function() {
     return gulp.src(['./build/**'])
         .pipe($.scp2({
             host: '192.168.1.99',
@@ -303,7 +303,7 @@ function serve(isDev) {
         delayTime: 1,
         env: {
             'PORT': port,
-            'NODE_ENV': isDev ? 'dev' : 'build'
+            'NODE_ENV': isDev ? 'dev' : 'prod'
         },
         watch: [config.server]
     };

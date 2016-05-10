@@ -54,13 +54,14 @@ sensorRepository.initSensorsFromDB();
 /************************************************************** */
 /*                               Tests                          */
 /************************************************************** */
-setTimeout(function () {
-    simulateSensorsPackets();
-}, 5000);
-setInterval(function () {
-    simulateSensorsPackets();
-}, 30000);
-
+if (environment !== 'prod') {
+    setTimeout(function () {
+        simulateSensorsPackets();
+    }, 5000);
+    setInterval(function () {
+        simulateSensorsPackets();
+    }, 30000);
+}
 function simulateSensorsPackets() {
     analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:' + random(1700, 2500) + ',hum:' + random(4000, 7000) + ',vcc:' + random(2500, 3100) + ',"date":"' + new Date().toJSON() + '"', io);
     //analyzer.analyze('"nodeid":"4","rx_rssi":"-55",temp:1745,vcc:3102,"date":"' + new Date().toJSON() + '"', io);
