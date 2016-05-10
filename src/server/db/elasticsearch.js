@@ -519,7 +519,6 @@ function getSensorMeasureId(id, date, value, callback) {
 exports.getSensorMeasureId = getSensorMeasureId;
 
 function updateSensorMeasure(id, value, callback) {
-
     elasticClient.update({
         index: indexName,
         type: 'sensorsmeasures',
@@ -534,9 +533,26 @@ function updateSensorMeasure(id, value, callback) {
             console.error('elastic : error updating sensor measure\n' + err);
         }
         else {
-            console.log(JSON.stringify(response));
+            //console.log(JSON.stringify(response));
             callback(response._shards);
         }
     });
 }
 exports.updateSensorMeasure = updateSensorMeasure;
+
+function deleteSensorMeasure(id, callback) {
+    elasticClient.delete({
+        index: indexName,
+        type: 'sensorsmeasures',
+        id: id
+    }, function (err, response) {
+        if (err) {
+            console.error('elastic : error deleting sensor measure\n' + err);
+        }
+        else {
+            //console.log(JSON.stringify(response));
+            callback({ found: response.found });
+        }
+    });
+}
+exports.deleteSensorMeasure = deleteSensorMeasure;

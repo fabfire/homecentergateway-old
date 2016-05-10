@@ -144,5 +144,10 @@ export class SensorService {
         return this.http.put("api/updatesensormeasure/", JSON.stringify(body), options)
             .map(response => response.json());
     }
+
+    deleteMeasure = (id: string) => {
+        return this.http.delete("api/deletesensormeasure/" + id)
+            .map(response => response.json());
+    }
 }
 

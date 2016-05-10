@@ -14,6 +14,7 @@ module.exports = function (app) {
     app.get(api + '/sensors', getSensors);
     app.post(api + '/getsensormeasureid', getSensorMeasureId);
     app.put(api + '/updatesensormeasure', updateSensorMeasure);
+    app.delete(api + '/deletesensormeasure/:id', deleteSensorMeasure);
 
     function getProbes(req, res) {
         console.log('API getProbes', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
@@ -107,6 +108,22 @@ module.exports = function (app) {
         console.log('API updateSensorMeasure', JSON.stringify(req.body));
         if ('undefined' !== typeof req.body.id) {
             sensorRepository.updateSensorMeasure(req.body.id, req.body.value,
+                function (data, err) {
+                    if (err) {
+                        res.status(500).send(err);
+                    }
+                    else {
+                        res.status(200).send(data);
+                    }
+                }
+            );
+        }
+    }
+    
+  function deleteSensorMeasure(req, res) {
+        console.log('API deleteSensorMeasure', JSON.stringify(req.params));
+        if ('undefined' !== typeof req.params.id) {
+            sensorRepository.deleteSensorMeasure(req.params.id,
                 function (data, err) {
                     if (err) {
                         res.status(500).send(err);

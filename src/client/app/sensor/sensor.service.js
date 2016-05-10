@@ -129,6 +129,10 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './probe.service']
                         return _this.http.put("api/updatesensormeasure/", JSON.stringify(body), options)
                             .map(function (response) { return response.json(); });
                     };
+                    this.deleteMeasure = function (id) {
+                        return _this.http.delete("api/deletesensormeasure/" + id)
+                            .map(function (response) { return response.json(); });
+                    };
                     // Create Observable Stream to output our data
                     this.sensorsData$ = new Rx_1.Observable(function (observer) { return _this._sensorDataObserver = observer; }).share();
                     this._dataStore = { sensorData: [] };

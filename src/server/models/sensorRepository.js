@@ -141,3 +141,10 @@ var updateSensorMeasure = function (id, value, callback) {
 }
 exports.updateSensorMeasure = updateSensorMeasure;
 
+var deleteSensorMeasure = function (id, callback) {
+    elastic.deleteSensorMeasure(id, function (response) {
+        callback(response);
+    });
+}
+exports.deleteSensorMeasure = deleteSensorMeasure;
+

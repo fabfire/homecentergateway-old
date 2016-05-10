@@ -201,7 +201,21 @@ export class SensorChartComponent implements OnInit, CanReuse {
 		$this._sensorService.updateMeasure($this.pointEditData.id, val).subscribe(
 			data => {
 				if (data.successful === 1) {
-					$('#graph').highcharts().series[0].data[$this.pointEditData.index].update({ y: val });
+					setTimeout(function () {
+						$('#graph').highcharts().series[0].data[$this.pointEditData.index].update({ y: val });
+					}, 200);
+				}
+			});
+	}
+
+	deleteValue() {
+		$('#chart-edit-modal').modal('hide');
+		$this._sensorService.deleteMeasure($this.pointEditData.id).subscribe(
+			data => {
+				if (data.found === true) {
+					setTimeout(function () {
+						$('#graph').highcharts().series[0].data[$this.pointEditData.index].remove();
+					}, 200);
 				}
 			});
 	}

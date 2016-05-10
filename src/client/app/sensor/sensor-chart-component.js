@@ -201,7 +201,19 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './model
                     var val = parseFloat($this.pointEditData.value);
                     $this._sensorService.updateMeasure($this.pointEditData.id, val).subscribe(function (data) {
                         if (data.successful === 1) {
-                            $('#graph').highcharts().series[0].data[$this.pointEditData.index].update({ y: val });
+                            setTimeout(function () {
+                                $('#graph').highcharts().series[0].data[$this.pointEditData.index].update({ y: val });
+                            }, 200);
+                        }
+                    });
+                };
+                SensorChartComponent.prototype.deleteValue = function () {
+                    $('#chart-edit-modal').modal('hide');
+                    $this._sensorService.deleteMeasure($this.pointEditData.id).subscribe(function (data) {
+                        if (data.found === true) {
+                            setTimeout(function () {
+                                $('#graph').highcharts().series[0].data[$this.pointEditData.index].remove();
+                            }, 200);
                         }
                     });
                 };
