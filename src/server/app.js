@@ -54,7 +54,7 @@ sensorRepository.initSensorsFromDB();
 /************************************************************** */
 /*                               Tests                          */
 /************************************************************** */
-if (environment !== 'prod') {
+if (environment === 'dev') {
     setTimeout(function () {
         simulateSensorsPackets();
     }, 5000);
@@ -63,7 +63,7 @@ if (environment !== 'prod') {
     }, 30000);
 }
 function simulateSensorsPackets() {
-    analyzer.analyze('"nodeid":"3","rx_rssi":"-50",temp:' + random(1700, 2500) + ',hum:' + random(4000, 7000) + ',vcc:' + random(2500, 3100) + ',"date":"' + new Date().toJSON() + '"', io);
+    analyzer.analyze('"nodeid":"9","rx_rssi":"-50",temp:' + random(1700, 2500) + ',hum:' + random(4000, 7000) + ',vcc:' + random(2500, 3100) + ',"date":"' + new Date().toJSON() + '"', io);
     //analyzer.analyze('"nodeid":"4","rx_rssi":"-55",temp:1745,vcc:3102,"date":"' + new Date().toJSON() + '"', io);
     //analyzer.analyze('"nodeid":"5","rx_rssi":"-78",temp:-1212,"date":"' + new Date().toJSON() + '"', io);
 
