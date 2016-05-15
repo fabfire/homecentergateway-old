@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './model', './utils.service'], function(exports_1, context_1) {
+System.register(['@angular/core', 'ng2-highcharts', './sensor.service', './model', './utils.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -50,7 +50,7 @@ System.register(['angular2/core', 'ng2-highcharts', './sensor.service', './model
                             weekdays: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
                             shortMonths: ['jan', 'fév', 'mar', 'avr', 'mai', 'juin', 'juil', 'aoû', 'sep', 'oct', 'nov', 'déc'],
                             printChart: 'Imprimer',
-                            // rangeSelectorZoom: 'Période',
+                            //  rangeSelectorZoom: 'Période',
                             // rangeSelectorFrom: 'Du',
                             // rangeSelectorTo: 'au',
                             downloadPNG: 'Télécharger en PNG',

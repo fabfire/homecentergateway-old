@@ -10,7 +10,7 @@
         "noImplicitAny": false,
         "rootDir": "./src/client/"
     },
-    "exclude": [
+    "exclude": [        
         "node_modules",
         "typings/main",
         "typings/main.d.ts",

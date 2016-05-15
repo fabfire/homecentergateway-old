@@ -1,6 +1,6 @@
-import {Inject, Injectable} from 'angular2/core';
+import {Inject, Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs/Rx';
-import {Http, Headers, RequestOptions} from 'angular2/http';
+import {Http, Headers, RequestOptions} from '@angular/http';
 import {ProbeData} from './model';
 
 @Injectable()

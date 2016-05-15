@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router, RouteParams, CanReuse, ComponentInstruction} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouteParams, CanReuse, ComponentInstruction} from '@angular/router-deprecated';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
 import {SensorChartComponent} from './sensor-chart-component'

@@ -1,5 +1,5 @@
-import {Inject, Injectable} from 'angular2/core';
-import {Http, Headers, RequestOptions} from 'angular2/http';
+import {Inject, Injectable} from '@angular/core';
+import {Http, Headers, RequestOptions} from '@angular/http';
 import {Observable, Observer, Subject} from 'rxjs/Rx';
 import {SensorData, HashTable} from './model';
 import {ProbeService} from './probe.service';

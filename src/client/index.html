@@ -52,28 +52,27 @@
     <script src="../../_theme/dist/js/app.min.js"></script>-->
     <!-- REQUIRED JS SCRIPTS -->
     <!-- 1. Angular2 libraries -->
+
+    <!--<script src="lib/angular2/angular2-polyfills.js"></script>-->
+    <!--<script src="lib/angular2/system-polyfills.js"></script>-->
+
     <!-- inject:angularjs -->
-
     <script src="lib/angular2/es6-shim.min.js"></script>
-
-    <script src="lib/angular2/system-polyfills.js"></script>
-
-    <script src="lib/angular2/shims_for_IE.js"></script>
-
-    <script src="lib/angular2/angular2-polyfills.js"></script>
-
-    <script src="lib/angular2/system.js"></script>
-
-    <script src="lib/angular2/Rx.js"></script>
-
-    <script src="lib/angular2/angular2.dev.js"></script>
-
-    <script src="lib/angular2/http.dev.js"></script>
-
-    <script src="lib/angular2/router.dev.js"></script>
-
+    <script src="lib/angular2/Reflect.js"></script>
+    <script src="lib/angular2/system.src.js"></script>
+    <script src="lib/angular2/zone.js"></script>
+    <script src="lib/angular2/Rx.umd.min.js"></script>
+    <script src="lib/angular2/core.umd.js"></script>
+    <script src="lib/angular2/compiler.umd.js"></script>
+    <script src="lib/angular2/common.umd.js"></script>
+    <script src="lib/angular2/http.umd.js"></script>
+    <script src="lib/angular2/platform-browser.umd.js"></script>
+    <script src="lib/angular2/platform-browser-dynamic.umd.js"></script>
+    <script src="lib/angular2/router-deprecated.umd.js"></script>
     <!-- endinject -->
-<script src="node_modules/moment/moment.js" ></script>
+
+    <script src="node_modules/moment/moment.js"></script>
+
     <!-- build:js js/lib.js-->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
@@ -97,20 +96,45 @@
 
     <!-- 2. Configure SystemJS -->
     <script>
-        System.config({
-            map: {
-                'ng2-highcharts': 'node_modules/ng2-highcharts'
+        var  map = {
+            '@angular': 'node_modules/@angular',
+            'rxjs':'node_modules/rxjs',
+            'ng2-highcharts': 'node_modules/ng2-highcharts',
+            'symbol-observable' : 'node_modules/symbol-observable'
+        };
+
+        var packages = {
+            'app':  {
+                format: 'register',
+                defaultExtension: 'js'
             },
-            packages: {             
-                app: {
-                    format: 'register',
-                    defaultExtension: 'js'
-                },
-                'ng2-highcharts' : {
-                    main: 'ng2-highcharts',
-                    defaultExtension: 'js',
-                }
-            }
+            'ng2-highcharts' : {
+                main: 'ng2-highcharts',
+                defaultExtension: 'js',
+            },
+            'rxjs': { defaultExtension: 'js' },
+            'symbol-observable': { main: 'index', defaultExtension: 'js' },
+        };
+
+        var ngPackageNames = [
+            'common',
+            'compiler',
+            'core',
+            'http',
+            'platform-browser',
+            'platform-browser-dynamic',
+            'router',
+            'router-deprecated'
+        ];
+        
+        // Add package entries for angular packages
+        ngPackageNames.forEach(function(pkgName) {
+            // Bundled (~40 requests):
+            packages['@angular/'+pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
+      });
+        System.config({
+            map: map,
+            packages: packages
         });
         System.import('app/main')
             .then(null, console.error.bind(console));

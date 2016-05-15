@@ -12,7 +12,7 @@ var port = process.env.PORT || config.defaultPort;
 gulp.task('help', $.taskListing);
 gulp.task('default', ['help']);
 
-gulp.task('vet', function() {
+gulp.task('vet', function () {
     log('Analyzing source with JSHint and JSCS');
     return gulp
         .src(config.alljs)
@@ -21,12 +21,12 @@ gulp.task('vet', function() {
         .pipe($.jscs.reporter())
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish', {
-                verbose: true
-            })
+            verbose: true
+        })
             .pipe($.jshint.reporter('fail')));
 });
 
-gulp.task('styles', ['clean-styles'], function() {
+gulp.task('styles', ['clean-styles'], function () {
     log('Autoprefixing CSS');
 
     return gulp
@@ -38,7 +38,7 @@ gulp.task('styles', ['clean-styles'], function() {
         .pipe(gulp.dest(config.temp));
 });
 
-gulp.task('fonts', ['clean-fonts'], function() {
+gulp.task('fonts', ['clean-fonts'], function () {
     log('Copying fonts');
 
     return gulp
@@ -46,7 +46,7 @@ gulp.task('fonts', ['clean-fonts'], function() {
         .pipe(gulp.dest(config.build + 'fonts'));
 });
 
-gulp.task('images', ['clean-images'], function() {
+gulp.task('images', ['clean-images'], function () {
     log('Copying and compressing the images');
 
     return gulp
@@ -57,7 +57,7 @@ gulp.task('images', ['clean-images'], function() {
         .pipe(gulp.dest(config.build + 'img'));
 });
 
-gulp.task('angular-app', ['clean-angular-app'], function() {
+gulp.task('angular-app', ['clean-angular-app'], function () {
     log('Copying Angular2 app');
 
     return gulp
@@ -65,30 +65,30 @@ gulp.task('angular-app', ['clean-angular-app'], function() {
         .pipe(gulp.dest(config.build + 'app'));
 });
 
-gulp.task('clean', function() {
+gulp.task('clean', function () {
     var delconfig = [].concat(config.build, config.buildServer, config.temp);
     log('Cleaning: ' + $.util.colors.blue(delconfig));
     del(delconfig);
 });
 
-gulp.task('clean-fonts', function() {
+gulp.task('clean-fonts', function () {
     clean(config.build + 'fonts/**/*.*');
 });
 
-gulp.task('clean-images', function() {
+gulp.task('clean-images', function () {
     clean(config.build + 'images/**/*.*');
 });
 
-gulp.task('clean-angular-app', function() {
+gulp.task('clean-angular-app', function () {
     clean(config.build + 'app/**/*.*');
 });
 
-gulp.task('clean-styles', function() {
+gulp.task('clean-styles', function () {
     clean(config.build + 'css/**/*.*');
     clean(config.temp + '**/*.css');
 });
 
-gulp.task('clean-code', function() {
+gulp.task('clean-code', function () {
     var files = [].concat(
         config.temp + '**/*.js',
         config.build + '**/*.html',
@@ -101,15 +101,35 @@ gulp.task('clean-code', function() {
 //     gulp.watch([config.less], ['styles']);
 // });
 
-gulp.task('angular-js', function() {
-    log('Copying Angular2 JS files');
+gulp.task('angular-js-dev', function () {
+    log('Copying Angular2 JS files to lib dev folder');
+
+    return gulp
+        .src(['./node_modules/@angular/common/common.umd.js',
+            './node_modules/@angular/core/core.umd.js',
+            './node_modules/@angular/compiler/compiler.umd.js',
+            './node_modules/@angular/http/http.umd.js',
+            './node_modules/@angular/platform-browser/platform-browser.umd.js',
+            './node_modules/@angular/platform-browser-dynamic/platform-browser-dynamic.umd.js',
+            './node_modules/@angular/router-deprecated/router-deprecated.umd.js',
+            './node_modules/es6-shim/es6-shim.min.js',
+            './node_modules/reflect-metadata/Reflect.js',
+            './node_modules/systemjs/dist/system.src.js',
+            './node_modules/zone.js/dist/zone.js',
+            './node_modules/rxjs/bundles/Rx.umd.min.js'
+        ])
+        .pipe(gulp.dest('./src/client/lib/angular2'));
+});
+
+gulp.task('angular-js-prod', function () {
+    log('Copying Angular2 JS files to lib prod folder');
 
     return gulp
         .src([config.client + 'lib/angular2/**/*.js'])
         .pipe(gulp.dest(config.build + 'lib/angular2'));
 });
 
-gulp.task('wiredep', function() {
+gulp.task('wiredep', function () {
     log('Wire up the bower css js and our app js into the html');
     var options = config.getWiredepDefaultOptions();
     var wiredep = require('wiredep').stream;
@@ -120,9 +140,9 @@ gulp.task('wiredep', function() {
         .pipe(gulp.dest(config.client));
 });
 
-gulp.task('tsc', $.shell.task(['npm run tsc'], {verbose:true}));
+gulp.task('tsc', $.shell.task(['npm run tsc'], { verbose: true }));
 
-gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
+gulp.task('inject', ['tsc', 'wiredep', 'styles', 'angular-js-dev'], function () {
     log('Wire up the app css into the html, and call wiredep ');
 
     var injectVendorJS = gulp.src([
@@ -130,8 +150,8 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
         config.themejs,
         './src/client/lib/kendo.console/js/kendo.console.js'
     ], {
-        read: false
-    });
+            read: false
+        });
     var vendorOptionsJS = {
         starttag: '<!-- inject:vendorjs -->',
         addRootSlash: false
@@ -139,18 +159,21 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
 
     var injectAngularJS = gulp.src([
         './lib/angular2/es6-shim.min.js',
-        './lib/angular2/system-polyfills.js',
-        './lib/angular2/shims_for_IE.js',
-        './lib/angular2/angular2-polyfills.js',
-        './lib/angular2/system.js',
-        './lib/angular2/Rx.js',
-        './lib/angular2/angular2.dev.js',
-        './lib/angular2/http.dev.js',
-        './lib/angular2/router.dev.js'
+        './lib/angular2/Reflect.js',
+        './lib/angular2/system.src.js',
+        './lib/angular2/zone.js',
+        './lib/angular2/Rx.umd.min.js',
+        './lib/angular2/core.umd.js',
+        './lib/angular2/compiler.umd.js',
+        './lib/angular2/common.umd.js',
+        './lib/angular2/http.umd.js',
+        './lib/angular2/platform-browser.umd.js',
+        './lib/angular2/platform-browser-dynamic.umd.js',
+        './lib/angular2/router-deprecated.umd.js'
     ], {
-        read: false,
-        cwd: './src/client/',
-    });
+            read: false,
+            cwd: './src/client',
+        });
     var angularOptionsJS = {
         starttag: '<!-- inject:angularjs -->',
         addRootSlash: false,
@@ -159,10 +182,10 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
     };
 
     var injectVendorCSS = gulp.src([].concat(config.themecss,
-     './src/client/lib/kendo.console/css/kendo.console.css',
-     '/bower_components/PACE/themes/black/pace-theme-minimal.css'), {
-        read: false
-    });
+        './src/client/lib/kendo.console/css/kendo.console.css',
+        '/bower_components/PACE/themes/black/pace-theme-minimal.css'), {
+            read: false
+        });
     var vendorOptionsCSS = {
         starttag: '<!-- inject:vendorcss -->',
         addRootSlash: false
@@ -178,7 +201,7 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles'], function() {
         .pipe(gulp.dest(config.client));
 });
 
-gulp.task('optimize', ['inject', 'fonts', 'images', 'angular-app', 'angular-js'], function() {
+gulp.task('optimize', ['inject', 'fonts', 'images', 'angular-app', 'angular-js-prod'], function () {
     log('Optimizing the javascript, css, html');
 
     var cssFilter = $.filter('**/*.css', {
@@ -220,7 +243,7 @@ gulp.task('optimize', ['inject', 'fonts', 'images', 'angular-app', 'angular-js']
  * --type=major will bump the major version x.*.*
  * --version=1.2.3 will bump to a specific version and ignore other flags
  */
-gulp.task('bump', function() {
+gulp.task('bump', function () {
     var msg = 'Bumping versions';
     var type = args.type;
     var version = args.version;
@@ -241,36 +264,36 @@ gulp.task('bump', function() {
         .pipe(gulp.dest(config.root));
 });
 
-gulp.task('replace-socketio-url-prod', function() {
+gulp.task('replace-socketio-url-prod', function () {
     gulp.src(config.client + 'js/app.js')
         .pipe($.injectString.replace('var url = "http://localhost:3000";', 'var url;'))
         .pipe(gulp.dest(config.client + 'js/'));
 });
 
-gulp.task('serve-prod', ['replace-socketio-url-prod', 'optimize'], function() {
+gulp.task('serve-prod', ['replace-socketio-url-prod', 'optimize'], function () {
     serve(false);
 });
 
-gulp.task('replace-socketio-url-dev', function() {
+gulp.task('replace-socketio-url-dev', function () {
     gulp.src(config.client + 'js/app.js')
         .pipe($.injectString.replace('var url;', 'var url = "http://localhost:5000";'))
         .pipe(gulp.dest(config.client + 'js/'));
 });
 
-gulp.task('serve-dev', ['replace-socketio-url-dev', 'inject'], function() {
+gulp.task('serve-dev', ['replace-socketio-url-dev', 'inject'], function () {
     serve(true);
 });
 
-gulp.task('prepare-server-files', function() {
+gulp.task('prepare-server-files', function () {
     gulp.src(['package.json*', /*'bower.json', '.bowerrc', */ 'gulpfile.js', 'gulp.config.js'])
         .pipe(gulp.dest(config.buildServer));
     gulp.src(['./src/server/**'], {
-            base: './src/'
-        })
+        base: './src/'
+    })
         .pipe(gulp.dest(config.buildServer));
 });
 //////////////////////////////
-gulp.task('deploy', function() {
+gulp.task('deploy', function () {
     return gulp.src(['app.js', 'package.json*', 'index.html'])
         .pipe($.scp2({
             host: '192.168.1.99',
@@ -278,12 +301,12 @@ gulp.task('deploy', function() {
             password: 'raspberry',
             dest: '/home/pi/homecenter/'
         }))
-        .on('error', function(err) {
+        .on('error', function (err) {
             console.log(err);
         });
 });
 
-gulp.task('deployfull', ['replace-socketio-url-prod', 'optimize', 'prepare-server-files'], function() {
+gulp.task('deployfull', ['replace-socketio-url-prod', 'optimize', 'prepare-server-files'], function () {
     return gulp.src(['./build/**'])
         .pipe($.scp2({
             host: '192.168.1.99',
@@ -291,7 +314,7 @@ gulp.task('deployfull', ['replace-socketio-url-prod', 'optimize', 'prepare-serve
             password: 'raspberry',
             dest: '/home/pi/homecenter/'
         }))
-        .on('error', function(err) {
+        .on('error', function (err) {
             console.log(err);
         });
 });
@@ -309,24 +332,24 @@ function serve(isDev) {
     };
 
     return $.nodemon(nodeOptions)
-        .on('restart', function(ev) {
+        .on('restart', function (ev) {
             log('*** nodemon restarted');
             log('files changed on restart:\n' + ev);
-            setTimeout(function() {
+            setTimeout(function () {
                 browserSync.notify('reloading now ...');
                 browserSync.reload({
                     stream: false
                 });
             }, config.browserReloadDelay);
         })
-        .on('start', function() {
+        .on('start', function () {
             log('*** nodemon started');
             startBrowserSync(isDev);
         })
-        .on('crash', function() {
+        .on('crash', function () {
             log('*** nodemon crashed: script crashed for some reason');
         })
-        .on('exit', function() {
+        .on('exit', function () {
             log('*** nodemon exited cleanly');
         });
 }
@@ -346,16 +369,16 @@ function startBrowserSync(isDev) {
     // TODO change less
     if (isDev) {
         gulp.watch([config.css], ['styles'])
-            .on('change', function(event) {
+            .on('change', function (event) {
                 changeEvent(event);
             });
         gulp.watch([config.client + '**/*.ts'], ['tsc'])
-            .on('change', function(event) {
+            .on('change', function (event) {
                 changeEvent(event);
             });
     } else {
         gulp.watch([config.css, config.js, config.html], ['optimize', browserSync.reload])
-            .on('change', function(event) {
+            .on('change', function (event) {
                 changeEvent(event);
             });
     }
@@ -390,7 +413,7 @@ function clean(path) {
 }
 
 function log(msg) {
-    if (typeof(msg) === 'object') {
+    if (typeof (msg) === 'object') {
         for (var item in msg) {
             if (msg.hasOwnProperty(item)) {
                 $.util.log($.util.colors.blue(msg[item]));

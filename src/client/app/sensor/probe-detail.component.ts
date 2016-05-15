@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router, RouteParams, CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouteParams, CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {ProbeService} from './probe.service'
 import {ProbeData, ProbeDetailData, HashTable} from './model';

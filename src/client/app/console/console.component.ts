@@ -1,5 +1,5 @@
-import {Component, AfterViewInit} from 'angular2/core';
-import {CanReuse, OnReuse, ComponentInstruction} from 'angular2/router';
+import {Component, AfterViewInit} from '@angular/core';
+import {CanReuse, OnReuse, ComponentInstruction} from '@angular/router-deprecated';
 import {SensorService} from '../sensor/sensor.service'
 
 declare var kendoConsole: any;

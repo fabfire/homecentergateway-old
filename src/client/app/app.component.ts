@@ -1,12 +1,12 @@
-import { Component } from 'angular2/core';
-import { AfterViewInit } from 'angular2/core';
+import { Component,AfterViewInit } from '@angular/core';
+import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig} from '@angular/router-deprecated';
+import { HTTP_PROVIDERS} from '@angular/http';
+
 import { MainHeaderComponent } from './layout/main-header.component';
 import { MainSidebarComponent } from './layout/main-sidebar.component';
 import { MainContentComponent } from './layout/main-content.component';
 import { MainFooterComponent } from './layout/main-footer.component';
 import { ControlSidebarComponent } from './layout/control-sidebar.component';
-import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
-import { HTTP_PROVIDERS} from 'angular2/http';
 import { ProbeListComponent } from './sensor/probe-list.component';
 import { ProbeDetailComponent } from './sensor/probe-detail.component';
 import { SensorListComponent } from './sensor/sensor-list.component';
