@@ -11,7 +11,7 @@ System.register(['@angular/platform-browser-dynamic', './app.component'], functi
                 app_component_1 = app_component_1_1;
             }],
         execute: function() {
-            //import {APP_BASE_HREF} from '@angular/common';
+            //enableProdMode();
             platform_browser_dynamic_1.bootstrap(app_component_1.AppComponent);
         }
     }

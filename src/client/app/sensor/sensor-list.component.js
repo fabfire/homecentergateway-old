@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/router-deprecated', './sensor.service', '../orderby'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/router', './sensor.service', '../orderby'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,15 +10,15 @@ System.register(['@angular/core', '@angular/router-deprecated', './sensor.servic
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_deprecated_1, sensor_service_1, orderby_1;
+    var core_1, router_1, sensor_service_1, orderby_1;
     var SensorListComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (router_deprecated_1_1) {
-                router_deprecated_1 = router_deprecated_1_1;
+            function (router_1_1) {
+                router_1 = router_1_1;
             },
             function (sensor_service_1_1) {
                 sensor_service_1 = sensor_service_1_1;
@@ -28,7 +28,8 @@ System.register(['@angular/core', '@angular/router-deprecated', './sensor.servic
             }],
         execute: function() {
             SensorListComponent = (function () {
-                function SensorListComponent(_sensorService) {
+                function SensorListComponent(router, _sensorService) {
+                    this.router = router;
                     this._sensorService = _sensorService;
                 }
                 SensorListComponent.prototype.ngOnInit = function () {
@@ -56,15 +57,14 @@ System.register(['@angular/core', '@angular/router-deprecated', './sensor.servic
                     this.listSubscription.unsubscribe();
                     this.animationSubscription.unsubscribe();
                 };
-                SensorListComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 SensorListComponent = __decorate([
                     core_1.Component({
                         selector: 'sensor-list',
                         templateUrl: './app/sensor/sensor-list.component.html',
-                        directives: [router_deprecated_1.ROUTER_DIRECTIVES],
+                        directives: [router_1.ROUTER_DIRECTIVES],
                         pipes: [orderby_1.OrderBy]
                     }), 
-                    __metadata('design:paramtypes', [sensor_service_1.SensorService])
+                    __metadata('design:paramtypes', [router_1.Router, sensor_service_1.SensorService])
                 ], SensorListComponent);
                 return SensorListComponent;
             }());

@@ -217,7 +217,6 @@ System.register(['@angular/core', 'ng2-highcharts', './sensor.service', './model
                         }
                     });
                 };
-                SensorChartComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 __decorate([
                     core_1.Input(), 
                     __metadata('design:type', String)

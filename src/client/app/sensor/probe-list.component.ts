@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES, Router} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {ProbeService} from './probe.service'
 import {ProbeData, HashTable} from './model';
@@ -11,10 +11,10 @@ declare var $: any;
     templateUrl: './app/sensor/probe-list.component.html',
     directives: [ROUTER_DIRECTIVES],
 })
-export class ProbeListComponent implements OnInit, CanReuse {
+export class ProbeListComponent implements OnInit {
     probes: ProbeData[];
 
-    constructor(private _probeService: ProbeService) { }
+    constructor(private router: Router, private _probeService: ProbeService) { }
 
     ngOnInit() {
         this._probeService.getProbes();
@@ -39,6 +39,6 @@ export class ProbeListComponent implements OnInit, CanReuse {
             console.error);
     }
 
-    routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
+    //  routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
 }
 

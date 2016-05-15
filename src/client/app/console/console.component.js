@@ -26,7 +26,6 @@ System.register(['@angular/core', '../sensor/sensor.service'], function(exports_
                     this._sensorService = _sensorService;
                     this.sensorService = this._sensorService;
                 }
-                ConsoleComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 ConsoleComponent.prototype.ngAfterViewInit = function () {
                     var messages = this.sensorService.getMessage();
                     messages.forEach(function (msg) {

@@ -29,7 +29,7 @@ var updateProbe = function (data, callback) {
     // activesProbes[data.pid].startdate = data.startdate;
     // activesProbes[data.pid].enddate = data.enddate;
     elastic.updateProbe(data, function (result, err) {
-        callback(activesProbes[data.pid], err);
+        callback(allProbes[data.pid], err);
     });
 };
 exports.updateProbe = updateProbe;

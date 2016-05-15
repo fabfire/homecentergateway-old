@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/router-deprecated', '../sensor/sensor.service'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/router', '../sensor/sensor.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,15 +10,15 @@ System.register(['@angular/core', '@angular/router-deprecated', '../sensor/senso
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_deprecated_1, sensor_service_1;
+    var core_1, router_1, sensor_service_1;
     var MainContentComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (router_deprecated_1_1) {
-                router_deprecated_1 = router_deprecated_1_1;
+            function (router_1_1) {
+                router_1 = router_1_1;
             },
             function (sensor_service_1_1) {
                 sensor_service_1 = sensor_service_1_1;
@@ -43,7 +43,7 @@ System.register(['@angular/core', '@angular/router-deprecated', '../sensor/senso
                     core_1.Component({
                         selector: 'main-content',
                         templateUrl: './app/layout/main-content.component.html',
-                        directives: [router_deprecated_1.ROUTER_DIRECTIVES]
+                        directives: [router_1.ROUTER_DIRECTIVES]
                     }), 
                     __metadata('design:paramtypes', [sensor_service_1.SensorService])
                 ], MainContentComponent);

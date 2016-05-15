@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/router-deprecated', './probe.service', './utils.service'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/router', './probe.service', './utils.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,15 +10,15 @@ System.register(['@angular/core', '@angular/router-deprecated', './probe.service
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_deprecated_1, probe_service_1, utils_service_1;
+    var core_1, router_1, probe_service_1, utils_service_1;
     var ProbeDetailComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (router_deprecated_1_1) {
-                router_deprecated_1 = router_deprecated_1_1;
+            function (router_1_1) {
+                router_1 = router_1_1;
             },
             function (probe_service_1_1) {
                 probe_service_1 = probe_service_1_1;
@@ -29,25 +29,25 @@ System.register(['@angular/core', '@angular/router-deprecated', './probe.service
         execute: function() {
             ProbeDetailComponent = (function () {
                 // subscriptionDetail: Subscription;
-                function ProbeDetailComponent(_router, _routeParams, _probeService, _utilsService) {
+                function ProbeDetailComponent(_router, _probeService, _utilsService) {
                     this._router = _router;
-                    this._routeParams = _routeParams;
                     this._probeService = _probeService;
                     this._utilsService = _utilsService;
                 }
+                ProbeDetailComponent.prototype.routerOnActivate = function (curr) {
+                    this.id = curr.getParam('id');
+                };
                 ProbeDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    var id = this._routeParams.get('id');
                     // automatically update sensor view when new data comes
                     this.subscription = this._probeService.probeUpdated$.subscribe(function (_id) {
-                        if (id === _id) {
-                            _this.getProbe(id);
+                        if (_this.id === _id) {
+                            _this.getProbe(_id);
                         }
                     });
-                    this.getProbe(id);
-                    this._probeService.getProbeDetail(id).subscribe(function (updatedData) { console.log(updatedData); _this.probeDetailedData = updatedData; });
+                    this.getProbe(this.id);
+                    this._probeService.getProbeDetail(this.id).subscribe(function (updatedData) { console.log(updatedData); _this.probeDetailedData = updatedData; });
                 };
-                ProbeDetailComponent.prototype.routerCanReuse = function (next, prev) { return true; };
                 ProbeDetailComponent.prototype.getProbe = function (id) {
                     var _this = this;
                     this.probeData = this._probeService.getProbe(id);
@@ -67,9 +67,9 @@ System.register(['@angular/core', '@angular/router-deprecated', './probe.service
                     core_1.Component({
                         selector: 'probe-detail',
                         templateUrl: './app/sensor/probe-detail.component.html',
-                        directives: [router_deprecated_1.ROUTER_DIRECTIVES],
+                        directives: [router_1.ROUTER_DIRECTIVES],
                     }), 
-                    __metadata('design:paramtypes', [router_deprecated_1.Router, router_deprecated_1.RouteParams, probe_service_1.ProbeService, utils_service_1.SensorUtilsService])
+                    __metadata('design:paramtypes', [router_1.Router, probe_service_1.ProbeService, utils_service_1.SensorUtilsService])
                 ], ProbeDetailComponent);
                 return ProbeDetailComponent;
             }());

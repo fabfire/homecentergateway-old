@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/router-deprecated', '@angular/http', './layout/main-header.component', './layout/main-sidebar.component', './layout/main-content.component', './layout/main-footer.component', './layout/control-sidebar.component', './sensor/probe-list.component', './sensor/probe-detail.component', './sensor/sensor-list.component', './sensor/sensor-detail.component', './console/console.component', './sensor/sensor.service', './sensor/probe.service', './sensor/utils.service'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/router', '@angular/http', './layout/main-header.component', './layout/main-sidebar.component', './layout/main-content.component', './layout/main-footer.component', './layout/control-sidebar.component', './sensor/probe-list.component', './sensor/probe-detail.component', './sensor/sensor-list.component', './sensor/sensor-detail.component', './console/console.component', './sensor/sensor.service', './sensor/probe.service', './sensor/utils.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,15 +10,15 @@ System.register(['@angular/core', '@angular/router-deprecated', '@angular/http',
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_deprecated_1, http_1, main_header_component_1, main_sidebar_component_1, main_content_component_1, main_footer_component_1, control_sidebar_component_1, probe_list_component_1, probe_detail_component_1, sensor_list_component_1, sensor_detail_component_1, console_component_1, sensor_service_1, probe_service_1, utils_service_1;
+    var core_1, router_1, http_1, main_header_component_1, main_sidebar_component_1, main_content_component_1, main_footer_component_1, control_sidebar_component_1, probe_list_component_1, probe_detail_component_1, sensor_list_component_1, sensor_detail_component_1, console_component_1, sensor_service_1, probe_service_1, utils_service_1;
     var AppComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (router_deprecated_1_1) {
-                router_deprecated_1 = router_deprecated_1_1;
+            function (router_1_1) {
+                router_1 = router_1_1;
             },
             function (http_1_1) {
                 http_1 = http_1_1;
@@ -76,14 +76,14 @@ System.register(['@angular/core', '@angular/router-deprecated', '@angular/http',
                         selector: 'homecenter',
                         templateUrl: './app/app.component.html',
                         directives: [main_header_component_1.MainHeaderComponent, main_sidebar_component_1.MainSidebarComponent, main_content_component_1.MainContentComponent, main_footer_component_1.MainFooterComponent, control_sidebar_component_1.ControlSidebarComponent],
-                        providers: [router_deprecated_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS, sensor_service_1.SensorService, probe_service_1.ProbeService, utils_service_1.SensorUtilsService]
+                        providers: [router_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS, sensor_service_1.SensorService, probe_service_1.ProbeService, utils_service_1.SensorUtilsService]
                     }),
-                    router_deprecated_1.RouteConfig([
-                        { path: '/', name: 'Sensors', component: sensor_list_component_1.SensorListComponent, useAsDefault: true },
-                        { path: '/sensor/:type/:id', name: 'SensorDetail', component: sensor_detail_component_1.SensorDetailComponent },
-                        { path: '/probes', name: 'Probes', component: probe_list_component_1.ProbeListComponent },
-                        { path: '/probe/:id', name: 'ProbeDetail', component: probe_detail_component_1.ProbeDetailComponent },
-                        { path: '/console', name: 'Console', component: console_component_1.ConsoleComponent }
+                    router_1.Routes([
+                        { path: '/', component: sensor_list_component_1.SensorListComponent },
+                        { path: '/sensor/:type/:id', component: sensor_detail_component_1.SensorDetailComponent },
+                        { path: '/probes', component: probe_list_component_1.ProbeListComponent },
+                        { path: '/probe/:id', component: probe_detail_component_1.ProbeDetailComponent },
+                        { path: '/console', component: console_component_1.ConsoleComponent }
                     ]), 
                     __metadata('design:paramtypes', [sensor_service_1.SensorService])
                 ], AppComponent);

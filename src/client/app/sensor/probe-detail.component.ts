@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouteParams, CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {Router, RouteSegment, ROUTER_DIRECTIVES} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {ProbeService} from './probe.service'
 import {ProbeData, ProbeDetailData, HashTable} from './model';
@@ -10,32 +10,34 @@ import {SensorUtilsService} from './utils.service'
     templateUrl: './app/sensor/probe-detail.component.html',
     directives: [ROUTER_DIRECTIVES],
 })
-export class ProbeDetailComponent implements OnInit, CanReuse {
+export class ProbeDetailComponent implements OnInit {
     probeData: ProbeData;
     editProbeData: ProbeData;
     probeDetailedData: ProbeDetailData;
     subscription: Subscription;
+    id: string;
     // subscriptionDetail: Subscription;
 
-    constructor(private _router: Router, private _routeParams: RouteParams, private _probeService: ProbeService, private _utilsService: SensorUtilsService) { }
-
+    constructor(private _router: Router, private _probeService: ProbeService, private _utilsService: SensorUtilsService) { }
+    
+    routerOnActivate(curr: RouteSegment) {
+        this.id = curr.getParam('id');
+    }
+    
     ngOnInit() {
-        let id = this._routeParams.get('id');
         // automatically update sensor view when new data comes
         this.subscription = this._probeService.probeUpdated$.subscribe(
             _id => {
-                if (id === _id) {
-                    this.getProbe(id);
+                if (this.id === _id) {
+                    this.getProbe(_id);
                 }
             });
 
-        this.getProbe(id);
+        this.getProbe(this.id);
 
-        this._probeService.getProbeDetail(id).subscribe(
+        this._probeService.getProbeDetail(this.id).subscribe(
             updatedData => { console.log(updatedData); this.probeDetailedData = updatedData; });
     }
-
-    routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
 
     private getProbe(id) {
         this.probeData = this._probeService.getProbe(id);

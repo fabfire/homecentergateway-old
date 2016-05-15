@@ -28,7 +28,7 @@
                     <!-- /.col -->
                     <div *ngIf="editProbeData.vcc" class="col-sm-4">
                         <div class="description-block">
-                            <h5 class="description-header">{{editProbeData.vcc}}</h5>
+                            <h5 class="description-header">{{editProbeData.vcc | number:'.1-1'}}</h5>
                             <span class="description-text">VCC</span>
                         </div>
                         <!-- /.description-block -->
@@ -53,7 +53,7 @@
             <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                     <li *ngFor="let detail of probeDetailedData.sensorstats">
-                        <a href='#' [routerLink]="['SensorDetail', {type:detail.sensordata.type, id: detail.sensordata.id}]"> {{_utilsService.getTypeLabel(detail.sensordata.type)}}
+                        <a href='#' [routerLink]="['/sensor/', detail.sensordata.type, detail.sensordata.id]"> {{_utilsService.getTypeLabel(detail.sensordata.type)}}
                             <span class="pull-right badge {{_utilsService.getTypeColor(detail.sensordata.type)}}">{{detail.count}} </span>
                         </a>
                     </li>

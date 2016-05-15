@@ -1,5 +1,5 @@
 import {Input, Component, OnInit} from '@angular/core';
-import {CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Ng2Highstocks} from 'ng2-highcharts';
 // import {Highcharts, CHART_DIRECTIVES } from 'angular2-highcharts';
@@ -19,7 +19,7 @@ var $this;
     // directives: [CHART_DIRECTIVES]
 
 })
-export class SensorChartComponent implements OnInit, CanReuse {
+export class SensorChartComponent implements OnInit {
     @Input() sensorId: string;
     @Input() sensorType: string;
     @Input() minDate: Date;
@@ -223,6 +223,4 @@ export class SensorChartComponent implements OnInit, CanReuse {
                 }
             });
     }
-
-    routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
 }

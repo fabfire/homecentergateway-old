@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouteParams, CanReuse, ComponentInstruction} from '@angular/router-deprecated';
+import {Router, RouteSegment} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
 import {SensorChartComponent} from './sensor-chart-component'
@@ -13,7 +13,7 @@ declare var $: any;
     templateUrl: './app/sensor/sensor-detail.component.html',
     directives: [SensorChartComponent]
 })
-export class SensorDetailComponent implements OnInit, CanReuse {
+export class SensorDetailComponent implements OnInit {
     sensorid: string;
     sensortype: string;
     minDate: Date;
@@ -21,35 +21,38 @@ export class SensorDetailComponent implements OnInit, CanReuse {
     sensorData: SensorData;
     editSensorData: SensorData;
     subscription: Subscription;
-
-    constructor(private _router: Router, private _routeParams: RouteParams, private _sensorService: SensorService, private _utilsService: SensorUtilsService) { }
-
+    id: string;
+    type: string;
+    
+    constructor(private _router: Router, private _sensorService: SensorService, private _utilsService: SensorUtilsService) { }
+    
+    routerOnActivate(curr: RouteSegment) {
+        this.id = curr.getParam('id');
+       this.type = curr.getParam('type');
+    }
+    
     ngOnInit() {
-        let id = this._routeParams.get('id');
-        let type = this._routeParams.get('type');
-        this.sensorid = id;
-        this.sensortype = type;
+        this.sensorid = this.id;
+        this.sensortype = this.type;
 
         // automatically update sensor view when new data comes
         this.subscription = this._sensorService.sensorUpdated$.subscribe(
             _id => {
-                if (id === _id) {
-                    this.getSensor(id, type);
+                if (this.id === _id) {
+                    this.getSensor(this.id, this.type);
                 }
             });
 
-        this.getSensor(id, type);
+        this.getSensor(this.id, this.type);
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
     
-    routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
-
     save() {
         this._sensorService.updateSensor(this.editSensorData);
-        this._router.navigate(['/Sensors']);
+        this._router.navigate(['/']);
         return false; //to prevent Chrome to submit the form (refresh page)
     }
 

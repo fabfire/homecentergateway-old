@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES, Router} from '@angular/router';
 
 import { SensorListComponent } from '../sensor/sensor-list.component';
 import { ConsoleComponent } from '../console/console.component';
@@ -10,4 +10,6 @@ import { ConsoleComponent } from '../console/console.component';
     directives: [ROUTER_DIRECTIVES, SensorListComponent, ConsoleComponent]
 })
 
-export class MainSidebarComponent { }
+export class MainSidebarComponent {
+    constructor(private router: Router){}
+ }

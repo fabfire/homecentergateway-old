@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CanReuse, ComponentInstruction, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
 import {SensorData, HashTable} from './model';
@@ -14,7 +14,7 @@ declare var moment: any;
     directives: [ROUTER_DIRECTIVES],
     pipes: [OrderBy]
 })
-export class SensorListComponent implements OnInit, CanReuse {
+export class SensorListComponent implements OnInit {
     // if use the async pipe, we have to declare an observable
     //sensorsData: Observable<SensorData[]>;
     sensorsData: SensorData[];
@@ -22,7 +22,7 @@ export class SensorListComponent implements OnInit, CanReuse {
     animationSubscription: Subscription;
     limitDate: Date;
 
-    constructor(private _sensorService: SensorService) { }
+    constructor(private router: Router, private _sensorService: SensorService) { }
 
     ngOnInit() {
 
@@ -54,6 +54,4 @@ export class SensorListComponent implements OnInit, CanReuse {
         this.listSubscription.unsubscribe();
         this.animationSubscription.unsubscribe();
     }
-    routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }
-
 }

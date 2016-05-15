@@ -1,5 +1,5 @@
 import { Component,AfterViewInit } from '@angular/core';
-import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig} from '@angular/router-deprecated';
+import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Routes} from '@angular/router';
 import { HTTP_PROVIDERS} from '@angular/http';
 
 import { MainHeaderComponent } from './layout/main-header.component';
@@ -25,12 +25,12 @@ declare var loadAdminLTE: any;
     providers: [ROUTER_PROVIDERS, HTTP_PROVIDERS, SensorService, ProbeService, SensorUtilsService]
 })
 
-@RouteConfig([
-    { path: '/', name: 'Sensors', component: SensorListComponent, useAsDefault: true },
-    { path: '/sensor/:type/:id', name: 'SensorDetail', component: SensorDetailComponent },
-    { path: '/probes', name: 'Probes', component: ProbeListComponent },
-    { path: '/probe/:id', name: 'ProbeDetail', component: ProbeDetailComponent },
-    { path: '/console', name: 'Console', component: ConsoleComponent }
+@Routes([
+    { path: '/', component: SensorListComponent},
+    { path: '/sensor/:type/:id', component: SensorDetailComponent },
+    { path: '/probes', component: ProbeListComponent },
+    { path: '/probe/:id', component: ProbeDetailComponent },
+    { path: '/console', component: ConsoleComponent }
 ])
 export class AppComponent implements AfterViewInit {
     constructor(private _sensorService: SensorService) { }
