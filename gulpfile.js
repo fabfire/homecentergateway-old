@@ -116,7 +116,7 @@ gulp.task('angular-js-dev', function () {
             './node_modules/reflect-metadata/Reflect.js',
             './node_modules/systemjs/dist/system.src.js',
             './node_modules/zone.js/dist/zone.js',
-            './node_modules/rxjs/bundles/Rx.umd.min.js'
+            './node_modules/rxjs/bundles/Rx.min.js'
         ])
         .pipe(gulp.dest('./src/client/lib/angular2'));
 });
@@ -162,7 +162,7 @@ gulp.task('inject', ['tsc', 'wiredep', 'styles', 'angular-js-dev'], function () 
         './lib/angular2/Reflect.js',
         './lib/angular2/system.src.js',
         './lib/angular2/zone.js',
-        //'./lib/angular2/Rx.umd.min.js',
+        './lib/angular2/Rx.min.js',
         // './lib/angular2/core.umd.js',
         // './lib/angular2/compiler.umd.js',
         // './lib/angular2/common.umd.js',
