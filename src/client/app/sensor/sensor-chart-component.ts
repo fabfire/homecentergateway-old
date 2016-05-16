@@ -24,7 +24,7 @@ export class SensorChartComponent implements OnInit {
     @Input() sensorType: string;
     @Input() minDate: Date;
     @Input() lastValueDate: Date;
-    chartStock = {};
+    chartStock;
     pointEditData: PointEditData = new PointEditData();
 
     constructor(private _sensorService: SensorService, private _utilsService: SensorUtilsService) {}

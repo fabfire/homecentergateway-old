@@ -34,7 +34,6 @@ System.register(['@angular/core', 'ng2-highcharts', './sensor.service', './model
                 function SensorChartComponent(_sensorService, _utilsService) {
                     this._sensorService = _sensorService;
                     this._utilsService = _utilsService;
-                    this.chartStock = {};
                     this.pointEditData = new model_1.PointEditData();
                 }
                 SensorChartComponent.prototype.ngOnInit = function () {

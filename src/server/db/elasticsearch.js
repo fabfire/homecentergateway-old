@@ -41,28 +41,26 @@ function indexExists() {
 exports.indexExists = indexExists;
 
 // ping ES
-function pingES() {
+function pingES(callback) {
     elasticClient.ping({
-        // ping usually has a 3000ms timeout 
-        //requestTimeout: Infinity,
-
-        // undocumented params are appended to the query string 
+    // undocumented params are appended to the query string 
         hello: '"elasticsearch!'
-    }, function (error) {
-        if (error) {
+    }, function (err, response) {
+        if (err) {
             console.trace('elastic : elasticsearch cluster is down!\n');
         } else {
             console.log('elastic : elasticsearch cluster is UP !!!\n');
         }
+        callback(err, response);
     });
 
-    elasticClient.info(function (err, response, status) {
-        if (err) {
-            console.trace('elastic : error gathering info on cluster');
-        } else {
-            // console.log(response);
-        }
-    });
+    // elasticClient.info(function (err, response, status) {
+    //     if (err) {
+    //         console.trace('elastic : error gathering info on cluster');
+    //     } else {
+    //         callback(err, response);
+    //     }
+    // });
 }
 exports.pingES = pingES;
 

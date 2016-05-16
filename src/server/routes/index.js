@@ -2,6 +2,7 @@ var express = require('express');
 
 var probeRepository = require('../models/probeRepository');
 var sensorRepository = require('../models/sensorRepository');
+var utils = require('../utils/utils');
 
 module.exports = function (app) {
     var api = '/api';
@@ -15,6 +16,7 @@ module.exports = function (app) {
     app.post(api + '/getsensormeasureid', getSensorMeasureId);
     app.put(api + '/updatesensormeasure', updateSensorMeasure);
     app.delete(api + '/deletesensormeasure/:id', deleteSensorMeasure);
+    app.get(api + '/getstatus', getStatus);
 
     function getProbes(req, res) {
         console.log('API getProbes', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
@@ -55,11 +57,10 @@ module.exports = function (app) {
 
     function getChartData(req, res) {
         console.log('API getChartData' + JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
-
         var start = req.params.start;
         var end = req.params.end;
-        if (undefined === start) { start = new Date(2010, 01, 01);}
-        if (undefined === end) { end = new Date();}
+        if (undefined === start) { start = new Date(2010, 01, 01); }
+        if (undefined === end) { end = new Date(); }
         sensorRepository.getChartData(req.params.id, start, end, function (data, err) {
             if (err) {
                 res.status(500).send(err);
@@ -119,8 +120,8 @@ module.exports = function (app) {
             );
         }
     }
-    
-  function deleteSensorMeasure(req, res) {
+
+    function deleteSensorMeasure(req, res) {
         console.log('API deleteSensorMeasure', JSON.stringify(req.params));
         if ('undefined' !== typeof req.params.id) {
             sensorRepository.deleteSensorMeasure(req.params.id,
@@ -136,4 +137,15 @@ module.exports = function (app) {
         }
     }
 
+    function getStatus(req, res) {
+        console.log('API getStatus', JSON.stringify(req.params));
+        utils.getStatus(function (err, data) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            else {
+                res.status(200).send(data);
+            }
+        });
+    }
 };
