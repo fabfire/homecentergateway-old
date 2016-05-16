@@ -1,7 +1,15 @@
 import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
 
 @Injectable()
 export class SensorUtilsService {
+    constructor(private http: Http) { }
+    
+    getStatus = () => {
+        return this.http.get("api/getstatus")
+            .map(response => response.json());
+    };
+    
     getTypeLabel = (type: string) => {
         var str;
         switch (type) {

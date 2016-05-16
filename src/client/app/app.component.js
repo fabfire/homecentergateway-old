@@ -71,6 +71,9 @@ System.register(['@angular/core', '@angular/router', '@angular/http', './layout/
                     //Initialize theme AdminLTE.
                     loadAdminLTE();
                 };
+                AppComponent.prototype.ngOnInit = function () {
+                    moment.locale('fr');
+                };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'homecenter',

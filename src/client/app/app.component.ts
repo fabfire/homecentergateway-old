@@ -1,4 +1,4 @@
-import { Component,AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, Routes} from '@angular/router';
 import { HTTP_PROVIDERS} from '@angular/http';
 
@@ -17,6 +17,7 @@ import { ProbeService } from './sensor/probe.service'
 import { SensorUtilsService } from './sensor/utils.service'
 
 declare var loadAdminLTE: any;
+declare var moment: any;
 
 @Component({
     selector: 'homecenter',
@@ -26,17 +27,21 @@ declare var loadAdminLTE: any;
 })
 
 @Routes([
-    { path: '/', component: SensorListComponent},
+    { path: '/', component: SensorListComponent },
     { path: '/sensor/:type/:id', component: SensorDetailComponent },
     { path: '/probes', component: ProbeListComponent },
     { path: '/probe/:id', component: ProbeDetailComponent },
     { path: '/console', component: ConsoleComponent }
 ])
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnInit {
     constructor(private _sensorService: SensorService) { }
 
     ngAfterViewInit() {
         //Initialize theme AdminLTE.
         loadAdminLTE();
+    }
+
+    ngOnInit() {
+        moment.locale('fr');
     }
 }
