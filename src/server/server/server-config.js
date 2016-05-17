@@ -18,10 +18,10 @@ var applyConfiguration = function(app) {
 
     app.use(compress());
     app.use(cors());
-    
+
     // custom routes, this should be placed after body parser
     var routes = require('../routes/index')(app);
-    
+
     switch (environment) {
         case 'prod':
             console.log('** PROD **');
@@ -35,11 +35,10 @@ var applyConfiguration = function(app) {
             app.use(express.static('./src/client/'));
             app.use(express.static('./'));
             app.use(express.static('./tmp'));
+            app.use(express.static('./test'));
             app.use('/*', express.static('./src/client/index.html'));
             break;
-    }
-
-    
+    }    
 };
 
 exports.applyConfiguration = applyConfiguration;

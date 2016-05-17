@@ -1,6 +1,7 @@
 var async = require('async');
-var elastic = require('../db/elasticsearch');
 var request = require('request');
+var elastic = require('../db/elasticsearch');
+var config = require('../config');
 
 var getStatus = function (callback) {
     async.parallel(
@@ -31,7 +32,9 @@ var getStatus = function (callback) {
             },
             // web health api on port 9615
             pm2: function (callback) {
-                request('http://localhost:9615', function (error, response, body) {
+                var url = (config.environment === 'prod' ? config.pm2webApiUrl.prod : config.pm2webApiUrl.dev);
+
+                request(url, function (error, response, body) {
                     var resultPM2;
                     if (!error && response.statusCode === 200) {
                         var info = JSON.parse(body);
@@ -42,13 +45,15 @@ var getStatus = function (callback) {
                             }
                         };
                         resultPM2.message.processes = [];
-                        info.processes.forEach(function (process, i) {
-                            resultPM2.message.processes[i] = {};
-                            resultPM2.message.processes[i].name = process.pm2_env.name;
-                            resultPM2.message.processes[i].port = process.pm2_env.PORT;
-                            resultPM2.message.processes[i].status = process.pm2_env.status;
-                            resultPM2.message.processes[i].restart_time = process.pm2_env.restart_time;
-                        });
+                        if (info.processes) {
+                            info.processes.forEach(function (process, i) {
+                                resultPM2.message.processes[i] = {};
+                                resultPM2.message.processes[i].name = process.pm2_env.name;
+                                resultPM2.message.processes[i].port = process.pm2_env.PORT;
+                                resultPM2.message.processes[i].status = process.pm2_env.status;
+                                resultPM2.message.processes[i].restart_time = process.pm2_env.restart_time;
+                            });
+                        }
                     }
                     else {
                         resultPM2 = {

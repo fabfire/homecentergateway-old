@@ -5,6 +5,10 @@ var config = {
         dev: 'COM4',
         prod: '/dev/ttyAMA0',
         baudrate: 57600
+    },
+    pm2webApiUrl: {
+        dev: 'http://localhost:3000/test/pm2.json',
+        prod:'http://localhost:9615'
     }
 };
 
