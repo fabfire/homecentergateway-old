@@ -18,7 +18,7 @@
     "kendo-ui": "kendo-ui-core#^2016.1.217",
     "moment": "~2.13",
     "PACE": "pace#^1.0.2",
-    "toastr": "~2.1.2",
+    "toastr": "^2.1.2",
     "Ionicons": "ionicons#^2.0.1",
     "socket.io": "^1.4.5",
     "weather-icons": "^2.0.10",

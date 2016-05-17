@@ -73,6 +73,9 @@ System.register(['@angular/core', '@angular/router', '@angular/http', './layout/
                 };
                 AppComponent.prototype.ngOnInit = function () {
                     moment.locale('fr');
+                    toastr.options = {
+                        "positionClass": "toast-bottom-right"
+                    };
                 };
                 AppComponent = __decorate([
                     core_1.Component({

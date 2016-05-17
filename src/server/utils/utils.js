@@ -31,7 +31,7 @@ var getStatus = function (callback) {
             },
             // web health api on port 9615
             pm2: function (callback) {
-                request('http://192.168.1.99:9615', function (error, response, body) {
+                request('http://localhost:9615', function (error, response, body) {
                     var resultPM2;
                     if (!error && response.statusCode === 200) {
                         var info = JSON.parse(body);

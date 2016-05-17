@@ -11,7 +11,7 @@ System.register(['@angular/core', '../sensor/utils.service'], function(exports_1
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, utils_service_1;
-    var ControlSidebarComponent;
+    var $this, ControlSidebarComponent;
     return {
         setters:[
             function (core_1_1) {
@@ -26,11 +26,38 @@ System.register(['@angular/core', '../sensor/utils.service'], function(exports_1
                     this._utilsService = _utilsService;
                 }
                 ControlSidebarComponent.prototype.ngOnInit = function () {
+                    $this = this;
+                    this.checkStatus();
+                    setInterval(function () {
+                        $this.checkStatus();
+                    }, 60000);
+                };
+                ControlSidebarComponent.prototype.checkStatus = function () {
                     var _this = this;
-                    var $this = this;
                     this._utilsService.getStatus().subscribe(function (data) {
                         _this.status = data;
-                        _this.status.pm2.message.system_info.uptime = moment.duration(data.pm2.message.system_info.uptime * 1000).humanize();
+                        if (data.pm2.message.system_info && data.pm2.message.system_info.uptime) {
+                            _this.status.pm2.message.system_info.uptime = moment.duration(data.pm2.message.system_info.uptime * 1000).humanize();
+                        }
+                        if (data.nodejs.status !== 'green') {
+                            toastr.error('Serveur NodeJS indisponible !');
+                        }
+                        else if (_this.previousStatus && _this.previousStatus.nodejs.status !== 'green') {
+                            toastr.success('Serveur NodeJS en ligne !');
+                        }
+                        if (data.elastic.status !== 'green') {
+                            toastr.error('Serveur ElasticSearch indisponible !');
+                        }
+                        else if (_this.previousStatus && _this.previousStatus.elastic.status !== 'green') {
+                            toastr.success('Serveur ElasticSearch en ligne !');
+                        }
+                        if (data.pm2.status !== 'green') {
+                            toastr.error('Monitoring PM2 indisponible !');
+                        }
+                        else if (_this.previousStatus && _this.previousStatus.pm2.status !== 'green') {
+                            toastr.success('Monitoring PM2 en ligne !');
+                        }
+                        _this.previousStatus = _this.status;
                     });
                 };
                 ControlSidebarComponent = __decorate([

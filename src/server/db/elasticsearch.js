@@ -46,11 +46,11 @@ function pingES(callback) {
     // undocumented params are appended to the query string 
         hello: '"elasticsearch!'
     }, function (err, response) {
-        if (err) {
-            console.trace('elastic : elasticsearch cluster is down!\n');
-        } else {
-            console.log('elastic : elasticsearch cluster is UP !!!\n');
-        }
+        // if (err) {
+        //     console.trace('elastic : elasticsearch cluster is down!\n');
+        // } else {
+        //     console.log('elastic : elasticsearch cluster is UP !!!\n');
+        // }
         callback(err, response);
     });
 

@@ -16,8 +16,9 @@ import { SensorService } from './sensor/sensor.service'
 import { ProbeService } from './sensor/probe.service'
 import { SensorUtilsService } from './sensor/utils.service'
 
-declare var loadAdminLTE: any;
 declare var moment: any;
+declare var toastr: any;
+declare var loadAdminLTE: any;
 
 @Component({
     selector: 'homecenter',
@@ -43,5 +44,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     ngOnInit() {
         moment.locale('fr');
+        toastr.options = {
+            "positionClass": "toast-bottom-right"
+        }
     }
 }

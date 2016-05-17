@@ -36,7 +36,7 @@
                 <span class="label label-success pull-right" *ngIf="status.pm2.status ==='green'">UP</span>
                 <span class="label label-danger pull-right" *ngIf="status.pm2.status !=='green'">DOWN</span>
                 <ul>
-                    <li>
+                    <li *ngIf="status.pm2.message.system_info">
                         <h4 class="control-sidebar-subheading">
                             Uptime
                             <span class="label label-primary pull-right">{{status.pm2.message.system_info.uptime}}</span>

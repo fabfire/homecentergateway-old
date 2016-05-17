@@ -77,7 +77,7 @@ var getChartData = function (id, start, end, callback) {
     // console.log('diff', diff);
     if (diff <= 86400000) // one day
     {
-        console.info('one day, returning real values');
+        //console.info('one day, returning real values');
         interval = undefined;
     } else if (diff <= 604800000) // one week
     {
