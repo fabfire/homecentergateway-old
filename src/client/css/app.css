@@ -51,3 +51,15 @@ div[class^="bg-"], div[class*=" bg-"].disabled{
     position: relative;
     margin-top: 50px;
 }
+
+.control-sidebar-dark .table {
+    color: #333;
+}
+
+.control-sidebar-dark .table {
+    margin-bottom: 0;
+}
+
+.control-sidebar-dark .table .label {
+    line-height: 1.42857143;
+}
