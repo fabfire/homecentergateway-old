@@ -6,7 +6,7 @@ export class SensorUtilsService {
     constructor(private http: Http) { }
     
     getStatus = () => {
-        return this.http.get("api/getstatus")
+        return this.http.get("api/status")
             .map(response => response.json());
     };
     

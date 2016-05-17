@@ -16,7 +16,7 @@ module.exports = function (app) {
     app.post(api + '/getsensormeasureid', getSensorMeasureId);
     app.put(api + '/updatesensormeasure', updateSensorMeasure);
     app.delete(api + '/deletesensormeasure/:id', deleteSensorMeasure);
-    app.get(api + '/getstatus', getStatus);
+    app.get(api + '/status', getStatus);
 
     function getProbes(req, res) {
         console.log('API getProbes', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));

@@ -26,7 +26,7 @@ System.register(['@angular/core', '@angular/http'], function(exports_1, context_
                     var _this = this;
                     this.http = http;
                     this.getStatus = function () {
-                        return _this.http.get("api/getstatus")
+                        return _this.http.get("api/status")
                             .map(function (response) { return response.json(); });
                     };
                     this.getTypeLabel = function (type) {

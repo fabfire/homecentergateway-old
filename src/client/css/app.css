@@ -46,3 +46,8 @@
 div[class^="bg-"], div[class*=" bg-"].disabled{
     opacity: .65;
 }
+
+.overlay-wrapper {
+    position: relative;
+    margin-top: 50px;
+}
