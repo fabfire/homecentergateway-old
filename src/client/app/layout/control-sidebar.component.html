@@ -91,13 +91,13 @@
                                 <span class="label label-primary pull-right">{{status.pm2.message.system_info.uptime}}</span>
                             </td>
                         </tr>
-                        <tr *ngIf="status.pm2.message.processes" *ngFor="let process of status.pm2.message.processes">
-                            <td>
-                                {{process.name}}
+                        <tr *ngIf="status.pm2.message.processes.length" *ngFor="let process of status.pm2.message.processes">
+                            <td *ngIf="process">
+                                {{process.name }}
                             </td>
-                            <td>
-                                <span class="label label-success pull-right" *ngIf="process.status ==='online'">UP</span>
-                                <span class="label label-success pull-right" *ngIf="process.status !=='online'">DOWN</span>
+                            <td *ngIf="process">
+                                <span class="label label-success pull-right" *ngIf="process.status == 'online'">UP</span>
+                                <span class="label label-danger pull-right" *ngIf="process.status != 'online'">DOWN</span>
                             </td>
                         </tr>
                     </tbody>
