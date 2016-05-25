@@ -23,7 +23,6 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 function extractProfile(profile) {
-    console.log('profile', JSON.stringify(profile));
     var imageUrl = '', email = '';
     if (profile.photos && profile.photos.length) {
         imageUrl = profile.photos[0].value;
@@ -53,7 +52,6 @@ passport.use(new GoogleStrategy({
     callbackURL: 'http://localhost:3000/auth/google/callback',
     accessType: 'offline'
 }, function (accessToken, refreshToken, profile, cb) {
-    console.log('GoogleStrategy');
     var prof = extractProfile(profile);
     if (prof.email && gatekeeper.isAllowed(prof.email)) {
         // Extract the minimal profile information we need from the profile object
@@ -76,7 +74,6 @@ var router = express.Router();
 // in, it will redirect the user to authorize the application and then return
 // them to the original URL they requested.
 function authRequired(req, res, next) {
-    console.log('authRequired : user', JSON.stringify(req.user));
     if (!req.user) {
         req.session.oauth2return = req.originalUrl;
         return res.redirect('/auth/login');
@@ -109,7 +106,6 @@ router.get(
     // Save the url of the user's current page so the app can redirect back to
     // it after authorization
     function (req, res, next) {
-        console.log('auth login');
         if (req.query.return) {
             req.session.oauth2return = req.query.return;
         }
@@ -121,31 +117,17 @@ router.get(
 );
 // [END authorize]
 
-var util = require("util");
-
 // [START callback]
 router.get(
     // OAuth 2 callback url. Use this url to configure your OAuth client in the
     // Google Developers console
     '/auth/google/callback',
-    function (req, res, next) {
-        //console.log('auth before authenticate', util.inspect(req));
-        console.log('auth before authenticate', req.isAuthenticated());
-        next();
-    },
 
     // Finish OAuth 2 flow using Passport.js
     passport.authenticate('google'),
 
-    function (req, res, next) {
-        console.log('auth after authenticate', req.isAuthenticated());
-        next();
-    },
-
     // Redirect back to the original page, if any
     function (req, res) {
-        console.log('auth callback', req.session.oauth2return);
-
         var redirect = req.session.oauth2return || '/';
         delete req.session.oauth2return;
         res.redirect(redirect);

@@ -2,8 +2,6 @@ var morgan = require('morgan');
 var FileStreamRotator = require('file-stream-rotator')
 var config = require('../config');
 
-var environment = config.environment;
-
 module.exports = function (app) {
     // morgan request logger
     // create a rotating write stream
@@ -15,10 +13,10 @@ module.exports = function (app) {
     });
 
     morgan.token('user', function (req, res) { return (req.user ? req.user.email : 'anonymous'); })
-    if (environment === 'dev') {
+    if (config.environment === 'dev' && config.logRequest) {
         app.use(morgan('dev', {
             skip: function (req, res) {
-                return (/\.(png|jpg|gif|css|jpeg|ico|js|map|woff2)$/).test(req.path);
+                return (/\.(png|jpg|gif|css|jpeg|ico|map|woff2)$/).test(req.path);
             }
         }));
     } else {

@@ -10,7 +10,8 @@ var config = {
         dev: 'http://localhost:3000/test/pm2.json',
         prod: 'http://localhost:9615'
     },
-    logDirectory: __dirname + '/logs/'
+    logDirectory: __dirname + '/logs/',
+    logRequest: false
 };
 
 module.exports = config;
