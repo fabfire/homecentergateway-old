@@ -15,6 +15,7 @@ import { ConsoleComponent } from './console/console.component';
 import { SensorService } from './sensor/sensor.service'
 import { ProbeService } from './sensor/probe.service'
 import { SensorUtilsService } from './sensor/utils.service'
+import { UserService } from './user/user.service'
 
 declare var moment: any;
 declare var toastr: any;
@@ -24,7 +25,7 @@ declare var loadAdminLTE: any;
     selector: 'homecenter',
     templateUrl: './app/app.component.html',
     directives: [MainHeaderComponent, MainSidebarComponent, MainContentComponent, MainFooterComponent, ControlSidebarComponent],
-    providers: [ROUTER_PROVIDERS, HTTP_PROVIDERS, SensorService, ProbeService, SensorUtilsService]
+    providers: [ROUTER_PROVIDERS, HTTP_PROVIDERS, SensorService, ProbeService, SensorUtilsService, UserService]
 })
 
 @Routes([

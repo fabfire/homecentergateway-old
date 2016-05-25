@@ -32,8 +32,8 @@ function extractProfile(profile) {
     }
     return {
         id: profile.id,
-        firstname: profile.name.familyName,
-        lastname: profile.name.givenName,
+        firstname: profile.name.givenName,
+        lastname: profile.name.familyName,
         email: email,
         image: imageUrl
     };

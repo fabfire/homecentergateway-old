@@ -5,6 +5,7 @@ var utils = require('../utils/utils');
 var probeRepository = require('../models/probeRepository');
 var sensorRepository = require('../models/sensorRepository');
 
+apiRoutes.get('/profile', getProfile);
 apiRoutes.get('/probes', getProbes);
 apiRoutes.get('/probeslist', getProbesList);
 apiRoutes.get('/probesensorsstats/:id', getProbeSensorsStats);
@@ -18,6 +19,11 @@ apiRoutes.delete('/deletesensormeasure/:id', deleteSensorMeasure);
 apiRoutes.get('/status', getStatus);
 
 module.exports = apiRoutes;
+
+function getProfile(req, res) {
+    console.log('API getProfile', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
+    res.status(200).send(req.user);
+}
 
 function getProbes(req, res) {
     console.log('API getProbes', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
