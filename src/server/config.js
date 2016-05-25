@@ -11,7 +11,7 @@ var config = {
         prod: 'http://localhost:9615'
     },
     logDirectory: __dirname + '/logs/',
-    logRequest: false
+    logRequest: true
 };
 
 module.exports = config;

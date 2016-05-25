@@ -76,7 +76,7 @@ var router = express.Router();
 function authRequired(req, res, next) {
     if (!req.user) {
         req.session.oauth2return = req.originalUrl;
-        return res.redirect('/auth/login');
+        return res.redirect('/login');
     }
     next();
 }
@@ -124,10 +124,11 @@ router.get(
     '/auth/google/callback',
 
     // Finish OAuth 2 flow using Passport.js
-    passport.authenticate('google'),
-
+    passport.authenticate('google', { failureRedirect: '/401.html' }),
+    
     // Redirect back to the original page, if any
     function (req, res) {
+        console.log('res', req.isAuthenticated());
         var redirect = req.session.oauth2return || '/';
         delete req.session.oauth2return;
         res.redirect(redirect);
