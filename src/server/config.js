@@ -8,8 +8,9 @@ var config = {
     },
     pm2webApiUrl: {
         dev: 'http://localhost:3000/test/pm2.json',
-        prod:'http://localhost:9615'
-    }
+        prod: 'http://localhost:9615'
+    },
+    logDirectory: __dirname + '/logs/'
 };
 
 module.exports = config;

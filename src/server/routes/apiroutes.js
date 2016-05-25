@@ -1,6 +1,5 @@
 var express = require('express');
 var apiRoutes = express.Router();
-var oauth2 = require('../auth/oauth2');
 var utils = require('../utils/utils');
 
 var probeRepository = require('../models/probeRepository');

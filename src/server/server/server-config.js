@@ -1,12 +1,11 @@
 var express = require('express');
-var app = express();
+// var app = express();
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var cors = require('cors');
-var morgan = require('morgan');
 
-var config = require('../config');
 //var favicon = require('serve-favicon');
+var config = require('../config');
 var environment = config.environment;
 
 var applyConfiguration = function (app) {
@@ -17,11 +16,10 @@ var applyConfiguration = function (app) {
     }));
     app.use(bodyParser.json());
 
-    // use morgan to log requests to the console
-    app.use(morgan('dev'));
-
     app.use(compress());
     app.use(cors());
+
+    var morgan = require('../logger/morgan')(app);
 
     var session = require('express-session');
     var passport = require('passport');

@@ -78,6 +78,7 @@
     "elasticsearch": "^11",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "file-stream-rotator": "0.0.6",
     "googleapis": "^7.0.0",
     "lodash": "^4.11.1",
     "morgan": "~1.7.0",

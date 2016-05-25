@@ -10,6 +10,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var init = require('./init');
 
 'use strict';
 
@@ -64,12 +65,8 @@ passport.use(new GoogleStrategy({
     }
 }));
 
-passport.serializeUser(function (user, cb) {
-    cb(null, user);
-});
-passport.deserializeUser(function (obj, cb) {
-    cb(null, obj);
-});
+// serialize user into the session
+init();
 // [END setup]
 
 var router = express.Router();
@@ -160,7 +157,7 @@ router.get(
 // This does not revoke any active tokens.
 router.get('/auth/logout', function (req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('/login');
 });
 
 module.exports = {
