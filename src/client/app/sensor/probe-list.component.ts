@@ -3,6 +3,8 @@ import {ROUTER_DIRECTIVES, Router} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {ProbeService} from './probe.service'
 import {ProbeData, HashTable} from './model';
+import {FilterPipe} from '../pipes/filter-sensor-pipe'
+import {OrderBy} from '../orderby';
 
 declare var $: any;
 
@@ -10,6 +12,7 @@ declare var $: any;
     selector: 'probe-list',
     templateUrl: './app/sensor/probe-list.component.html',
     directives: [ROUTER_DIRECTIVES],
+    pipes: [OrderBy, FilterPipe]
 })
 export class ProbeListComponent implements OnInit {
     probes: ProbeData[];

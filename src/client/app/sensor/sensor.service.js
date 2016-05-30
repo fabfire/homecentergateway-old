@@ -133,6 +133,12 @@ System.register(['@angular/core', '@angular/http', 'rxjs/Rx', './probe.service']
                         return _this.http.delete("api/deletesensormeasure/" + id)
                             .map(function (response) { return response.json(); });
                     };
+                    this.updateFilter = function (filter) {
+                        _this.searchFilter = filter;
+                    };
+                    this.getFilter = function () {
+                        return _this.searchFilter;
+                    };
                     // Create Observable Stream to output our data
                     this.sensorsData$ = new Rx_1.Observable(function (observer) { return _this._sensorDataObserver = observer; }).share();
                     this._dataStore = { sensorData: [] };

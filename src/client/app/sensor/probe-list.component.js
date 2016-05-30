@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/router', './probe.service'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/router', './probe.service', '../pipes/filter-sensor-pipe', '../orderby'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', '@angular/router', './probe.service'], functio
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, probe_service_1;
+    var core_1, router_1, probe_service_1, filter_sensor_pipe_1, orderby_1;
     var ProbeListComponent;
     return {
         setters:[
@@ -22,6 +22,12 @@ System.register(['@angular/core', '@angular/router', './probe.service'], functio
             },
             function (probe_service_1_1) {
                 probe_service_1 = probe_service_1_1;
+            },
+            function (filter_sensor_pipe_1_1) {
+                filter_sensor_pipe_1 = filter_sensor_pipe_1_1;
+            },
+            function (orderby_1_1) {
+                orderby_1 = orderby_1_1;
             }],
         execute: function() {
             ProbeListComponent = (function () {
@@ -53,6 +59,7 @@ System.register(['@angular/core', '@angular/router', './probe.service'], functio
                         selector: 'probe-list',
                         templateUrl: './app/sensor/probe-list.component.html',
                         directives: [router_1.ROUTER_DIRECTIVES],
+                        pipes: [orderby_1.OrderBy, filter_sensor_pipe_1.FilterPipe]
                     }), 
                     __metadata('design:paramtypes', [router_1.Router, probe_service_1.ProbeService])
                 ], ProbeListComponent);

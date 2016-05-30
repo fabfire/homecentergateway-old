@@ -16,6 +16,9 @@ export class SensorService {
     // Observable streams
     sensorUpdated$ = this._sensorUpdated.asObservable();
 
+    // sensor filter
+    private searchFilter: string;
+
     private _dataStore: {
         sensorData: SensorData[]
     };
@@ -148,6 +151,14 @@ export class SensorService {
     deleteMeasure = (id: string) => {
         return this.http.delete("api/deletesensormeasure/" + id)
             .map(response => response.json());
+    }
+
+    updateFilter = (filter: string) => {
+        this.searchFilter = filter;
+    }
+
+    getFilter = () => {
+        return this.searchFilter;
     }
 }
 

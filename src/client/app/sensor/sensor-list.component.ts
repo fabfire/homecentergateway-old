@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef} from '@angular/core';
 import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
 import {SensorData, HashTable} from './model';
 import {OrderBy} from '../orderby';
+import {FilterPipe} from '../pipes/filter-sensor-pipe'
 
 declare var $: any;
 declare var moment: any;
@@ -12,7 +13,7 @@ declare var moment: any;
     selector: 'sensor-list',
     templateUrl: './app/sensor/sensor-list.component.html',
     directives: [ROUTER_DIRECTIVES],
-    pipes: [OrderBy]
+    pipes: [OrderBy, FilterPipe]
 })
 export class SensorListComponent implements OnInit {
     // if use the async pipe, we have to declare an observable
@@ -22,7 +23,7 @@ export class SensorListComponent implements OnInit {
     animationSubscription: Subscription;
     limitDate: Date;
 
-    constructor(private router: Router, private _sensorService: SensorService) { }
+    constructor(private router: Router, private _sensorService: SensorService,private cd: ChangeDetectorRef) { }
 
     ngOnInit() {
 
@@ -32,6 +33,7 @@ export class SensorListComponent implements OnInit {
             updatedData => {
                 this.sensorsData = updatedData;
                 this.limitDate = moment().subtract(1, 'hour');
+               // this.cd.markForCheck(); // marks path
             }
         );
         // 2 : bind member and use async pipe into the view, but it doesn't work as expected : the view is not refreshed when the view is reloaded
@@ -46,7 +48,6 @@ export class SensorListComponent implements OnInit {
             }, 200);
         });
 
-        //this._sensorService.loadSensorInfo();
         this._sensorService.getSensors();
     }
 

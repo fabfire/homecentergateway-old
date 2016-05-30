@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {ROUTER_DIRECTIVES, Router} from '@angular/router';
 
 import { SensorListComponent } from '../sensor/sensor-list.component';
 import { ConsoleComponent } from '../console/console.component';
+
 
 @Component({
     selector: 'main-sidebar',
@@ -11,5 +12,5 @@ import { ConsoleComponent } from '../console/console.component';
 })
 
 export class MainSidebarComponent {
-    constructor(private router: Router){}
- }
+    constructor(private router: Router) { }
+}

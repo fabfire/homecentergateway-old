@@ -63,3 +63,34 @@ div[class^="bg-"], div[class*=" bg-"].disabled{
 .control-sidebar-dark .table .label {
     line-height: 1.42857143;
 }
+
+.filter {
+    float: right;
+}
+.title {
+    margin-top:20px;
+    margin-bottom:30px;
+}
+
+.title > div > h2 {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+input[type="reset"]{
+    background: transparent;
+    border: none;
+    font-family: 'FontAwesome';
+    font-size: 1.3em;
+    opacity: 0.4;
+    /* this next line is necessary to override bootstrap's behavior and allow hovering */
+    pointer-events: auto;
+}
+
+
+.form-control:focus+input[type="reset"]{
+    opacity: 0.7;
+}
+
+.form-control:focus+input[type="reset"]:hover{
+    opacity: 1.0;
+}
