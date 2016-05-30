@@ -62,7 +62,7 @@ gulp.task('angular-app', ['clean-angular-app'], function () {
 
     return gulp
         .src(config.app)
-        .pipe(gulp.dest(config.build + 'app'));
+        .pipe(gulp.dest(config.build));
 });
 
 gulp.task('clean', function () {
@@ -122,6 +122,14 @@ gulp.task('angular-js-dev', function () {
 });
 
 gulp.task('angular-js-prod', function () {
+    log('Copying Angular2 JS files to lib prod folder');
+
+    return gulp
+        .src([config.client + 'lib/angular2/**/*.js'])
+        .pipe(gulp.dest(config.build + 'lib/angular2'));
+});
+
+gulp.task('html-files', function () {
     log('Copying Angular2 JS files to lib prod folder');
 
     return gulp

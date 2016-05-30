@@ -15,7 +15,7 @@ module.exports = function() {
             './src/**/*.js',
             './*.js'
         ],
-        app: [client + 'app/**/*.js', client + 'app/**/*.html'],
+        app: [client + '**/*.js', client + '**/*.html'],
         build: './build/client/',
         buildServer: './build/',
         client: client,

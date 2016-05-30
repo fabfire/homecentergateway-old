@@ -2,7 +2,7 @@ var express = require('express');
 
 var path = require('path');
 var oauth2 = require('../auth/oauth2');
-var apiRoutes = require('./apiRoutes');
+var apiRoutes = require('./apiroutes');
 
 module.exports = function (app) {
     app.get('/login', function (req, res) {
