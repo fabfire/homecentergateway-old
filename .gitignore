@@ -10,3 +10,4 @@ logs.*
 typings
 *.js.map
 .vscode
+src/server/logs/
