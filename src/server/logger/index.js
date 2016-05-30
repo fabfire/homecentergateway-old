@@ -1,9 +1,9 @@
-//var morganLogger = require('morgan');
 var winston = require('winston');
 winston.remove(winston.transports.Console);
+var config = require('../config');
 
 winston.add(require('winston-daily-rotate-file'), {
-    filename: 'logs',
+    filename: config.logDirectory + '/info',
     maxFiles: 10
 });
 

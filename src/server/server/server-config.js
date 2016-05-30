@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var cors = require('cors');
+var logger = require('../logger/index');
 
 //var favicon = require('serve-favicon');
 var config = require('../config');
@@ -41,7 +42,8 @@ var applyConfiguration = function (app) {
 
     // custom routes, this should be placed after body parser
     var routes = require('../routes/index')(app);
-
+    
+    logger.info('server started, mode : %s', environment);
     switch (environment) {
         case 'prod':
             console.log('** PROD **');

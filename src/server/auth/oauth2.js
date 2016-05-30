@@ -10,10 +10,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-var init = require('./init');
-
 'use strict';
 
+var init = require('./init');
+var logger = require('../logger/index');
 var express = require('express');
 var config = require('../config');
 var gatekeeper = require('./gatekeeper');
@@ -125,10 +125,10 @@ router.get(
 
     // Finish OAuth 2 flow using Passport.js
     passport.authenticate('google', { failureRedirect: '/401.html' }),
-    
+
     // Redirect back to the original page, if any
     function (req, res) {
-        console.log('res', req.isAuthenticated());
+        logger.info('user %s logged in', req.user.email)
         var redirect = req.session.oauth2return || '/';
         delete req.session.oauth2return;
         res.redirect(redirect);
@@ -139,6 +139,7 @@ router.get(
 // Deletes the user's credentials and profile from the session.
 // This does not revoke any active tokens.
 router.get('/auth/logout', function (req, res) {
+    logger.info('user %s logged out', req.user.email)
     req.logout();
     res.redirect('/login');
 });

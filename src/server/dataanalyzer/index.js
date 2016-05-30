@@ -1,6 +1,7 @@
 var sensorFactory = require('../models/sensorFactory');
 var probeRepository = require('../models/probeRepository');
 var sensorRepository = require('../models/sensorRepository');
+var logger = require('../logger/index');
 
 var addSensors = function(sensors, io) {
     sensorRepository.addSensors(sensors);
@@ -9,7 +10,8 @@ var addSensors = function(sensors, io) {
             sensorRepository.addSensorMeasure(sensor);
         }
         io.sockets.emit('message', sensor);
-        console.log('sensor sent : ' + JSON.stringify(sensor));
+        logger.info('sensor info : ' + JSON.stringify(sensor))
+        //console.log('sensor sent : ' + JSON.stringify(sensor));
     });
 };
 exports.addSensors = addSensors;

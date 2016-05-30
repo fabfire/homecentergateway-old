@@ -1,6 +1,7 @@
+var logger = require('../logger/index');
 var config = require('../config');
 
-module.exports = function(logger, io, messageBus) {
+module.exports = function(io, messageBus) {
 
     var serialport = require('serialport');
     var environment = config.environment;

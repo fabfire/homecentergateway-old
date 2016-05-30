@@ -1,4 +1,3 @@
-var logger = require('./logger/index');
 var server = require('./server/server');
 var io = require('./socket.io/index')(server);
 var elastic = require('./db/elasticsearch');
@@ -6,7 +5,7 @@ var elastic = require('./db/elasticsearch');
 var events = require('events');
 var util = require('util');
 var messageBus = new events.EventEmitter();
-var serialport = require('./serial/index')(logger, io, messageBus);
+var serialport = require('./serial/index')(io, messageBus);
 var config = require('./config');
 var analyzer = require('./dataanalyzer/index');
 var probeRepository = require('./models/probeRepository');
@@ -55,12 +54,12 @@ sensorRepository.initSensorsFromDB();
 /*                               Tests                          */
 /************************************************************** */
 if (environment === 'dev') {
-    // setTimeout(function () {
-    //     simulateSensorsPackets();
-    // }, 5000);
-    // setInterval(function () {
-    //     simulateSensorsPackets();
-    // }, 30000);
+    setTimeout(function () {
+        simulateSensorsPackets();
+    }, 5000);
+    setInterval(function () {
+        simulateSensorsPackets();
+    }, 30000);
 }
 function simulateSensorsPackets() {
     analyzer.analyze('"nodeid":"9","rx_rssi":"-50",temp:' + random(1700, 2500) + ',hum:' + random(4000, 7000) + ',vcc:' + random(2500, 3100) + ',"date":"' + new Date().toJSON() + '"', io);

@@ -1,4 +1,6 @@
 var elasticsearch = require('elasticsearch');
+var logger = require('../logger/index');
+
 var elasticClient = new elasticsearch.Client({
     host: 'localhost:9200',
     //host: '192.168.1.99',
@@ -22,7 +24,7 @@ exports.deleteIndex = deleteIndex;
 * create the index
 */
 function initIndex() {
-    console.log('elastic : Creating index : ' + indexName);
+    logger.infpo('elastic : Creating index : ' + indexName);
     return elasticClient.indices.create({
         index: indexName
     });
@@ -33,7 +35,7 @@ exports.initIndex = initIndex;
 * check if the index exists
 */
 function indexExists() {
-    console.log('elastic : Exists index : ' + indexName);
+    logger.info('elastic : Exists index : ' + indexName);
     return elasticClient.indices.exists({
         index: indexName
     });
@@ -46,11 +48,6 @@ function pingES(callback) {
     // undocumented params are appended to the query string 
         hello: '"elasticsearch!'
     }, function (err, response) {
-        // if (err) {
-        //     console.trace('elastic : elasticsearch cluster is down!\n');
-        // } else {
-        //     console.log('elastic : elasticsearch cluster is UP !!!\n');
-        // }
         callback(err, response);
     });
 
@@ -80,10 +77,10 @@ function createTypes() {
         },
         function (err, response, status) {
             if (err) {
-                console.trace('elastic : error creating type Probelocation \n' + err);
+                logger.error('elastic : error creating type Probelocation \n' + err);
             }
             else {
-                console.log('elastic : type creation successfull : Probelocation');
+                logger.info('elastic : type creation successfull : Probelocation');
             }
         }
     );
@@ -104,10 +101,10 @@ function createTypes() {
         },
         function (err, response, status) {
             if (err) {
-                console.trace('elastic : error creating type Sensors \n' + err);
+                logger.error('elastic : error creating type Sensors \n' + err);
             }
             else {
-                console.log('elastic : type creation successfull : Sensors');
+                logger.info('elastic : type creation successfull : Sensors');
             }
         }
     );
@@ -128,10 +125,10 @@ function createTypes() {
         },
         function (err, response, status) {
             if (err) {
-                console.trace('elastic : error creating type Sensors measures \n' + err);
+                logger.error('elastic : error creating type Sensors measures \n' + err);
             }
             else {
-                console.log('elastic : type creation successfull : sensorsmeasures');
+                logger.info('elastic : type creation successfull : sensorsmeasures');
             }
         }
     );
@@ -150,7 +147,7 @@ function addSensor(sensor) {
         }
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error creating sensor \n' + err);
+            logger.error('elastic : error creating sensor \n' + err);
         }
     });
 }
@@ -169,7 +166,7 @@ function addProbe(probe) {
         }
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error creating probe \n' + err);
+            logger.error('elastic : error creating probe \n' + err);
         }
     });
 }
@@ -187,7 +184,7 @@ function addSensorMeasure(sensor) {
         }
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error adding sensor measure\n' + err);
+            logger.error('elastic : error adding sensor measure\n' + err);
         }
     });
 }
@@ -199,7 +196,7 @@ function getSensors(callback) {
         type: 'sensors'
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error getting sensors \n' + err);
+            logger.error('elastic : error getting sensors \n' + err);
         }
         else {
             callback(response.hits.hits);
@@ -243,7 +240,7 @@ function getSensorsWithLastValue(callback) {
         ]
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error getting Sensors Last Values \n' + err);
+            logger.error('elastic : error getting Sensors Last Values \n' + err);
         }
         else {
             //console.info(JSON.stringify(response));
@@ -259,7 +256,7 @@ function getProbes(callback) {
         type: 'probelocation'
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error getting probes \n' + err);
+            logger.error('elastic : error getting probes \n' + err);
         }
         else {
             callback(response.hits.hits);
@@ -330,7 +327,7 @@ function getProbesExt(callback) {
     },
         function (err, response) {
             if (err) {
-                console.error('elastic : error getting probes ext infos \n' + err);
+                logger.error('elastic : error getting probes ext infos \n' + err);
             }
             else {
                 //console.info(JSON.stringify(response));
@@ -378,7 +375,7 @@ function getProbeSensorsStats(id, callback) {
     },
         function (err, response) {
             if (err) {
-                console.error('elastic : error getting sensorstats ' + id + ' \n' + err);
+                logger.error('elastic : error getting sensorstats ' + id + ' \n' + err);
             }
             else {
                 //console.info(JSON.stringify(response));
@@ -442,26 +439,6 @@ function getChartData(id, startDate, endDate, interval, callback) {
         sort: 'date:asc'
     }, function (error, response) {
         callback(response);
-        //return;
-        // collect the date and value from each response
-        // response.hits.hits.forEach(function (hit) {
-        //     allValues.push([new Date(hit.fields.date[0]).getTime(), hit.fields.value[0]]);
-        //     //allValues.push([hit.fields.date[0], hit.fields.value[0]]);
-        // });
-        // console.log('total ' + response.hits.total);
-        // console.log('got  ' + allValues.length);
-
-        // if (response.hits.total !== allValues.length) {
-        //     // now we can call scroll over and over
-        //     elasticClient.scroll({
-        //         scrollId: response._scroll_id,
-        //         scroll: '30s'
-        //     }, getMoreUntilDone);
-        // } else {
-        //     console.log('finish retrieving sensorsmeasures for sensor', id);
-        //     //console.log(allValues);
-        //    // callback(allValues);
-        // }
     });
 }
 exports.getChartData = getChartData;
@@ -478,7 +455,7 @@ function updateProbe(probe, callback) {
         }
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error updating probe \n' + err);
+            logger.error('elastic : error updating probe \n' + err);
         }
         else {
             callback(response);
@@ -506,7 +483,7 @@ function getSensorMeasureId(id, date, value, callback) {
         }
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error getting sensor measure\n' + err);
+            logger.error('elastic : error getting sensor measure\n' + err);
         }
         else {
             //console.log(JSON.stringify(response));
@@ -528,7 +505,7 @@ function updateSensorMeasure(id, value, callback) {
         }
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error updating sensor measure\n' + err);
+            logger.error('elastic : error updating sensor measure\n' + err);
         }
         else {
             //console.log(JSON.stringify(response));
@@ -545,7 +522,7 @@ function deleteSensorMeasure(id, callback) {
         id: id
     }, function (err, response) {
         if (err) {
-            console.error('elastic : error deleting sensor measure\n' + err);
+            logger.error('elastic : error deleting sensor measure\n' + err);
         }
         else {
             //console.log(JSON.stringify(response));
