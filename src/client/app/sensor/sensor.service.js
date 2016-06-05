@@ -44,6 +44,9 @@ System.register(['@angular/core', '@angular/http', 'rxjs/Rx', './probe.service']
                         }
                     };
                     this.getSensors = function () {
+                        if (_this._sensorDataObserver != undefined) {
+                            _this._sensorDataObserver.next(_this._dataStore.sensorData);
+                        }
                         _this.http.get("api/sensors")
                             .map(function (response) { return response.json(); })
                             .subscribe(function (sensors) {

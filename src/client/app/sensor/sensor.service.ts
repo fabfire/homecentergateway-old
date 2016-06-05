@@ -39,6 +39,9 @@ export class SensorService {
     };
 
     getSensors = () => {
+        if (this._sensorDataObserver != undefined) {
+            this._sensorDataObserver.next(this._dataStore.sensorData);
+        }
         this.http.get("api/sensors")
             .map(response => response.json())
             .subscribe(sensors => {
