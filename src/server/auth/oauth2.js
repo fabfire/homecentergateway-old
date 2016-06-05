@@ -47,9 +47,9 @@ function extractProfile(profile) {
 // object, which will be set at `req.user` in route handlers after
 // authentication.
 passport.use(new GoogleStrategy({
-    clientID: '157258009673-9cuuotu5oeai1i6980qs68l0e38196rq.apps.googleusercontent.com',
-    clientSecret: 'RS5AUtO8usxM2FMDX-whjWDN',
-    callbackURL: 'http://localhost:3000/auth/google/callback',
+    clientID: config.google.clientID,
+    clientSecret: config.google.clientSecret,
+    callbackURL: config.google.callbackURL,
     accessType: 'offline'
 }, function (accessToken, refreshToken, profile, cb) {
     var prof = extractProfile(profile);
