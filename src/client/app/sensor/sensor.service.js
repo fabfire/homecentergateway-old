@@ -145,7 +145,7 @@ System.register(['@angular/core', '@angular/http', 'rxjs/Rx', './probe.service']
                     // Create Observable Stream to output our data
                     this.sensorsData$ = new Rx_1.Observable(function (observer) { return _this._sensorDataObserver = observer; }).share();
                     this._dataStore = { sensorData: [] };
-                    this.probeService = probeService;
+                    //this.probeService = probeService;
                 }
                 SensorService.prototype.getSensor = function (id, type) {
                     var foundSensor;
