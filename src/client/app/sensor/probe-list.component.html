@@ -4,7 +4,7 @@
     </div>
     <div class="col-lg-8 col-sm-6 col-xs-5">
     </div>
-     <form class="form-horizontal">
+    <form class="form-horizontal">
         <div class="col-lg-2 col-sm-4 col-xs-5 form-group has-feedback">
             <input type="text" name="q" class="form-control filter" placeholder="Filtrer ..." #probeFilter />
             <input type="reset" id="search_clear" class="form-control-feedback" value="&#xf00d;">
@@ -12,50 +12,52 @@
     </form>
 </div>
 <div class="row">
-    <a href='#' [routerLink]="['/probe', data.pid]"  *ngFor='let data of probes | filter:probeFilter.value:"location"'>
+    <div *ngFor="let data of probes | filter:probeFilter.value:'location'">
 
         <div class="col-lg-3 col-md-4 col-sm-6 ">
             <!-- Widget: user widget style 1 -->
-            <div class="box box-widget widget-user">
-                <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header bg-black" style="background: url('{{data.image}}') 0 no-repeat;">
-                    <h3 class="widget-user-username"><span>{{data.location}}</span></h3>
-                    <h5 class="widget-user-desc"><span>{{data.pid}}</span></h5>
-                </div>
-
-                <div class="box-footer">
-                    <div class="row">
-                        <div [ngClass]="{'col-sm-4': data.vcc, 'col-sm-6': ! data.vcc, 'border-right':true}">
-                            <div class="description-block">
-                                <h5 class="description-header">{{data.numberofsensors}}</h5>
-                                <span class="description-text">{{data.numberofsensors > 1 ? 'Capteurs':'Capteur'}} </span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div [ngClass]="{'col-sm-4': data.vcc, 'col-sm-6': ! data.vcc, 'border-right':true}">
-                            <div class="description-block">
-                                <h5 class="description-header">{{data.numberofmeasures}}</h5>
-                                <span class="description-text">{{data.numberofmeasures > 1 ? 'Mesures':'Mesure'}}</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div *ngIf="data.vcc" class="col-sm-4">
-                            <div class="description-block">
-                                <h5 class="description-header">{{data.vcc | number:'.1-1'}}</h5>
-                                <span class="description-text">VCC</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
+            <a href="#" [routerLink]="['/probe', data.pid]">
+                <div class="box box-widget widget-user">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-black" [ngStyle]="{'background': 'url(' + data.image + ') 0 no-repeat'}">
+                        <h3 class="widget-user-username"><span>{{data.location}}</span></h3>
+                        <h5 class="widget-user-desc"><span>{{data.pid}}</span></h5>
                     </div>
-                    <!-- /.row -->
+
+                    <div class="box-footer">
+                        <div class="row">
+                            <div [ngClass]="{'col-sm-4': data.vcc, 'col-sm-6': ! data.vcc, 'border-right':true}">
+                                <div class="description-block">
+                                    <h5 class="description-header">{{data.numberofsensors}}</h5>
+                                    <span class="description-text">{{data.numberofsensors > 1 ? 'Capteurs':'Capteur'}} </span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div [ngClass]="{'col-sm-4': data.vcc, 'col-sm-6': ! data.vcc, 'border-right':true}">
+                                <div class="description-block">
+                                    <h5 class="description-header">{{data.numberofmeasures}}</h5>
+                                    <span class="description-text">{{data.numberofmeasures > 1 ? 'Mesures':'Mesure'}}</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div *ngIf="data.vcc" class="col-sm-4">
+                                <div class="description-block">
+                                    <h5 class="description-header">{{data.vcc | number:'.1-1'}}</h5>
+                                    <span class="description-text">VCC</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
                 </div>
-            </div>
+            </a>
             <!-- /.widget-user -->
         </div>
-    </a>
+    </div>
 </div>
 <div class="overlay-wrapper">
     <div class="overlay" *ngIf="probes == undefined">
