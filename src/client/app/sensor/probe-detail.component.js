@@ -46,7 +46,7 @@ System.register(['@angular/core', '@angular/router', './probe.service', './utils
                         }
                     });
                     this.getProbe(this.id);
-                    this._probeService.getProbeDetail(this.id).subscribe(function (updatedData) { console.log(updatedData); _this.probeDetailedData = updatedData; });
+                    this._probeService.getProbeDetail(this.id).subscribe(function (updatedData) { _this.probeDetailedData = updatedData; });
                 };
                 ProbeDetailComponent.prototype.getProbe = function (id) {
                     var _this = this;

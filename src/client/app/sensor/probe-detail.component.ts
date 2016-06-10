@@ -36,7 +36,7 @@ export class ProbeDetailComponent implements OnInit {
         this.getProbe(this.id);
 
         this._probeService.getProbeDetail(this.id).subscribe(
-            updatedData => { console.log(updatedData); this.probeDetailedData = updatedData; });
+            updatedData => { this.probeDetailedData = updatedData; });
     }
 
     private getProbe(id) {

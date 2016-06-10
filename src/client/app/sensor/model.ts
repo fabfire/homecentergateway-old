@@ -5,6 +5,7 @@ export class ProbeData {
     numberofsensors: number;
     numberofmeasures: number;
     vcc: number;
+    sensorstats:any;
 }
 
 export class ProbeDetailData {

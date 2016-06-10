@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs/Rx';
-import {Http, Headers, RequestOptions} from '@angular/http';
+import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import {ProbeData} from './model';
 
 @Injectable()
@@ -24,24 +24,38 @@ export class ProbeService {
     }
 
     getProbes = () => {
+        // refresh observable during the load form the API
+        if (this._listDataStore.probeData) {
+            var $this = this;
+            this._listDataStore.probeData.forEach((probe) => {
+                $this._probeUpdated.next(probe.pid);
+            });
+        }
+
         this.probesList$ = this.http.get("api/probeslist")
-            .map(response => response.json());
-        // this.probesList$.subscribe(
-        //     _probe => {
-        //         var $this = this;
-        //         _probe.forEach((probe, i) => {
-        //             $this._listDataStore.probeData[i] = probe;
-        //             $this._probeUpdated.next(probe.pid);
-        //         });
-        //     }, err => this.logError(err)
-        //     //, () => console.log('subscribe ')
-        // );
+            .map(this.extractProbeList);
     };
+
+    extractProbeList = (response: Response) => {
+        var probes = response.json();
+        this.updateProbes(probes);
+        return probes;
+    }
 
     updateProbes = (probes: ProbeData[]) => {
         var $this = this;
         probes.forEach((probe, i) => {
-            $this._listDataStore.probeData[i] = probe;
+            if ($this._listDataStore.probeData[i]) {
+                Object.assign($this._listDataStore.probeData[i], probe);
+            }
+            else {
+                $this._listDataStore.probeData[i] = probe;
+            }
+            // for (var attr in probe) {
+            //      var obj = $this._listDataStore.probeData[i];
+            //     obj[attr] = probe[attr];
+            // }
+            //$this._listDataStore.probeData[i] = probe;
             $this._probeUpdated.next(probe.pid);
         });
     };
@@ -59,7 +73,23 @@ export class ProbeService {
 
     getProbeDetail = (id: string) => {
         return this.http.get("api/probesensorsstats/" + id)
-            .map(response => response.json());
+            .map(this.extractProbeDetail);
+    };
+
+    extractProbeDetail = (response: Response) => {
+        var probe = response.json();
+        this.updateProbeDetail(probe);
+        return probe;
+    };
+
+    updateProbeDetail = (_probe) => {
+        var $this = this;
+        this._listDataStore.probeData.some((probe, i) => {
+            if (probe.pid === _probe.pid) {
+                $this._listDataStore.probeData[i].sensorstats = _probe.sensorstats;
+                return true;
+            }
+        });
     };
 
     updateProbe = (_probe) => {
