@@ -26,16 +26,24 @@ export class ProbeService {
     getProbes = () => {
         this.probesList$ = this.http.get("api/probeslist")
             .map(response => response.json());
-        this.probesList$.subscribe(_probe => {
-            var $this = this;
-            _probe.forEach((probe, i) => {
-                $this._listDataStore.probeData[i] = probe;
-                this._probeUpdated.next(probe.pid);
-            })
-        }, err => this.logError(err)
-            //, () => console.log('subscribe ')
-        );
+        // this.probesList$.subscribe(
+        //     _probe => {
+        //         var $this = this;
+        //         _probe.forEach((probe, i) => {
+        //             $this._listDataStore.probeData[i] = probe;
+        //             $this._probeUpdated.next(probe.pid);
+        //         });
+        //     }, err => this.logError(err)
+        //     //, () => console.log('subscribe ')
+        // );
+    };
 
+    updateProbes = (probes: ProbeData[]) => {
+        var $this = this;
+        probes.forEach((probe, i) => {
+            $this._listDataStore.probeData[i] = probe;
+            $this._probeUpdated.next(probe.pid);
+        });
     };
 
     getProbe = (id: string) => {
@@ -53,7 +61,7 @@ export class ProbeService {
         return this.http.get("api/probesensorsstats/" + id)
             .map(response => response.json());
     };
-    
+
     updateProbe = (_probe) => {
         var probe;
         var body = JSON.stringify(_probe);

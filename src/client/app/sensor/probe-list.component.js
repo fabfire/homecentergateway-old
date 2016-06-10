@@ -41,6 +41,7 @@ System.register(['@angular/core', '@angular/router', './probe.service', '../pipe
                     this._probeService.probesList$
                         .subscribe(function (_probes) {
                         _this.probes = _probes;
+                        _this._probeService.updateProbes(_probes);
                         setTimeout(function () {
                             $('.box').hover(function () {
                                 $(this).find('.widget-user-header').stop().animate({

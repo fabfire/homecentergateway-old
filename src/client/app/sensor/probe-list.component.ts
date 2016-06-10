@@ -24,6 +24,7 @@ export class ProbeListComponent implements OnInit {
         this._probeService.probesList$
             .subscribe(_probes => {
                 this.probes = _probes;
+                this._probeService.updateProbes(_probes);
                 setTimeout(function () {
                     $('.box').hover(
                         function () {

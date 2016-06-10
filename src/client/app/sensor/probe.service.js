@@ -35,13 +35,23 @@ System.register(['@angular/core', 'rxjs/Rx', '@angular/http'], function(exports_
                     this.getProbes = function () {
                         _this.probesList$ = _this.http.get("api/probeslist")
                             .map(function (response) { return response.json(); });
-                        _this.probesList$.subscribe(function (_probe) {
-                            var $this = _this;
-                            _probe.forEach(function (probe, i) {
-                                $this._listDataStore.probeData[i] = probe;
-                                _this._probeUpdated.next(probe.pid);
-                            });
-                        }, function (err) { return _this.logError(err); });
+                        // this.probesList$.subscribe(
+                        //     _probe => {
+                        //         var $this = this;
+                        //         _probe.forEach((probe, i) => {
+                        //             $this._listDataStore.probeData[i] = probe;
+                        //             $this._probeUpdated.next(probe.pid);
+                        //         });
+                        //     }, err => this.logError(err)
+                        //     //, () => console.log('subscribe ')
+                        // );
+                    };
+                    this.updateProbes = function (probes) {
+                        var $this = _this;
+                        probes.forEach(function (probe, i) {
+                            $this._listDataStore.probeData[i] = probe;
+                            $this._probeUpdated.next(probe.pid);
+                        });
                     };
                     this.getProbe = function (id) {
                         var foundProbe;

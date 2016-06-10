@@ -41,7 +41,6 @@ function getSensors(req, res) {
 function getProbesList(req, res) {
     console.log('API getProbesList', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
     probeRepository.getProbesList(function (response) {
-
         res.status(200).send(response);
     });
 }

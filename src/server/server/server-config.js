@@ -42,7 +42,7 @@ var applyConfiguration = function (app) {
 
     // custom routes, this should be placed after body parser
     var routes = require('../routes/index')(app);
-    
+
     logger.info('server started, mode : %s', environment);
     switch (environment) {
         case 'prod':
