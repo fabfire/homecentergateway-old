@@ -29,16 +29,21 @@ System.register(['@angular/core', '@angular/router', './probe.service', './utils
         execute: function() {
             ProbeDetailComponent = (function () {
                 // subscriptionDetail: Subscription;
-                function ProbeDetailComponent(_router, _probeService, _utilsService) {
+                function ProbeDetailComponent(_router, _route, _probeService, _utilsService) {
                     this._router = _router;
+                    this._route = _route;
                     this._probeService = _probeService;
                     this._utilsService = _utilsService;
                 }
-                ProbeDetailComponent.prototype.routerOnActivate = function (curr) {
-                    this.id = curr.getParam('id');
-                };
+                // routerOnActivate(curr: RouteSegment) {
+                //     this.id = curr.getParam('id');
+                // }
                 ProbeDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
+                    this.sub = this._route.params.subscribe(function (params) {
+                        _this.id = params['id']; // (+) converts string 'id' to a number
+                        console.log('param ', _this.id);
+                    });
                     // automatically update sensor view when new data comes
                     this.subscription = this._probeService.probeUpdated$.subscribe(function (_id) {
                         if (_this.id === _id) {
@@ -69,7 +74,7 @@ System.register(['@angular/core', '@angular/router', './probe.service', './utils
                         templateUrl: './app/sensor/probe-detail.component.html',
                         directives: [router_1.ROUTER_DIRECTIVES],
                     }), 
-                    __metadata('design:paramtypes', [router_1.Router, probe_service_1.ProbeService, utils_service_1.SensorUtilsService])
+                    __metadata('design:paramtypes', [router_1.Router, router_1.ActivatedRoute, probe_service_1.ProbeService, utils_service_1.SensorUtilsService])
                 ], ProbeDetailComponent);
                 return ProbeDetailComponent;
             }());

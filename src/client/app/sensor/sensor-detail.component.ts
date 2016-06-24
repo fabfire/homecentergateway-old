@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouteSegment} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {SensorService} from './sensor.service'
 import {SensorChartComponent} from './sensor-chart-component'
@@ -23,15 +23,23 @@ export class SensorDetailComponent implements OnInit {
     subscription: Subscription;
     id: string;
     type: string;
-    
-    constructor(private _router: Router, private _sensorService: SensorService, private _utilsService: SensorUtilsService) { }
-    
-    routerOnActivate(curr: RouteSegment) {
-        this.id = curr.getParam('id');
-       this.type = curr.getParam('type');
-    }
-    
+    private sub: any;
+
+    constructor(private _router: Router, private _route: ActivatedRoute, private _sensorService: SensorService, private _utilsService: SensorUtilsService) { }
+
+    // routerOnActivate(curr: RouteSegment) {
+    //     this.id = curr.getParam('id');
+    //    this.type = curr.getParam('type');
+    // }
+
     ngOnInit() {
+
+        this.sub = this._route.params.subscribe(params => {
+            this.id = params['id']; // (+) converts string 'id' to a number
+            this.type = params['type'];
+            console.log('param ', this.id, " ", this.type);
+        });
+
         this.sensorid = this.id;
         this.sensortype = this.type;
 
@@ -49,7 +57,7 @@ export class SensorDetailComponent implements OnInit {
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
-    
+
     save() {
         this._sensorService.updateSensor(this.editSensorData);
         this._router.navigate(['/']);
@@ -65,7 +73,7 @@ export class SensorDetailComponent implements OnInit {
         this.editSensorData = this.clone(this.sensorData);
         if (this.editSensorData && this.editSensorData.date) {
             this.lastDate = this.editSensorData.date;
-        } 
+        }
     }
 
     private clone(obj) {

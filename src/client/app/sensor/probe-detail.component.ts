@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouteSegment, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router, ActivatedRoute, ROUTER_DIRECTIVES} from '@angular/router';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {ProbeService} from './probe.service'
 import {ProbeData, ProbeDetailData, HashTable} from './model';
@@ -16,15 +16,22 @@ export class ProbeDetailComponent implements OnInit {
     probeDetailedData: ProbeDetailData;
     subscription: Subscription;
     id: string;
+    private sub: any;
+
     // subscriptionDetail: Subscription;
 
-    constructor(private _router: Router, private _probeService: ProbeService, private _utilsService: SensorUtilsService) { }
-    
-    routerOnActivate(curr: RouteSegment) {
-        this.id = curr.getParam('id');
-    }
-    
+    constructor(private _router: Router, private _route: ActivatedRoute, private _probeService: ProbeService, private _utilsService: SensorUtilsService) { }
+
+    // routerOnActivate(curr: RouteSegment) {
+    //     this.id = curr.getParam('id');
+    // }
+
     ngOnInit() {
+
+        this.sub = this._route.params.subscribe(params => {
+            this.id = params['id']; // (+) converts string 'id' to a number
+            console.log('param ', this.id);
+        });
         // automatically update sensor view when new data comes
         this.subscription = this._probeService.probeUpdated$.subscribe(
             _id => {

@@ -136,7 +136,7 @@ System.register(['@angular/core', 'ng2-highcharts', './sensor.service', './model
                                     name: 'Valeur',
                                     data: data,
                                     tooltip: {
-                                        valueDecimals: 1,
+                                        valueDecimals: 2,
                                         dateTimeLabelFormats: 'seconds'
                                     },
                                     dataGrouping: {

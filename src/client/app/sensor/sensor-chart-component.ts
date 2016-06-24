@@ -130,7 +130,7 @@ export class SensorChartComponent implements OnInit {
                         name: 'Valeur',
                         data: data,
                         tooltip: {
-                            valueDecimals: 1,
+                            valueDecimals: 2,
                             dateTimeLabelFormats: 'seconds'
                         },
                         dataGrouping: {

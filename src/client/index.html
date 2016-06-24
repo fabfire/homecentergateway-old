@@ -105,8 +105,19 @@
                 main: 'ng2-highcharts',
                 defaultExtension: 'js',
             },
-           // 'rxjs': { defaultExtension: 'js' },
             'symbol-observable': { main: 'index', defaultExtension: 'js' },
+            // '@angular/platform-browser': {
+            //     main: '/bundles/platform-browser.umd',
+            //     defaultExtension: 'js',
+            // },
+            // '@angular/platform-browser-dynamic': {
+            //     main: '/bundles/platform-browser-dynamic.umd',
+            //     defaultExtension: 'js',
+            // },
+            '@angular/router': {
+                main: 'index',
+                defaultExtension: 'js',
+            }
         };
 
         var ngPackageNames = [
@@ -116,13 +127,12 @@
             'http',
             'platform-browser',
             'platform-browser-dynamic',
-            'router'
+            //'router'
         ];
-        
         // Add package entries for angular packages
         ngPackageNames.forEach(function(pkgName) {
             // Bundled (~40 requests):
-            packages['@angular/'+pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
+            packages['@angular/'+pkgName] = { main: '/bundles/'+pkgName + '.umd.js', defaultExtension: 'js' };
       });
         System.config({
             map: map,

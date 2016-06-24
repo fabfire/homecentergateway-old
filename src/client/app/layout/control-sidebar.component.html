@@ -91,7 +91,7 @@
                                 <span class="label label-primary pull-right">{{status.pm2.message.system_info.uptime}}</span>
                             </td>
                         </tr>
-                        <tr *ngIf="status.pm2.message.processes.length" *ngFor="let process of status.pm2.message.processes">
+                        <tr *ngIf="status.pm2.message.processes" *ngFor="let process of status.pm2.message.processes">
                             <td *ngIf="process">
                                 {{process.name }}
                             </td>

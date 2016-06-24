@@ -3,7 +3,6 @@ var logger = require('../logger/index');
 
 var elasticClient = new elasticsearch.Client({
     host: 'localhost:9200',
-    //host: '192.168.1.99',
     log: 'info'
 });
 

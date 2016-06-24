@@ -31,17 +31,23 @@ System.register(['@angular/core', '@angular/router', './sensor.service', './sens
             }],
         execute: function() {
             SensorDetailComponent = (function () {
-                function SensorDetailComponent(_router, _sensorService, _utilsService) {
+                function SensorDetailComponent(_router, _route, _sensorService, _utilsService) {
                     this._router = _router;
+                    this._route = _route;
                     this._sensorService = _sensorService;
                     this._utilsService = _utilsService;
                 }
-                SensorDetailComponent.prototype.routerOnActivate = function (curr) {
-                    this.id = curr.getParam('id');
-                    this.type = curr.getParam('type');
-                };
+                // routerOnActivate(curr: RouteSegment) {
+                //     this.id = curr.getParam('id');
+                //    this.type = curr.getParam('type');
+                // }
                 SensorDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
+                    this.sub = this._route.params.subscribe(function (params) {
+                        _this.id = params['id']; // (+) converts string 'id' to a number
+                        _this.type = params['type'];
+                        console.log('param ', _this.id, " ", _this.type);
+                    });
                     this.sensorid = this.id;
                     this.sensortype = this.type;
                     // automatically update sensor view when new data comes
@@ -79,7 +85,7 @@ System.register(['@angular/core', '@angular/router', './sensor.service', './sens
                         templateUrl: './app/sensor/sensor-detail.component.html',
                         directives: [sensor_chart_component_1.SensorChartComponent]
                     }), 
-                    __metadata('design:paramtypes', [router_1.Router, sensor_service_1.SensorService, utils_service_1.SensorUtilsService])
+                    __metadata('design:paramtypes', [router_1.Router, router_1.ActivatedRoute, sensor_service_1.SensorService, utils_service_1.SensorUtilsService])
                 ], SensorDetailComponent);
                 return SensorDetailComponent;
             }());

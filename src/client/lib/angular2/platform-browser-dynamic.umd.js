@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v2.0.0-rc.1
+ * @license Angular 2.0.0-rc.3
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -9,11 +9,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/compiler'), require('@angular/platform-browser'), require('@angular/core')) :
-        typeof define === 'function' && define.amd ? define(['exports', '@angular/compiler', '@angular/platform-browser', '@angular/core'], factory) :
-            (factory((global.ng = global.ng || {}, global.ng.platformBrowserDynamic = global.ng.platformBrowserDynamic || {}), global.ng.compiler, global.ng.platformBrowser, global.ng.core));
-}(this, function (exports, _angular_compiler, _angular_platformBrowser, _angular_core) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/compiler'), require('@angular/core'), require('@angular/platform-browser'), require('rxjs/Subject'), require('rxjs/observable/PromiseObservable'), require('rxjs/operator/toPromise'), require('rxjs/Observable')) :
+        typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/compiler', '@angular/core', '@angular/platform-browser', 'rxjs/Subject', 'rxjs/observable/PromiseObservable', 'rxjs/operator/toPromise', 'rxjs/Observable'], factory) :
+            (factory((global.ng = global.ng || {}, global.ng.platformBrowserDynamic = global.ng.platformBrowserDynamic || {}), global.ng.common, global.ng.compiler, global.ng.core, global.ng.platformBrowser, global.Rx, global.Rx, global.Rx.Observable.prototype, global.Rx));
+}(this, function (exports, _angular_common, _angular_compiler, _angular_core, _angular_platformBrowser, rxjs_Subject, rxjs_observable_PromiseObservable, rxjs_operator_toPromise, rxjs_Observable) {
     'use strict';
+    var ReflectionCapabilities = _angular_core.__core_private__.ReflectionCapabilities;
+    var reflector = _angular_core.__core_private__.reflector;
     var globalScope;
     if (typeof window === 'undefined') {
         if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
@@ -45,6 +47,50 @@ var __extends = (this && this.__extends) || function (d, b) {
     function isArray(obj) {
         return Array.isArray(obj);
     }
+    var PromiseCompleter = (function () {
+        function PromiseCompleter() {
+            var _this = this;
+            this.promise = new Promise(function (res, rej) {
+                _this.resolve = res;
+                _this.reject = rej;
+            });
+        }
+        return PromiseCompleter;
+    }());
+    var PromiseWrapper = (function () {
+        function PromiseWrapper() {
+        }
+        PromiseWrapper.resolve = function (obj) { return Promise.resolve(obj); };
+        PromiseWrapper.reject = function (obj, _) { return Promise.reject(obj); };
+        // Note: We can't rename this method into `catch`, as this is not a valid
+        // method name in Dart.
+        PromiseWrapper.catchError = function (promise, onError) {
+            return promise.catch(onError);
+        };
+        PromiseWrapper.all = function (promises) {
+            if (promises.length == 0)
+                return Promise.resolve([]);
+            return Promise.all(promises);
+        };
+        PromiseWrapper.then = function (promise, success, rejection) {
+            return promise.then(success, rejection);
+        };
+        PromiseWrapper.wrap = function (computation) {
+            return new Promise(function (res, rej) {
+                try {
+                    res(computation());
+                }
+                catch (e) {
+                    rej(e);
+                }
+            });
+        };
+        PromiseWrapper.scheduleMicrotask = function (computation) {
+            PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function (_) { });
+        };
+        PromiseWrapper.completer = function () { return new PromiseCompleter(); };
+        return PromiseWrapper;
+    }());
     var Map$1 = global$1.Map;
     var Set = global$1.Set;
     // Safari and Internet Explorer do not support the iterable parameter to the
@@ -266,10 +312,13 @@ var __extends = (this && this.__extends) || function (d, b) {
             };
         }
     })();
+    /**
+     * @stable
+     */
     var BaseException = (function (_super) {
         __extends(BaseException, _super);
         function BaseException(message) {
-            if (message === void 0) { message = "--"; }
+            if (message === void 0) { message = '--'; }
             _super.call(this, message);
             this.message = message;
             this.stack = (new Error(message)).stack;
@@ -277,51 +326,6 @@ var __extends = (this && this.__extends) || function (d, b) {
         BaseException.prototype.toString = function () { return this.message; };
         return BaseException;
     }(Error));
-    var PromiseCompleter = (function () {
-        function PromiseCompleter() {
-            var _this = this;
-            this.promise = new Promise(function (res, rej) {
-                _this.resolve = res;
-                _this.reject = rej;
-            });
-        }
-        return PromiseCompleter;
-    }());
-    var PromiseWrapper = (function () {
-        function PromiseWrapper() {
-        }
-        PromiseWrapper.resolve = function (obj) { return Promise.resolve(obj); };
-        PromiseWrapper.reject = function (obj, _) { return Promise.reject(obj); };
-        // Note: We can't rename this method into `catch`, as this is not a valid
-        // method name in Dart.
-        PromiseWrapper.catchError = function (promise, onError) {
-            return promise.catch(onError);
-        };
-        PromiseWrapper.all = function (promises) {
-            if (promises.length == 0)
-                return Promise.resolve([]);
-            return Promise.all(promises);
-        };
-        PromiseWrapper.then = function (promise, success, rejection) {
-            return promise.then(success, rejection);
-        };
-        PromiseWrapper.wrap = function (computation) {
-            return new Promise(function (res, rej) {
-                try {
-                    res(computation());
-                }
-                catch (e) {
-                    rej(e);
-                }
-            });
-        };
-        PromiseWrapper.scheduleMicrotask = function (computation) {
-            PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function (_) { });
-        };
-        PromiseWrapper.isPromise = function (obj) { return obj instanceof Promise; };
-        PromiseWrapper.completer = function () { return new PromiseCompleter(); };
-        return PromiseWrapper;
-    }());
     /**
      * An implementation of XHR that uses a template cache to avoid doing an actual
      * XHR.
@@ -383,18 +387,19 @@ var __extends = (this && this.__extends) || function (d, b) {
         };
         return XHRImpl;
     }(_angular_compiler.XHR));
-    var ReflectionCapabilities = _angular_core.__core_private__.ReflectionCapabilities;
-    var CACHED_TEMPLATE_PROVIDER = 
-    /*@ts2dart_const*/ [{ provide: _angular_compiler.XHR, useClass: CachedXHR }];
-    /**
-     * An array of providers that should be passed into `application()` when bootstrapping a component.
-     */
-    var BROWSER_APP_DYNAMIC_PROVIDERS = 
-    /*@ts2dart_const*/ [
-        _angular_platformBrowser.BROWSER_APP_COMMON_PROVIDERS,
-        _angular_compiler.COMPILER_PROVIDERS,
+    var BROWSER_APP_COMPILER_PROVIDERS = [
+        _angular_compiler.COMPILER_PROVIDERS, {
+            provide: _angular_compiler.CompilerConfig,
+            useFactory: function (platformDirectives, platformPipes) {
+                return new _angular_compiler.CompilerConfig({ platformDirectives: platformDirectives, platformPipes: platformPipes });
+            },
+            deps: [_angular_core.PLATFORM_DIRECTIVES, _angular_core.PLATFORM_PIPES]
+        },
         { provide: _angular_compiler.XHR, useClass: XHRImpl },
+        { provide: _angular_core.PLATFORM_DIRECTIVES, useValue: _angular_common.COMMON_DIRECTIVES, multi: true },
+        { provide: _angular_core.PLATFORM_PIPES, useValue: _angular_common.COMMON_PIPES, multi: true }
     ];
+    var CACHED_TEMPLATE_PROVIDER = [{ provide: _angular_compiler.XHR, useClass: CachedXHR }];
     /**
      * Bootstrapping for Angular applications.
      *
@@ -464,11 +469,56 @@ var __extends = (this && this.__extends) || function (d, b) {
      * Returns a `Promise` of {@link ComponentRef}.
      */
     function bootstrap(appComponentType, customProviders) {
-        _angular_core.reflector.reflectionCapabilities = new ReflectionCapabilities();
-        var appInjector = _angular_core.ReflectiveInjector.resolveAndCreate([BROWSER_APP_DYNAMIC_PROVIDERS, isPresent(customProviders) ? customProviders : []], _angular_platformBrowser.browserPlatform().injector);
-        return _angular_core.coreLoadAndBootstrap(appInjector, appComponentType);
+        reflector.reflectionCapabilities = new ReflectionCapabilities();
+        var providers = [
+            _angular_platformBrowser.BROWSER_APP_PROVIDERS, BROWSER_APP_COMPILER_PROVIDERS,
+            isPresent(customProviders) ? customProviders : []
+        ];
+        var appInjector = _angular_core.ReflectiveInjector.resolveAndCreate(providers, _angular_platformBrowser.browserPlatform().injector);
+        return _angular_core.coreLoadAndBootstrap(appComponentType, appInjector);
     }
+    /**
+     * @experimental
+     */
+    function bootstrapWorkerUi(workerScriptUri, customProviders) {
+        var app = _angular_core.ReflectiveInjector.resolveAndCreate([
+            _angular_platformBrowser.WORKER_UI_APPLICATION_PROVIDERS, BROWSER_APP_COMPILER_PROVIDERS,
+            { provide: _angular_platformBrowser.WORKER_SCRIPT, useValue: workerScriptUri },
+            isPresent(customProviders) ? customProviders : []
+        ], _angular_platformBrowser.workerUiPlatform().injector);
+        // Return a promise so that we keep the same semantics as Dart,
+        // and we might want to wait for the app side to come up
+        // in the future...
+        return PromiseWrapper.resolve(app.get(_angular_core.ApplicationRef));
+    }
+    /**
+     * @experimental
+     */
+    var WORKER_APP_COMPILER_PROVIDERS = [
+        _angular_compiler.COMPILER_PROVIDERS, {
+            provide: _angular_compiler.CompilerConfig,
+            useFactory: function (platformDirectives, platformPipes) {
+                return new _angular_compiler.CompilerConfig({ platformDirectives: platformDirectives, platformPipes: platformPipes });
+            },
+            deps: [_angular_core.PLATFORM_DIRECTIVES, _angular_core.PLATFORM_PIPES]
+        },
+        { provide: _angular_compiler.XHR, useClass: XHRImpl },
+        { provide: _angular_core.PLATFORM_DIRECTIVES, useValue: _angular_common.COMMON_DIRECTIVES, multi: true },
+        { provide: _angular_core.PLATFORM_PIPES, useValue: _angular_common.COMMON_PIPES, multi: true }
+    ];
+    /**
+     * @experimental
+     */
+    function bootstrapWorkerApp(appComponentType, customProviders) {
+        var appInjector = _angular_core.ReflectiveInjector.resolveAndCreate([
+            _angular_platformBrowser.WORKER_APP_APPLICATION_PROVIDERS, WORKER_APP_COMPILER_PROVIDERS,
+            isPresent(customProviders) ? customProviders : []
+        ], _angular_platformBrowser.workerAppPlatform().injector);
+        return _angular_core.coreLoadAndBootstrap(appComponentType, appInjector);
+    }
+    exports.BROWSER_APP_COMPILER_PROVIDERS = BROWSER_APP_COMPILER_PROVIDERS;
     exports.CACHED_TEMPLATE_PROVIDER = CACHED_TEMPLATE_PROVIDER;
-    exports.BROWSER_APP_DYNAMIC_PROVIDERS = BROWSER_APP_DYNAMIC_PROVIDERS;
     exports.bootstrap = bootstrap;
+    exports.bootstrapWorkerUi = bootstrapWorkerUi;
+    exports.bootstrapWorkerApp = bootstrapWorkerApp;
 }));
