@@ -1,7 +1,7 @@
 var logger = require('../logger/index');
 var config = require('../config');
 
-module.exports = function(io, messageBus) {
+module.exports = function (io, messageBus) {
 
     var serialport = require('serialport');
     var environment = config.environment;
@@ -9,34 +9,25 @@ module.exports = function(io, messageBus) {
     //TODO : remove, just form test
     //environment = 'dev';
     // Load Serialport regarding environment
-    switch (environment) {
-        case 'prod':
-            serial = new serialport.SerialPort(config.serialport.prod, {
-                baudrate: config.serialport.baudrate,
-                parser: serialport.parsers.readline('\r\n')
-            });
-            break;
-        default:
-            serial = new serialport.SerialPort(config.serialport.dev, {
-                baudrate: config.serialport.baudrate,
-                parser: serialport.parsers.readline('\r\n')
-            });
-            break;
-    }
 
-    serial.on('open', function() {
+    serial = new serialport.SerialPort(config.serialport.path, {
+        baudrate: config.serialport.baudrate,
+        parser: serialport.parsers.readline('\r\n')
+    });
+
+    serial.on('open', function () {
         console.log('Serial port opened');
         logger.log('info', 'Serial port opened');
 
     });
 
-    serial.on('close', function() {
+    serial.on('close', function () {
         console.log('Serial port closed');
         logger.log('info', 'Serial port closed');
 
     });
 
-    serial.on('data', function(data) {
+    serial.on('data', function (data) {
         data = data + ',"date":' + JSON.stringify(new Date());
         logger.info(data);
         messageBus.emit('data', data);
@@ -46,7 +37,7 @@ module.exports = function(io, messageBus) {
         return (i < 10) ? '0' + i : i;
     }
 
-    serial.on('error', function(e) {
+    serial.on('error', function (e) {
         console.error('Serial communication error : %s', e);
     });
 

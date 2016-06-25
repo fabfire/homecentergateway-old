@@ -32,7 +32,7 @@ var getStatus = function (callback) {
             },
             // web health api on port 9615
             pm2: function (callback) {
-                var url = (config.environment === 'prod' ? config.pm2webApiUrl.prod : config.pm2webApiUrl.dev);
+                var url = config.pm2webApiUrl;
 
                 request(url, function (error, response, body) {
                     var resultPM2;
