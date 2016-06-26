@@ -84,6 +84,7 @@ System.register(['@angular/core', '@angular/http', 'rxjs/Rx', './probe.service']
                         if (!updated) {
                             _this._dataStore.sensorData.push(data);
                         }
+                        _this.probeService.updateDataStoreCount(data);
                         if (_this._sensorDataObserver != undefined) {
                             _this._sensorDataObserver.next(_this._dataStore.sensorData);
                         }

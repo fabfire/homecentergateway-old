@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {Observable, Observer, Subject} from 'rxjs/Rx';
 import {Http, Headers, RequestOptions, Response} from '@angular/http';
-import {ProbeData} from './model';
+import {ProbeData, SensorData} from './model';
 
 @Injectable()
 export class ProbeService {
@@ -62,6 +62,25 @@ export class ProbeService {
             }
 
             $this._probeUpdated.next(probe.pid);
+        });
+    };
+
+    updateDataStoreCount = (sensor: SensorData) => {
+        var $this = this;
+        this._listDataStore.probeData.some((probe, i) => {
+            if (probe.pid === sensor.pid) {
+                $this._listDataStore.probeData[i].numberofmeasures += 1;
+                $this._probeUpdated.next(probe.pid);
+                if ($this._listDataStore.probeData[i].sensorstats){
+                    $this._listDataStore.probeData[i].sensorstats.some((_sensor, j) => {
+                        if (sensor.id === _sensor.sensordata.id) {
+                            $this._listDataStore.probeData[i].sensorstats[j].count += 1;
+                        }
+                    });
+
+                }
+                return true;
+            }
         });
     };
 

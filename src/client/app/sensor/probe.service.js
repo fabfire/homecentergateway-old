@@ -66,6 +66,23 @@ System.register(['@angular/core', 'rxjs/Rx', '@angular/http'], function(exports_
                             $this._probeUpdated.next(probe.pid);
                         });
                     };
+                    this.updateDataStoreCount = function (sensor) {
+                        var $this = _this;
+                        _this._listDataStore.probeData.some(function (probe, i) {
+                            if (probe.pid === sensor.pid) {
+                                $this._listDataStore.probeData[i].numberofmeasures += 1;
+                                $this._probeUpdated.next(probe.pid);
+                                if ($this._listDataStore.probeData[i].sensorstats) {
+                                    $this._listDataStore.probeData[i].sensorstats.some(function (_sensor, j) {
+                                        if (sensor.id === _sensor.sensordata.id) {
+                                            $this._listDataStore.probeData[i].sensorstats[j].count += 1;
+                                        }
+                                    });
+                                }
+                                return true;
+                            }
+                        });
+                    };
                     this.getProbe = function (id) {
                         var foundProbe;
                         _this._listDataStore.probeData.some(function (probe, i) {

@@ -40,11 +40,9 @@ function getSensors(req, res) {
 
 function getProbesList(req, res) {
     console.log('API getProbesList', JSON.stringify(req.params) + ' - ' + JSON.stringify(req.body));
-    setTimeout(function () {
-        probeRepository.getProbesList(function (response) {
-            res.status(200).send(response);
-        });
-    }, 3000);
+    probeRepository.getProbesList(function (response) {
+        res.status(200).send(response);
+    });
 }
 
 function getProbeSensorsStats(req, res) {

@@ -80,6 +80,8 @@ export class SensorService {
         if (!updated) {
             this._dataStore.sensorData.push(data);
         }
+        this.probeService.updateDataStoreCount(data);
+        
         if (this._sensorDataObserver != undefined) {
             this._sensorDataObserver.next(this._dataStore.sensorData);
         }
