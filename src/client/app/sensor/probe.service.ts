@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs/Rx';
+import {Observable, Observer, Subject} from 'rxjs/Rx';
 import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import {ProbeData} from './model';
 
@@ -7,6 +7,7 @@ import {ProbeData} from './model';
 export class ProbeService {
     // Observable for update detection of the probe list info
     probesList$: Observable<ProbeData[]>;
+    private _probesListObserver: Observer<ProbeData[]>;
     // Observable for update detection of probe detail info
     probeDetail$: Observable<ProbeData>;
 
@@ -20,20 +21,28 @@ export class ProbeService {
     };
 
     constructor(private http: Http) {
+        this.probesList$ = new Observable<ProbeData[]>(observer => this._probesListObserver = observer).share();
         this._listDataStore = { probeData: [] };
     }
 
     getProbes = () => {
         // refresh observable during the load form the API
-        if (this._listDataStore.probeData) {
-            var $this = this;
-            this._listDataStore.probeData.forEach((probe) => {
-                $this._probeUpdated.next(probe.pid);
-            });
+        if (this._probesListObserver != undefined) {
+            this._probesListObserver.next(this._listDataStore.probeData);
         }
+        // if (this._listDataStore.probeData) {
 
-        this.probesList$ = this.http.get("api/probeslist")
-            .map(this.extractProbeList);
+        //     // var $this = this;
+        //     // this._listDataStore.probeData.forEach((probe) => {
+        //     //     $this._probeUpdated.next(probe.pid);
+        //     // });
+        // }
+
+        this.http.get("api/probeslist")
+            .map(this.extractProbeList)
+            .subscribe(probes => {
+                this.updateProbes(probes);
+            });
     };
 
     extractProbeList = (response: Response) => {
@@ -51,11 +60,7 @@ export class ProbeService {
             else {
                 $this._listDataStore.probeData[i] = probe;
             }
-            // for (var attr in probe) {
-            //      var obj = $this._listDataStore.probeData[i];
-            //     obj[attr] = probe[attr];
-            // }
-            //$this._listDataStore.probeData[i] = probe;
+
             $this._probeUpdated.next(probe.pid);
         });
     };

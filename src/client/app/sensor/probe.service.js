@@ -34,14 +34,20 @@ System.register(['@angular/core', 'rxjs/Rx', '@angular/http'], function(exports_
                     this.probeUpdated$ = this._probeUpdated.asObservable();
                     this.getProbes = function () {
                         // refresh observable during the load form the API
-                        if (_this._listDataStore.probeData) {
-                            var $this = _this;
-                            _this._listDataStore.probeData.forEach(function (probe) {
-                                $this._probeUpdated.next(probe.pid);
-                            });
+                        if (_this._probesListObserver != undefined) {
+                            _this._probesListObserver.next(_this._listDataStore.probeData);
                         }
-                        _this.probesList$ = _this.http.get("api/probeslist")
-                            .map(_this.extractProbeList);
+                        // if (this._listDataStore.probeData) {
+                        //     // var $this = this;
+                        //     // this._listDataStore.probeData.forEach((probe) => {
+                        //     //     $this._probeUpdated.next(probe.pid);
+                        //     // });
+                        // }
+                        _this.http.get("api/probeslist")
+                            .map(_this.extractProbeList)
+                            .subscribe(function (probes) {
+                            _this.updateProbes(probes);
+                        });
                     };
                     this.extractProbeList = function (response) {
                         var probes = response.json();
@@ -57,11 +63,6 @@ System.register(['@angular/core', 'rxjs/Rx', '@angular/http'], function(exports_
                             else {
                                 $this._listDataStore.probeData[i] = probe;
                             }
-                            // for (var attr in probe) {
-                            //      var obj = $this._listDataStore.probeData[i];
-                            //     obj[attr] = probe[attr];
-                            // }
-                            //$this._listDataStore.probeData[i] = probe;
                             $this._probeUpdated.next(probe.pid);
                         });
                     };
@@ -111,6 +112,7 @@ System.register(['@angular/core', 'rxjs/Rx', '@angular/http'], function(exports_
                         }, function (err) { return _this.logError(err); });
                         // () => console.log('subscribe ')
                     };
+                    this.probesList$ = new Rx_1.Observable(function (observer) { return _this._probesListObserver = observer; }).share();
                     this._listDataStore = { probeData: [] };
                 }
                 ProbeService.prototype.logError = function (err) {

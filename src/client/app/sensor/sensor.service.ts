@@ -27,7 +27,6 @@ export class SensorService {
         // Create Observable Stream to output our data
         this.sensorsData$ = new Observable<SensorData[]>(observer => this._sensorDataObserver = observer).share();
         this._dataStore = { sensorData: [] };
-        //this.probeService = probeService;
     }
 
     messageReceived = (msg) => {
@@ -91,9 +90,9 @@ export class SensorService {
         this._sensorUpdated.next(id);
     }
 
-    loadSensorInfo = () => {
-        this._sensorDataObserver.next(this._dataStore.sensorData);
-    }
+    // loadSensorInfo = () => {
+    //     this._sensorDataObserver.next(this._dataStore.sensorData);
+    // }
 
     updateSensorsName = (probeId, name) => {
         this._dataStore.sensorData.forEach((sensor, i) => {

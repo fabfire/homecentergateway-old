@@ -92,9 +92,9 @@ System.register(['@angular/core', '@angular/http', 'rxjs/Rx', './probe.service']
                     this.sensorUpdated = function (id) {
                         _this._sensorUpdated.next(id);
                     };
-                    this.loadSensorInfo = function () {
-                        _this._sensorDataObserver.next(_this._dataStore.sensorData);
-                    };
+                    // loadSensorInfo = () => {
+                    //     this._sensorDataObserver.next(this._dataStore.sensorData);
+                    // }
                     this.updateSensorsName = function (probeId, name) {
                         _this._dataStore.sensorData.forEach(function (sensor, i) {
                             if (sensor.id.startsWith(probeId + '.')) {
@@ -145,7 +145,6 @@ System.register(['@angular/core', '@angular/http', 'rxjs/Rx', './probe.service']
                     // Create Observable Stream to output our data
                     this.sensorsData$ = new Rx_1.Observable(function (observer) { return _this._sensorDataObserver = observer; }).share();
                     this._dataStore = { sensorData: [] };
-                    //this.probeService = probeService;
                 }
                 SensorService.prototype.getSensor = function (id, type) {
                     var foundSensor;

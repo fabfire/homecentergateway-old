@@ -37,7 +37,6 @@ export class SensorDetailComponent implements OnInit {
         this.sub = this._route.params.subscribe(params => {
             this.id = params['id']; // (+) converts string 'id' to a number
             this.type = params['type'];
-            console.log('param ', this.id, " ", this.type);
         });
 
         this.sensorid = this.id;

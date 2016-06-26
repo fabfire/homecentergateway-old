@@ -43,7 +43,6 @@ System.register(['@angular/core', '@angular/router', './sensor.service', '../ord
                     this.listSubscription = this._sensorService.sensorsData$.subscribe(function (updatedData) {
                         _this.sensorsData = updatedData;
                         _this.limitDate = moment().subtract(1, 'hour');
-                        // this.cd.markForCheck(); // marks path
                     });
                     // 2 : bind member and use async pipe into the view, but it doesn't work as expected : the view is not refreshed when the view is reloaded
                     //this.sensorsData$ = this._sensorService.sensorsData$;

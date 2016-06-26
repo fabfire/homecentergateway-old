@@ -20,7 +20,6 @@ export class ProbeListComponent implements OnInit {
     constructor(private router: Router, private _probeService: ProbeService) { }
 
     ngOnInit() {
-        this._probeService.getProbes();
         this._probeService.probesList$
             .subscribe(_probes => {
                 this.probes = _probes;
@@ -40,6 +39,7 @@ export class ProbeListComponent implements OnInit {
                 }, 200);
             },
             console.error);
+        this._probeService.getProbes();
     }
 
     //  routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return true; }

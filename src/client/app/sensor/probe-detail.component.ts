@@ -30,7 +30,6 @@ export class ProbeDetailComponent implements OnInit {
 
         this.sub = this._route.params.subscribe(params => {
             this.id = params['id']; // (+) converts string 'id' to a number
-            console.log('param ', this.id);
         });
         // automatically update sensor view when new data comes
         this.subscription = this._probeService.probeUpdated$.subscribe(

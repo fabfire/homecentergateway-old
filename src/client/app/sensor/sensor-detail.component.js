@@ -46,7 +46,6 @@ System.register(['@angular/core', '@angular/router', './sensor.service', './sens
                     this.sub = this._route.params.subscribe(function (params) {
                         _this.id = params['id']; // (+) converts string 'id' to a number
                         _this.type = params['type'];
-                        console.log('param ', _this.id, " ", _this.type);
                     });
                     this.sensorid = this.id;
                     this.sensortype = this.type;

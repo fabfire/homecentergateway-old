@@ -42,7 +42,6 @@ System.register(['@angular/core', '@angular/router', './probe.service', './utils
                     var _this = this;
                     this.sub = this._route.params.subscribe(function (params) {
                         _this.id = params['id']; // (+) converts string 'id' to a number
-                        console.log('param ', _this.id);
                     });
                     // automatically update sensor view when new data comes
                     this.subscription = this._probeService.probeUpdated$.subscribe(function (_id) {

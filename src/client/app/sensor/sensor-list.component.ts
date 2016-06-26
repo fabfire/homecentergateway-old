@@ -33,7 +33,6 @@ export class SensorListComponent implements OnInit {
             updatedData => {
                 this.sensorsData = updatedData;
                 this.limitDate = moment().subtract(1, 'hour');
-               // this.cd.markForCheck(); // marks path
             }
         );
         // 2 : bind member and use async pipe into the view, but it doesn't work as expected : the view is not refreshed when the view is reloaded

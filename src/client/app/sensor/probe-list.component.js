@@ -37,7 +37,6 @@ System.register(['@angular/core', '@angular/router', './probe.service', '../pipe
                 }
                 ProbeListComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    this._probeService.getProbes();
                     this._probeService.probesList$
                         .subscribe(function (_probes) {
                         _this.probes = _probes;
@@ -53,6 +52,7 @@ System.register(['@angular/core', '@angular/router', './probe.service', '../pipe
                             });
                         }, 200);
                     }, console.error);
+                    this._probeService.getProbes();
                 };
                 ProbeListComponent = __decorate([
                     core_1.Component({
