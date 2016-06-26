@@ -1,8 +1,9 @@
 var elasticsearch = require('elasticsearch');
 var logger = require('../logger/index');
+var config = require('../config');
 
 var elasticClient = new elasticsearch.Client({
-    host: 'localhost:9200',
+    host: config.elasticsearch,
     log: 'info'
 });
 

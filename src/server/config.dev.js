@@ -12,7 +12,8 @@ var config = {
         clientID: '157258009673-9cuuotu5oeai1i6980qs68l0e38196rq.apps.googleusercontent.com',
         clientSecret: 'RS5AUtO8usxM2FMDX-whjWDN',
         callbackURL: 'http://localhost:3000/auth/google/callback'
-    }
+    },
+    elasticsearch: 'localhost:9200'
 };
 
 module.exports = config;
