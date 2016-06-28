@@ -58,6 +58,15 @@ System.register(['@angular/core', '../sensor/utils.service'], function(exports_1
                             toastr.success('Monitoring PM2 en ligne !');
                         }
                         _this.previousStatus = _this.status;
+                    }, function (err) {
+                        _this.status = undefined;
+                        toastr.error('Serveur NodeJS indisponible !', '', {
+                            "closeButton": true,
+                            "preventDuplicates": true,
+                            "positionClass": "toast-bottom-right",
+                            "hideDuration": "0",
+                            "timeOut": "0",
+                        });
                     });
                 };
                 ControlSidebarComponent = __decorate([

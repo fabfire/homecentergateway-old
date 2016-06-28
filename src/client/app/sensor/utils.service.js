@@ -1,4 +1,4 @@
-System.register(['@angular/core', '@angular/http'], function(exports_1, context_1) {
+System.register(['@angular/core', '@angular/http', 'rxjs/Rx'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['@angular/core', '@angular/http'], function(exports_1, context_
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1;
+    var core_1, http_1, Rx_1;
     var SensorUtilsService;
     return {
         setters:[
@@ -19,6 +19,9 @@ System.register(['@angular/core', '@angular/http'], function(exports_1, context_
             },
             function (http_1_1) {
                 http_1 = http_1_1;
+            },
+            function (Rx_1_1) {
+                Rx_1 = Rx_1_1;
             }],
         execute: function() {
             SensorUtilsService = (function () {
@@ -27,7 +30,8 @@ System.register(['@angular/core', '@angular/http'], function(exports_1, context_
                     this.http = http;
                     this.getStatus = function () {
                         return _this.http.get("api/status")
-                            .map(function (response) { return response.json(); });
+                            .map(function (response) { return response.json(); })
+                            .catch(_this.handleError);
                     };
                     this.getTypeLabel = function (type) {
                         var str;
@@ -90,6 +94,12 @@ System.register(['@angular/core', '@angular/http'], function(exports_1, context_
                         return str;
                     };
                 }
+                SensorUtilsService.prototype.handleError = function (error) {
+                    var errMsg = (error.message) ? error.message :
+                        error.status ? '${error.status} - ${error.statusText}' : 'Server error';
+                    console.error('error getting status', errMsg); // log to console instead
+                    return Rx_1.Observable.throw(errMsg);
+                };
                 SensorUtilsService = __decorate([
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [http_1.Http])

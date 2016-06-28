@@ -51,6 +51,17 @@ export class ControlSidebarComponent implements OnInit {
             }
 
             this.previousStatus = this.status;
-        });
+        },
+            err => {
+                this.status = undefined;
+                toastr.error('Serveur NodeJS indisponible !', '', {
+                    "closeButton": true,
+                    "preventDuplicates": true,
+                    "positionClass": "toast-bottom-right",
+                    "hideDuration": "0",
+                    "timeOut": "0",
+                });
+            }
+        );
     }
 }

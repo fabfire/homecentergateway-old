@@ -1,15 +1,23 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
+import {Observable} from 'rxjs/Rx';
 
 @Injectable()
 export class SensorUtilsService {
     constructor(private http: Http) { }
-    
+
     getStatus = () => {
         return this.http.get("api/status")
-            .map(response => response.json());
+            .map(response => response.json())
+            .catch(this.handleError);
     };
-    
+    private handleError(error: any) {
+        let errMsg = (error.message) ? error.message :
+            error.status ? '${error.status} - ${error.statusText}' : 'Server error';
+        console.error('error getting status', errMsg); // log to console instead
+        return Observable.throw(errMsg);
+    }
+
     getTypeLabel = (type: string) => {
         var str;
         switch (type) {
