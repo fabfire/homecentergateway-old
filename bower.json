@@ -1,72 +1,78 @@
 {
-  "name": "nodejsprojecttemplate",
-  "version": "0.1.0",
-  "description": "Node.JS + Express template",
-  "authors": "",
-  "license": "MIT",
-  "homepage": "https://bitbucket.org/fabfire/nodejsprojecttemplate/overview",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components"
-  ],
-  "dependencies": {
-    "jquery": "^2.2.0",
-    "bootstrap": "~3.3.6",
-    "intl": "^1.1.0",
-    "font-awesome": "~4.6.0",
-    "kendo-ui": "kendo-ui-core#^2016.1.217",
-    "moment": "~2.13",
-    "PACE": "pace#^1.0.2",
-    "toastr": "^2.1.2",
-    "Ionicons": "ionicons#^2.0.1",
-    "socket.io": "^1.4.5",
-    "weather-icons": "^2.0.10",
-    "highcharts": "^4.2.4",
-    "bootstrap-datepicker": "^1.6.0"
-  },
-  "overrides": {
-    "bootstrap": {
-      "main": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.css",
-        "less/bootstrap.less"
-      ]
+    "name": "nodejsprojecttemplate",
+    "version": "0.1.0",
+    "description": "Node.JS + Express template",
+    "authors": "",
+    "license": "MIT",
+    "homepage": "https://bitbucket.org/fabfire/nodejsprojecttemplate/overview",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "jquery": "^2.2.0",
+        "bootstrap": "~3.3.6",
+        "intl": "^1.2.4",
+        "font-awesome": "~4.6.0",
+        "kendo-ui": "kendo-ui-core#^2016.1.217",
+        "moment": "~2.13",
+        "PACE": "pace#^1.0.2",
+        "toastr": "^2.1.2",
+        "Ionicons": "ionicons#^2.0.1",
+        "socket.io": "^1.4.5",
+        "weather-icons": "^2.0.10",
+        "highcharts": "^4.2.4",
+        "bootstrap-datepicker": "^1.6.0"
     },
-    "bootstrap-datepicker": {
-      "main": [
-        "dist/css/bootstrap-datepicker3.css",
-        "dist/js/bootstrap-datepicker.min.js",
-        "dist/locales/bootstrap-datepicker.fr.min.js"
-      ]
-    },
-    "font-awesome": {
-      "main": [
-        "css/font-awesome.css",
-        "css/font-awesome.less"
-      ]
-    },
-    "highcharts": {
-      "main": [
-        "highstock.js"
-      ]
-    },
-    "PACE": {
-      "main": [
-        "pace.js",
-        "themes/black/pace-theme-minimal.css"
-      ]
-    },
-    "moment": {
-      "main": [
-        "min/moment-with-locales.js"
-      ]
-    },
-    "weather-icons": {
-      "main": [
-        "css/weather-icons.css",
-        "font/*"
-      ]
+    "overrides": {
+        "bootstrap": {
+            "main": [
+                "dist/js/bootstrap.js",
+                "dist/css/bootstrap.css",
+                "less/bootstrap.less"
+            ]
+        },
+        "bootstrap-datepicker": {
+            "main": [
+                "dist/css/bootstrap-datepicker3.css",
+                "dist/js/bootstrap-datepicker.min.js",
+                "dist/locales/bootstrap-datepicker.fr.min.js"
+            ]
+        },
+        "font-awesome": {
+            "main": [
+                "css/font-awesome.css",
+                "css/font-awesome.less"
+            ]
+        },
+        "highcharts": {
+            "main": [
+                "highstock.js"
+            ]
+        },
+        "intl": {
+            "main": [
+                "dist/Intl.js",
+                "locale-data/jsonp/fr-FR.js"
+            ]
+        },
+        "PACE": {
+            "main": [
+                "pace.js",
+                "themes/black/pace-theme-minimal.css"
+            ]
+        },
+        "moment": {
+            "main": [
+                "min/moment-with-locales.js"
+            ]
+        },
+        "weather-icons": {
+            "main": [
+                "css/weather-icons.css",
+                "font/*"
+            ]
+        }
     }
-  }
 }

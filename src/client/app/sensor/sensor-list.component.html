@@ -28,7 +28,7 @@
                         <i [ngClass]="{'wi wi-thermometer': data.type == 'temp', 'wi wi-humidity': data.type =='hum', 'wi wi-barometer': data.type =='pres', 'fa fa-battery-half': data.type =='vcc', 'wi': data.type !='vcc'}"></i>
                     </div>
                     <span href="#" class="small-box-footer">
-                    <i class="wi wi-time-8"></i> {{ data.date | date:'dd MM yyyy HH:mm' }}
+                    <i class="wi wi-time-8"></i> {{ data.date | date:"dd/MM/yyyy mm" }}<!--datepipe seems to be broken on rc3 : date:'dd MM yyyy mm'-->
                     </span>
                 </div>
             </a>
